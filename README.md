@@ -13,7 +13,7 @@
     <img src="https://img.shields.io/packagist/dt/lmsqueezy/laravel" alt="Total Downloads">
 </a>
 
-A package to easily integrate your Laravel application with [Lemon Squeezy](https://www.lemonsqueezy.com/).
+A package to easily integrate your [Laravel](https://laravel.com) application with Lemon Squeezy.
 
 This package drew inspiration from [Cashier](https://github.com/laravel/cashier-stripe) which was created by [Taylor Otwell](https://twitter.com/taylorotwell).
 
