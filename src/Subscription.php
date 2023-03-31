@@ -278,7 +278,6 @@ class Subscription extends Model
         return $this;
     }
 
-
     /**
      * Get the subscription update payment method URL.
      */
