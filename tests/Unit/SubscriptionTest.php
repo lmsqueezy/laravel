@@ -1,6 +1,6 @@
 <?php
 
-use LaravelLemonSqueezy\Subscription;
+use LemonSqueezy\Laravel\Subscription;
 
 it('can determine if the subscription is on trial', function () {
     $subscription = new Subscription(['status' => Subscription::STATUS_ON_TRIAL]);

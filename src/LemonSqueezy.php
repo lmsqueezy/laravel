@@ -1,11 +1,11 @@
 <?php
 
-namespace LaravelLemonSqueezy;
+namespace LemonSqueezy\Laravel;
 
 use Exception;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use LaravelLemonSqueezy\Exceptions\LemonSqueezyApiError;
+use LemonSqueezy\Laravel\Exceptions\LemonSqueezyApiError;
 
 class LemonSqueezy
 {
@@ -45,7 +45,7 @@ class LemonSqueezy
 
         /** @var \Illuminate\Http\Client\Response $response */
         $response = Http::withToken($apiKey)
-            ->withUserAgent('LaravelLemonSqueezy/'.static::VERSION)
+            ->withUserAgent('LemonSqueezy\Laravel/'.static::VERSION)
             ->accept('application/vnd.api+json')
             ->contentType('application/vnd.api+json')
             ->$method("https://api.lemonsqueezy.com/v1/{$uri}", $payload);

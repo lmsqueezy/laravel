@@ -1,6 +1,6 @@
 {
     "name": "lmsqueezy/laravel",
-    "description": "A package to easily integrate your Laravel application with Lemon Squeezy's billing services. ",
+    "description": "A package to easily integrate your Laravel application with Lemon Squeezy's billing services.",
     "keywords": ["laravel", "lemon squeezy", "billing"],
     "license": "MIT",
     "support": {
@@ -29,8 +29,8 @@
     },
     "autoload": {
         "psr-4": {
-            "LaravelLemonSqueezy\\": "src/",
-            "LaravelLemonSqueezy\\Database\\Factories\\": "database/factories/"
+            "LemonSqueezy\\Laravel\\": "src/",
+            "LemonSqueezy\\Laravel\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
@@ -44,7 +44,7 @@
         },
         "laravel": {
             "providers": [
-                "LaravelLemonSqueezy\\LemonSqueezyServiceProvider"
+                "LemonSqueezy\\Laravel\\LemonSqueezyServiceProvider"
             ]
         }
     },

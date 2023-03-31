@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use LaravelLemonSqueezy\LemonSqueezyServiceProvider;
+use LemonSqueezy\Laravel\LemonSqueezyServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelLemonSqueezy\Http\Middleware;
+namespace LemonSqueezy\Laravel\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;

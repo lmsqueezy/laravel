@@ -1,11 +1,11 @@
 <?php
 
-namespace LaravelLemonSqueezy\Database\Factories;
+namespace LemonSqueezy\Laravel\Database\Factories;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use LaravelLemonSqueezy\Customer;
-use LaravelLemonSqueezy\Subscription;
+use LemonSqueezy\Laravel\Customer;
+use LemonSqueezy\Laravel\Subscription;
 
 class SubscriptionFactory extends Factory
 {

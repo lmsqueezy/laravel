@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelLemonSqueezy\Concerns;
+namespace LemonSqueezy\Laravel\Concerns;
 
-use LaravelLemonSqueezy\Checkout;
-use LaravelLemonSqueezy\Exceptions\MissingStore;
+use LemonSqueezy\Laravel\Checkout;
+use LemonSqueezy\Laravel\Exceptions\MissingStore;
 
 trait ManagesCheckouts
 {

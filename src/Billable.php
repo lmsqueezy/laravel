@@ -1,10 +1,10 @@
 <?php
 
-namespace LaravelLemonSqueezy;
+namespace LemonSqueezy\Laravel;
 
-use LaravelLemonSqueezy\Concerns\ManagesCheckouts;
-use LaravelLemonSqueezy\Concerns\ManagesCustomer;
-use LaravelLemonSqueezy\Concerns\ManagesSubscriptions;
+use LemonSqueezy\Laravel\Concerns\ManagesCheckouts;
+use LemonSqueezy\Laravel\Concerns\ManagesCustomer;
+use LemonSqueezy\Laravel\Concerns\ManagesSubscriptions;
 
 trait Billable
 {

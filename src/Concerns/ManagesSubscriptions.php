@@ -1,10 +1,10 @@
 <?php
 
-namespace LaravelLemonSqueezy\Concerns;
+namespace LemonSqueezy\Laravel\Concerns;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use LaravelLemonSqueezy\LemonSqueezy;
-use LaravelLemonSqueezy\Subscription;
+use LemonSqueezy\Laravel\LemonSqueezy;
+use LemonSqueezy\Laravel\Subscription;
 
 trait ManagesSubscriptions
 {

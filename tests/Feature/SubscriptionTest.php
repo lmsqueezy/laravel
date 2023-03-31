@@ -2,7 +2,7 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
-use LaravelLemonSqueezy\Subscription;
+use LemonSqueezy\Laravel\Subscription;
 
 uses(RefreshDatabase::class);
 

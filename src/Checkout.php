@@ -1,11 +1,11 @@
 <?php
 
-namespace LaravelLemonSqueezy;
+namespace LemonSqueezy\Laravel;
 
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
-use LaravelLemonSqueezy\Exceptions\ReservedCustomKeys;
+use LemonSqueezy\Laravel\Exceptions\ReservedCustomKeys;
 
 class Checkout implements Responsable
 {

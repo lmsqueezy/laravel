@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelLemonSqueezy\Database\Factories;
+namespace LemonSqueezy\Laravel\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use LaravelLemonSqueezy\Customer;
+use LemonSqueezy\Laravel\Customer;
 
 class CustomerFactory extends Factory
 {

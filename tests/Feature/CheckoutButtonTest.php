@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
-use LaravelLemonSqueezy\Checkout;
+use LemonSqueezy\Laravel\Checkout;
 
 uses(InteractsWithViews::class);
 

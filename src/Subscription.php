@@ -1,15 +1,15 @@
 <?php
 
-namespace LaravelLemonSqueezy;
+namespace LemonSqueezy\Laravel;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use LaravelLemonSqueezy\Database\Factories\SubscriptionFactory;
+use LemonSqueezy\Laravel\Database\Factories\SubscriptionFactory;
 
 /**
- * @property \LaravelLemonSqueezy\Billable $billable
+ * @property \LemonSqueezy\Laravel\Billable $billable
  */
 class Subscription extends Model
 {

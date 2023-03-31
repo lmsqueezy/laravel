@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelLemonSqueezy\Exceptions;
+namespace LemonSqueezy\Laravel\Exceptions;
 
 use Exception;
 

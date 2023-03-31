@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\RedirectResponse;
-use LaravelLemonSqueezy\Checkout;
+use LemonSqueezy\Laravel\Checkout;
 
 it('can initiate a new checkout', function () {
     $checkout = new Checkout('lemon', 'variant_123');

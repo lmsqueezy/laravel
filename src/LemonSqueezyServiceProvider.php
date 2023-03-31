@@ -1,11 +1,11 @@
 <?php
 
-namespace LaravelLemonSqueezy;
+namespace LemonSqueezy\Laravel;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use LaravelLemonSqueezy\Http\Controllers\WebhookController;
+use LemonSqueezy\Laravel\Http\Controllers\WebhookController;
 
 class LemonSqueezyServiceProvider extends ServiceProvider
 {

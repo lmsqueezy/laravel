@@ -3,7 +3,7 @@
 namespace Tests\Fixtures;
 
 use Illuminate\Database\Eloquent\Model;
-use LaravelLemonSqueezy\Billable;
+use LemonSqueezy\Laravel\Billable;
 
 class User extends Model
 {

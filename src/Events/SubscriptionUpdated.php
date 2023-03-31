@@ -1,11 +1,11 @@
 <?php
 
-namespace LaravelLemonSqueezy\Events;
+namespace LemonSqueezy\Laravel\Events;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use LaravelLemonSqueezy\Subscription;
+use LemonSqueezy\Laravel\Subscription;
 
 class SubscriptionUpdated
 {

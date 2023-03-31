@@ -1,14 +1,14 @@
 <?php
 
-namespace LaravelLemonSqueezy;
+namespace LemonSqueezy\Laravel;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use LaravelLemonSqueezy\Database\Factories\CustomerFactory;
+use LemonSqueezy\Laravel\Database\Factories\CustomerFactory;
 
 /**
- * @property \LaravelLemonSqueezy\Billable $billable
+ * @property \LemonSqueezy\Laravel\Billable $billable
  */
 class Customer extends Model
 {

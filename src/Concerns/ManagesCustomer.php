@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelLemonSqueezy\Concerns;
+namespace LemonSqueezy\Laravel\Concerns;
 
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use LaravelLemonSqueezy\Customer;
+use LemonSqueezy\Laravel\Customer;
 
 trait ManagesCustomer
 {

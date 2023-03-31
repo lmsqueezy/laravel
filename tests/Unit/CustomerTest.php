@@ -1,6 +1,6 @@
 <?php
 
-use LaravelLemonSqueezy\Customer;
+use LemonSqueezy\Laravel\Customer;
 
 it('can determine if the customer is on a generic trial', function () {
     $customer = new Customer();

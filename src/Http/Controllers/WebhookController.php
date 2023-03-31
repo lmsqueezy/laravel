@@ -1,24 +1,24 @@
 <?php
 
-namespace LaravelLemonSqueezy\Http\Controllers;
+namespace LemonSqueezy\Laravel\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
-use LaravelLemonSqueezy\Events\SubscriptionCancelled;
-use LaravelLemonSqueezy\Events\SubscriptionCreated;
-use LaravelLemonSqueezy\Events\SubscriptionExpired;
-use LaravelLemonSqueezy\Events\SubscriptionPaused;
-use LaravelLemonSqueezy\Events\SubscriptionResumed;
-use LaravelLemonSqueezy\Events\SubscriptionUnpaused;
-use LaravelLemonSqueezy\Events\SubscriptionUpdated;
-use LaravelLemonSqueezy\Events\WebhookHandled;
-use LaravelLemonSqueezy\Events\WebhookReceived;
-use LaravelLemonSqueezy\Exceptions\InvalidCustomPayload;
-use LaravelLemonSqueezy\Http\Middleware\VerifyWebhookSignature;
-use LaravelLemonSqueezy\LemonSqueezy;
-use LaravelLemonSqueezy\Subscription;
+use LemonSqueezy\Laravel\Events\SubscriptionCancelled;
+use LemonSqueezy\Laravel\Events\SubscriptionCreated;
+use LemonSqueezy\Laravel\Events\SubscriptionExpired;
+use LemonSqueezy\Laravel\Events\SubscriptionPaused;
+use LemonSqueezy\Laravel\Events\SubscriptionResumed;
+use LemonSqueezy\Laravel\Events\SubscriptionUnpaused;
+use LemonSqueezy\Laravel\Events\SubscriptionUpdated;
+use LemonSqueezy\Laravel\Events\WebhookHandled;
+use LemonSqueezy\Laravel\Events\WebhookReceived;
+use LemonSqueezy\Laravel\Exceptions\InvalidCustomPayload;
+use LemonSqueezy\Laravel\Http\Middleware\VerifyWebhookSignature;
+use LemonSqueezy\Laravel\LemonSqueezy;
+use LemonSqueezy\Laravel\Subscription;
 use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
@@ -158,7 +158,7 @@ class WebhookController extends Controller
     }
 
     /**
-     * @return \LaravelLemonSqueezy\Billable
+     * @return \LemonSqueezy\Laravel\Billable
      *
      * @throws InvalidCustomPayload
      */
