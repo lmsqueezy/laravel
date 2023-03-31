@@ -1,6 +1,6 @@
 {
     "name": "lmsqueezy/laravel",
-    "description": "A package to easily integrate your Laravel application with Lemon Squeezy's billing services.",
+    "description": "A package to easily integrate your Laravel application with Lemon Squeezy.",
     "keywords": ["laravel", "lemon squeezy", "billing"],
     "license": "MIT",
     "support": {
