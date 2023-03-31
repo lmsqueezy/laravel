@@ -278,6 +278,17 @@ class Subscription extends Model
         return $this;
     }
 
+
+    /**
+     * Get the subscription update payment method URL.
+     */
+    public function updatePaymentMethodUrl(): string
+    {
+        $response = LemonSqueezy::api('GET', "subscriptions/{$this->lemon_squeezy_id}");
+
+        return $response['data']['attributes']['urls']['update_payment_method'];
+    }
+
     /**
      * Sync the subscription with the given attributes.
      */
