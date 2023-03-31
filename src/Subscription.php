@@ -4,6 +4,7 @@ namespace LemonSqueezy\Laravel;
 
 use Carbon\Carbon;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -55,7 +56,6 @@ class Subscription extends Model
     protected $casts = [
         'pause_resumes_at' => 'datetime',
         'trial_ends_at' => 'datetime',
-        'paused_from' => 'datetime',
         'renews_at' => 'datetime',
         'ends_at' => 'datetime',
     ];
@@ -69,11 +69,27 @@ class Subscription extends Model
     }
 
     /**
+     * Determine if the subscription is active, on trial, paused for free, or within its grace period.
+     */
+    public function valid(): bool
+    {
+        return $this->active() || $this->onTrial() || ($this->paused() && $this->pause_mode === 'free') || $this->onGracePeriod();
+    }
+
+    /**
      * Check if the subscription is on trial.
      */
     public function onTrial(): bool
     {
         return $this->status === self::STATUS_ON_TRIAL;
+    }
+
+    /**
+     * Filter query by on trial.
+     */
+    public function scopeOnTrial(Builder $query): void
+    {
+        $query->where('status', self::STATUS_ON_TRIAL);
     }
 
     /**
@@ -85,11 +101,27 @@ class Subscription extends Model
     }
 
     /**
+     * Filter query by active.
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('status', self::STATUS_ACTIVE);
+    }
+
+    /**
      * Check if the subscription is paused.
      */
     public function paused(): bool
     {
         return $this->status === self::STATUS_PAUSED;
+    }
+
+    /**
+     * Filter query by paused.
+     */
+    public function scopePaused(Builder $query): void
+    {
+        $query->where('status', self::STATUS_PAUSED);
     }
 
     /**
@@ -101,11 +133,27 @@ class Subscription extends Model
     }
 
     /**
+     * Filter query by past due.
+     */
+    public function scopePastDue(Builder $query): void
+    {
+        $query->where('status', self::STATUS_PAST_DUE);
+    }
+
+    /**
      * Check if the subscription is unpaid.
      */
     public function unpaid(): bool
     {
         return $this->status === self::STATUS_UNPAID;
+    }
+
+    /**
+     * Filter query by unpaid.
+     */
+    public function scopeUnpaid(Builder $query): void
+    {
+        $query->where('status', self::STATUS_UNPAID);
     }
 
     /**
@@ -117,11 +165,43 @@ class Subscription extends Model
     }
 
     /**
+     * Filter query by cancelled.
+     */
+    public function scopeCancelled(Builder $query): void
+    {
+        $query->where('status', self::STATUS_CANCELLED);
+    }
+
+    /**
      * Check if the subscription is expired.
      */
     public function expired(): bool
     {
         return $this->status === self::STATUS_EXPIRED;
+    }
+
+    /**
+     * Filter query by expired.
+     */
+    public function scopeExpired(Builder $query): void
+    {
+        $query->where('status', self::STATUS_EXPIRED);
+    }
+
+    /**
+     * Determine if the subscription is within its grace period after cancellation.
+     */
+    public function onGracePeriod(): bool
+    {
+        return $this->cancelled() && $this->ends_at?->isFuture();
+    }
+
+    /**
+     * Determine if the subscription is within its paused period.
+     */
+    public function onPausedPeriod(): bool
+    {
+        return $this->paused() && $this->pause_resumes_at?->isFuture();
     }
 
     /**
