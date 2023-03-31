@@ -3,10 +3,13 @@
 namespace LemonSqueezy\Laravel;
 
 use Carbon\Carbon;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use LemonSqueezy\Laravel\Concerns\Prorates;
 use LemonSqueezy\Laravel\Database\Factories\SubscriptionFactory;
+use LogicException;
 
 /**
  * @property \LemonSqueezy\Laravel\Billable $billable
@@ -14,6 +17,7 @@ use LemonSqueezy\Laravel\Database\Factories\SubscriptionFactory;
 class Subscription extends Model
 {
     use HasFactory;
+    use Prorates;
 
     const STATUS_ON_TRIAL = 'on_trial';
 
@@ -64,15 +68,73 @@ class Subscription extends Model
         return $this->morphTo();
     }
 
-    public function swap(string $productId, string $variantId): self
+    /**
+     * Check if the subscription is on trial.
+     */
+    public function onTrial(): bool
+    {
+        return $this->status === self::STATUS_ON_TRIAL;
+    }
+
+    /**
+     * Check if the subscription is active.
+     */
+    public function active(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    /**
+     * Check if the subscription is paused.
+     */
+    public function paused(): bool
+    {
+        return $this->status === self::STATUS_PAUSED;
+    }
+
+    /**
+     * Check if the subscription is past due.
+     */
+    public function pastDue(): bool
+    {
+        return $this->status === self::STATUS_PAST_DUE;
+    }
+
+    /**
+     * Check if the subscription is unpaid.
+     */
+    public function unpaid(): bool
+    {
+        return $this->status === self::STATUS_UNPAID;
+    }
+
+    /**
+     * Check if the subscription is cancelled.
+     */
+    public function cancelled(): bool
+    {
+        return $this->status === self::STATUS_CANCELLED;
+    }
+
+    /**
+     * Check if the subscription is expired.
+     */
+    public function expired(): bool
+    {
+        return $this->status === self::STATUS_EXPIRED;
+    }
+
+    /**
+     * Change the billing cycle anchor on the subscription.
+     */
+    public function anchorBillingCycleOn(?int $date): self
     {
         $response = LemonSqueezy::api('PATCH', "subscriptions/{$this->lemon_squeezy_id}", [
             'data' => [
                 'type' => 'subscriptions',
                 'id' => $this->lemon_squeezy_id,
                 'attributes' => [
-                    'product_id' => $productId,
-                    'variant_id' => $variantId,
+                    'billing_anchor' => $date,
                 ],
             ],
         ]);
@@ -82,6 +144,143 @@ class Subscription extends Model
         return $this;
     }
 
+    /**
+     * Swap the subscription to a new product plan.
+     */
+    public function swap(string $productId, string $variantId, array $attributes = []): self
+    {
+        $response = LemonSqueezy::api('PATCH', "subscriptions/{$this->lemon_squeezy_id}", [
+            'data' => [
+                'type' => 'subscriptions',
+                'id' => $this->lemon_squeezy_id,
+                'attributes' => array_merge([
+                    'product_id' => $productId,
+                    'variant_id' => $variantId,
+                    'disable_prorations' => ! $this->prorate,
+                ], $attributes),
+            ],
+        ]);
+
+        $this->sync($response['data']['attributes']);
+
+        return $this;
+    }
+
+    /**
+     * Swap the subscription to a new product plan and invoice immediately.
+     */
+    public function swapAndInvoice(string $productId, string $variantId): self
+    {
+        return $this->swap($productId, $variantId, [
+            'invoice_immediately' => true,
+        ]);
+    }
+
+    /**
+     * Cancel the subscription.
+     */
+    public function cancel(?int $date): self
+    {
+        $response = LemonSqueezy::api('DELETE', "subscriptions/{$this->lemon_squeezy_id}");
+
+        $this->sync($response['data']['attributes']);
+
+        return $this;
+    }
+
+    /**
+     * Resume the subscription.
+     */
+    public function resume(?int $date): self
+    {
+        if ($this->expired()) {
+            throw new LogicException('Cannot resume an expired subscription.');
+        }
+
+        $response = LemonSqueezy::api('PATCH', "subscriptions/{$this->lemon_squeezy_id}", [
+            'data' => [
+                'type' => 'subscriptions',
+                'id' => $this->lemon_squeezy_id,
+                'attributes' => [
+                    'cancelled' => false,
+                ],
+            ],
+        ]);
+
+        $this->sync($response['data']['attributes']);
+
+        return $this;
+    }
+
+    /**
+     * Pause the subscription and prevent the user from using the service.
+     */
+    public function pause(DateTimeInterface $resumesAt = null): self
+    {
+        $response = LemonSqueezy::api('PATCH', "subscriptions/{$this->lemon_squeezy_id}", [
+            'data' => [
+                'type' => 'subscriptions',
+                'id' => $this->lemon_squeezy_id,
+                'attributes' => [
+                    'pause' => [
+                        'mode' => 'void',
+                        'resumes_at' => $resumesAt ? Carbon::instance($resumesAt)->toIso8601String() : null,
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->sync($response['data']['attributes']);
+
+        return $this;
+    }
+
+    /**
+     * Pause the subscription but let the user continue to use the service for free.
+     */
+    public function pauseForFree(DateTimeInterface $resumesAt = null): self
+    {
+        $response = LemonSqueezy::api('PATCH', "subscriptions/{$this->lemon_squeezy_id}", [
+            'data' => [
+                'type' => 'subscriptions',
+                'id' => $this->lemon_squeezy_id,
+                'attributes' => [
+                    'pause' => [
+                        'mode' => 'free',
+                        'resumes_at' => $resumesAt ? Carbon::instance($resumesAt)->toIso8601String() : null,
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->sync($response['data']['attributes']);
+
+        return $this;
+    }
+
+    /**
+     * Unpause the subscription.
+     */
+    public function unpause(): self
+    {
+        $response = LemonSqueezy::api('PATCH', "subscriptions/{$this->lemon_squeezy_id}", [
+            'data' => [
+                'type' => 'subscriptions',
+                'id' => $this->lemon_squeezy_id,
+                'attributes' => [
+                    'pause' => null,
+                ],
+            ],
+        ]);
+
+        $this->sync($response['data']['attributes']);
+
+        return $this;
+    }
+
+    /**
+     * Sync the subscription with the given attributes.
+     */
     public function sync(array $attributes): self
     {
         $this->update([
@@ -98,41 +297,6 @@ class Subscription extends Model
         ]);
 
         return $this;
-    }
-
-    public function onTrial(): bool
-    {
-        return $this->status === self::STATUS_ON_TRIAL;
-    }
-
-    public function active(): bool
-    {
-        return $this->status === self::STATUS_ACTIVE;
-    }
-
-    public function paused(): bool
-    {
-        return $this->status === self::STATUS_PAUSED;
-    }
-
-    public function pastDue(): bool
-    {
-        return $this->status === self::STATUS_PAST_DUE;
-    }
-
-    public function unpaid(): bool
-    {
-        return $this->status === self::STATUS_UNPAID;
-    }
-
-    public function cancelled(): bool
-    {
-        return $this->status === self::STATUS_CANCELLED;
-    }
-
-    public function expired(): bool
-    {
-        return $this->status === self::STATUS_EXPIRED;
     }
 
     /**
