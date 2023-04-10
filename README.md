@@ -19,7 +19,7 @@ This package drew inspiration from [Cashier](https://github.com/laravel/cashier-
 
 Any sponsorship to [help fund development on this package](https://github.com/sponsors/driesvints) is greatly appreciated ❤️
 
-> This package is a work in progress...
+> This package is a work in progress. As long as there is no v1.0.0, breaking changes may occur in v0.x releases.
 
 ## Requirements
 
