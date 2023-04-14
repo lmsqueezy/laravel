@@ -6,11 +6,11 @@
 <a href="https://github.com/lmsqueezy/laravel/actions/workflows/coding-standards.yml">
     <img src="https://github.com/lmsqueezy/laravel/actions/workflows/coding-standards.yml/badge.svg" alt="Coding Standards" />
 </a>
-<a href="https://packagist.org/packages/lmsqueezy/laravel">
-    <img src="https://img.shields.io/packagist/v/lmsqueezy/laravel" alt="Latest Stable Version">
+<a href="https://packagist.org/packages/lemonsqueezy/laravel">
+    <img src="https://img.shields.io/packagist/v/lemonsqueezy/laravel" alt="Latest Stable Version">
 </a>
-<a href="https://packagist.org/packages/lmsqueezy/laravel">
-    <img src="https://img.shields.io/packagist/dt/lmsqueezy/laravel" alt="Total Downloads">
+<a href="https://packagist.org/packages/lemonsqueezy/laravel">
+    <img src="https://img.shields.io/packagist/dt/lemonsqueezy/laravel" alt="Total Downloads">
 </a>
 
 A package to easily integrate your [Laravel](https://laravel.com) application with Lemon Squeezy.
@@ -34,7 +34,7 @@ Install the package with composer:
 composer require lemonsqueezy/laravel
 ```
 
-Next, make sure to set up incoming webhooks. This is both needed in development as in production. Go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the url to your exposed local site. You can use [Ngrok](https://ngrok.com/), [Expose](https://github.com/beyondcode/expose) or another tool of your preference for this.
+Next, make sure to set up incoming webhooks. This is both needed in development as in production. Go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the url to your exposed local app. You can use [Ngrok](https://ngrok.com/), [Expose](https://github.com/beyondcode/expose) or another tool of your preference for this.
 
 Make sure to select all event types. The path you should point to is `/lemon-squeezy/webhook` by default. 
 
