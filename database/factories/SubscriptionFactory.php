@@ -44,7 +44,7 @@ class SubscriptionFactory extends Factory
     /**
      * Configure the model factory.
      */
-    public function configure(): static
+    public function configure(): self
     {
         return $this->afterCreating(function ($subscription) {
             Customer::factory()->create([
@@ -58,7 +58,7 @@ class SubscriptionFactory extends Factory
     /**
      * Mark the subscription as being within a trial period.
      */
-    public function trialing(DateTimeInterface $trialEndsAt = null): static
+    public function trialing(DateTimeInterface $trialEndsAt = null): self
     {
         return $this->state([
             'status' => Subscription::STATUS_ON_TRIAL,
@@ -69,7 +69,7 @@ class SubscriptionFactory extends Factory
     /**
      * Mark the subscription as active.
      */
-    public function active(): static
+    public function active(): self
     {
         return $this->state([
             'status' => Subscription::STATUS_ACTIVE,
@@ -79,7 +79,7 @@ class SubscriptionFactory extends Factory
     /**
      * Mark the subscription as paused.
      */
-    public function paused(DateTimeInterface $resumesAt = null): static
+    public function paused(DateTimeInterface $resumesAt = null): self
     {
         return $this->state([
             'status' => Subscription::STATUS_PAUSED,
@@ -91,7 +91,7 @@ class SubscriptionFactory extends Factory
     /**
      * Mark the subscription as past due.
      */
-    public function pastDue(): static
+    public function pastDue(): self
     {
         return $this->state([
             'status' => Subscription::STATUS_PAST_DUE,
@@ -101,7 +101,7 @@ class SubscriptionFactory extends Factory
     /**
      * Mark the subscription as unpaid.
      */
-    public function unpaid(): static
+    public function unpaid(): self
     {
         return $this->state([
             'status' => Subscription::STATUS_UNPAID,
@@ -111,7 +111,7 @@ class SubscriptionFactory extends Factory
     /**
      * Mark the subscription as cancelled.
      */
-    public function cancelled(): static
+    public function cancelled(): self
     {
         return $this->state([
             'status' => Subscription::STATUS_CANCELLED,
@@ -122,7 +122,7 @@ class SubscriptionFactory extends Factory
     /**
      * Mark the subscription as expired
      */
-    public function expired(): static
+    public function expired(): self
     {
         return $this->state([
             'status' => Subscription::STATUS_EXPIRED,

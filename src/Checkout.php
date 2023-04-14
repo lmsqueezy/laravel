@@ -21,10 +21,8 @@ class Checkout implements Responsable
 
     private array $custom = [];
 
-    public function __construct(
-        private string $store,
-        private string $variant
-    ) {
+    public function __construct(private string $store, private string $variant)
+    {
     }
 
     public static function make(string $store, string $variant): static
@@ -32,49 +30,49 @@ class Checkout implements Responsable
         return new static($store, $variant);
     }
 
-    public function withoutLogo(): static
+    public function withoutLogo(): self
     {
         $this->logo = false;
 
         return $this;
     }
 
-    public function withoutMedia(): static
+    public function withoutMedia(): self
     {
         $this->media = false;
 
         return $this;
     }
 
-    public function withoutDescription(): static
+    public function withoutDescription(): self
     {
         $this->description = false;
 
         return $this;
     }
 
-    public function withoutCode(): static
+    public function withoutCode(): self
     {
         $this->code = false;
 
         return $this;
     }
 
-    public function withName(string $name): static
+    public function withName(string $name): self
     {
         $this->fields['name'] = $name;
 
         return $this;
     }
 
-    public function withEmail(string $email): static
+    public function withEmail(string $email): self
     {
         $this->fields['email'] = $email;
 
         return $this;
     }
 
-    public function withBillingAddress(string $country, string $state = null, string $zip = null): static
+    public function withBillingAddress(string $country, string $state = null, string $zip = null): self
     {
         $this->fields['billing_address'] = array_filter([
             'country' => $country,
@@ -85,21 +83,21 @@ class Checkout implements Responsable
         return $this;
     }
 
-    public function withTaxNumber(string $taxNumber): static
+    public function withTaxNumber(string $taxNumber): self
     {
         $this->fields['tax_number'] = $taxNumber;
 
         return $this;
     }
 
-    public function withDiscountCode(string $discountCode): static
+    public function withDiscountCode(string $discountCode): self
     {
         $this->fields['discount_code'] = $discountCode;
 
         return $this;
     }
 
-    public function withCustomData(array $custom): static
+    public function withCustomData(array $custom): self
     {
         if (
             (array_key_exists('billable_id', $custom) && isset($this->custom['billable_id'])) ||

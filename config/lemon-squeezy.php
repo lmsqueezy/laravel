@@ -63,6 +63,8 @@ return [
     | store. Each product should have a unique ID, name, and variants. The
     | variants should have a unique ID and name.
     |
+    | Note to developers: this config setting is not yet used by the package.
+    |
     */
 
     'products' => [
