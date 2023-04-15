@@ -8,7 +8,7 @@ use LemonSqueezy\Laravel\Concerns\ManagesSubscriptions;
 
 trait Billable
 {
-    use ManagesCustomer;
     use ManagesCheckouts;
+    use ManagesCustomer;
     use ManagesSubscriptions;
 }

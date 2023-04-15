@@ -58,7 +58,7 @@ LEMON_SQUEEZY_API_KEY=your-lemon-squeezy-api-key
 ```
 
 > **Warning**  
-> Mever commit your API keys to Git. Also, always use a test key for development and never use a production key locally.
+> Never commit your API keys to Git. Also, always use a test key for development and never use a production key locally.
 
 ### Store URL
 
@@ -128,3 +128,79 @@ LEMON_SQUEEZY_SIGNING_SECRET=your-webhook-signing-secret
 ```
 
 Any incoming webhook will now first be verified before being executed.
+
+## Checkouts
+
+With this package, you can easily create checkouts for your customers.
+
+### Single Payments
+
+For example, to create a checkout for a single-payment, click the "share" button of the product you want to share, copy its UUID from the share url and create a checkout using the snippet below:
+
+```php
+use Illuminate\Http\Request;
+ 
+Route::get('/buy', function (Request $request) {
+    return response()->redirect(
+        $request->user()->checkout('your-product-uuid')
+    );
+});
+```
+
+This will automatically redirect your customer to a Lemon Squeezy checkout where the customer can buy your product. 
+
+> **Note**  
+> Please note that the product UUID is not the same as the variant ID.
+
+### Overlay Widget
+
+Instead of redirecting your customer to a checkout screen, you can also create a checkout button which will render a checkout overlay on your page. To do this, pass the `$checkout` object to a view:
+
+```php
+use Illuminate\Http\Request;
+ 
+Route::get('/buy', function (Request $request) {
+    $checkout = $request->user()->checkout('your-product-uuid');
+
+    return view('billing', ['checkout' => $checkout]);
+});
+```
+
+Now, create the button using the shipped Laravel Blade component from the package:
+
+```blade
+<x-lemon-button :href="$checkout" class="px-8 py-4">
+    Buy Product
+</x-lemon-button>
+```
+
+When a user clicks this button, it'll trigger the Lemon Squeezy checkout overlay. You can also, optionally request it to be rendered in dark mode:
+
+```blade
+<x-lemon-button :href="$checkout" class="px-8 py-4" dark>
+    Buy Product
+</x-lemon-button>
+```
+
+### Prefill User Data
+
+You can easily prefill user data for checkouts by overwriting the following methods on your billable model:
+
+```php
+public function lemonSqueezyName(): ?string; // name
+public function lemonSqueezyEmail(): ?string; // email
+public function lemonSqueezyCountry(): ?string; // country
+public function lemonSqueezyState(): ?string; // state
+public function lemonSqueezyZip(): ?string; // zip
+public function lemonSqueezyTaxNumber(): ?string; // tax_number
+```
+
+By default, the attributes displayed in a comment on the right of the methods will be used.
+
+### Redirects After Purchase
+
+After a purchase the customer will be redirected to your Lemon Squeezy's store. If you want them to be redirected back to your app, you'll have to configure the url in your settings in your Lemon Squeezy dashboard for each individual product.
+
+## Subscriptions
+
+Coming soon...
