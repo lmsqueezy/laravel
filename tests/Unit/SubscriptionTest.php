@@ -50,3 +50,17 @@ it('can determine if the subscription is expired', function () {
     expect($subscription->expired())->toBeTrue();
     expect($subscription->active())->toBeFalse();
 });
+
+it('can determine if the subscription is on a specific product', function () {
+    $subscription = new Subscription(['product_id' => '45067']);
+
+    expect($subscription->hasProduct('45067'))->toBeTrue();
+    expect($subscription->hasProduct('93048'))->toBeFalse();
+});
+
+it('can determine if the subscription is on a specific variant', function () {
+    $subscription = new Subscription(['variant_id' => '45067']);
+
+    expect($subscription->hasVariant('45067'))->toBeTrue();
+    expect($subscription->hasVariant('93048'))->toBeFalse();
+});

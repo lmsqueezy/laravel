@@ -197,10 +197,136 @@ public function lemonSqueezyTaxNumber(): ?string; // tax_number
 
 By default, the attributes displayed in a comment on the right of the methods will be used.
 
+Additionally, you may also pass this data on the fly by using the following methods:
+
+```php
+use Illuminate\Http\Request;
+ 
+Route::get('/buy', function (Request $request) {
+    return response()->redirect(
+        $request->user()
+            ->checkout('your-product-uuid')
+            ->withName('John Doe')
+            ->withEmail('john@example.com')
+            ->withBillingAddress('US', 'NY', '10038')
+            ->withTaxNumber('123456679')
+            ->withDiscountCode('PROMO')
+    );
+});
+```
+
 ### Redirects After Purchase
 
 After a purchase the customer will be redirected to your Lemon Squeezy's store. If you want them to be redirected back to your app, you'll have to configure the url in your settings in your Lemon Squeezy dashboard for each individual product.
 
+### Custom Data
+
+You can also [pass along custom data with your checkouts](https://docs.lemonsqueezy.com/help/checkout/passing-custom-data). To do this, send along key/value pairs with the checkout method:
+
+```php
+use Illuminate\Http\Request;
+ 
+Route::get('/buy', function (Request $request) {
+    return response()->redirect(
+        $request->user()->checkout('your-product-uuid', custom: ['foo' => 'bar'])
+    );
+});
+```
+
+These will then later be available in the related webhooks for you.
+
+#### Reserved Keywords
+
+When working with custom data there are a few reserved keywords for this library:
+
+- `billable_id`
+- `billable_type`
+- `subscription_type`
+
+Attempting to use any of these will result in an exception being thrown.
+
 ## Subscriptions
+
+### Setting Up Subscription Products
+
+Setting up subscription products with different plans and intervals needs to be done in a specific way. Lemon Squeezy has [a good guide](https://docs.lemonsqueezy.com/guides/tutorials/saas-subscription-plans) on how to do this.
+
+Although you're free to choose how you set up products and plans, it's easier to go for option two and create a product for each plan type. So for example, when you have a "Basic" and "Pro" plan and both have monthly and yearly prices, it's wiser to create two separate products for these and then add two variants for each for their monthly and yearly prices.
+
+This gives you the advantage later on to make use of the `hasProduct` method on a subscription which allows you to just check if a subscription is on a specific plan type and don't worry if it's on a monthly or yearly schedule.
+
+### Creating Subscriptions
+
+Starting subscriptions is easy. For this, we need the UUID from our product. Click the "share" button of the subscription product you want to share, copy its UUID from the share url and initiate a new subscription checkout from your billable model:
+
+```php
+use Illuminate\Http\Request;
+ 
+Route::get('/buy', function (Request $request) {
+    return response()->redirect(
+        $request->user()->subscribe('your-product-uuid')
+    );
+});
+```
+
+When the customer has finished their checkout, the incoming `SubscriptionCreated` webhook will couple it to your billable model in the database. You can then retrieve the subscription from your billable model:
+
+```php
+$subscription = $user->subscription();
+```
+
+### Checking Subscription Status
+
+Coming soon...
+
+#### Subscription Scopes
+
+Various subscriptions scopes are available to query subscriptions in specific states:
+
+```php
+// Get all active subscriptions...
+$subscriptions = Subscription::query()->active()->get();
+ 
+// Get all of the cancelled subscriptions for a specific user...
+$subscriptions = $user->subscriptions()->cancelled()->get();
+```
+
+Here's all available scopes:
+
+```php
+Subscription::query()->onTrial();
+Subscription::query()->active();
+Subscription::query()->paused();
+Subscription::query()->pastDue();
+Subscription::query()->unpaid();
+Subscription::query()->cancelled();
+Subscription::query()->expired();
+```
+
+### Updating Payment Information
+
+Coming soon...
+
+### Changing Plans
+
+Coming soon...
+
+### Multiple Subscriptions
+
+Coming soon...
+
+### Pausing Subscriptions
+
+Coming soon...
+
+### Cancelling Subscriptions
+
+Coming soon...
+
+### Subscription Trials
+
+Coming soon...
+
+## Handling Webhooks
 
 Coming soon...

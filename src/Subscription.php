@@ -205,6 +205,22 @@ class Subscription extends Model
     }
 
     /**
+     * Determine if the subscription is on a specific product.
+     */
+    public function hasProduct(string $productId): bool
+    {
+        return $this->product_id === $productId;
+    }
+
+    /**
+     * Determine if the subscription is on a specific variant.
+     */
+    public function hasVariant(string $variantId): bool
+    {
+        return $this->variant_id === $variantId;
+    }
+
+    /**
      * Change the billing cycle anchor on the subscription.
      */
     public function anchorBillingCycleOn(?int $date): self
