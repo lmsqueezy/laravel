@@ -123,15 +123,15 @@ class Checkout implements Responsable
 
         $checkout = [];
         if ($this->fields) {
-            $checkout = array_merge($checkout, $this->fields);
+            $checkout = array_merge($checkout, array_filter($this->fields));
         }
 
         if ($this->custom) {
-            $checkout = array_merge($checkout, ['custom' => $this->custom]);
+            $checkout = array_merge($checkout, ['custom' => array_filter($this->custom)]);
         }
 
         if (count($checkout) > 0) {
-            $params['checkout'] = array_filter($checkout);
+            $params['checkout'] = $checkout;
         }
 
         $params = $params->isNotEmpty() ? '?'.http_build_query($params->all()) : '';
