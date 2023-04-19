@@ -205,8 +205,7 @@ use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
     return response()->redirect(
-        $request->user()
-            ->checkout('your-product-uuid')
+        $request->user()->checkout('your-product-uuid')
             ->withName('John Doe')
             ->withEmail('john@example.com')
             ->withBillingAddress('US', 'NY', '10038')
