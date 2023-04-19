@@ -127,7 +127,7 @@ class Checkout implements Responsable
         }
 
         if ($this->custom) {
-            $checkout = array_merge($checkout, ['custom' => array_filter($this->custom)]);
+            $checkout = array_merge($checkout, ['custom' => $this->custom]);
         }
 
         if (count($checkout) > 0) {
