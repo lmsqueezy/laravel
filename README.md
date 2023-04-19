@@ -53,14 +53,13 @@ composer require lemonsqueezy/laravel
 
 ### API Key
 
-Next, configure your API key. Create a new test key in [the Lemon Squeezy dashboard](https://app.lemonsqueezy.com/settings/api) and paste them in your `.env` file as shown below:
+Next, configure your API key. Create a new key in testing mode in [the Lemon Squeezy dashboard](https://app.lemonsqueezy.com/settings/api) and paste them in your `.env` file as shown below:
 
 ```ini
 LEMON_SQUEEZY_API_KEY=your-lemon-squeezy-api-key
 ```
 
-> **Warning**  
-> Never commit your API keys to Git. Also, always use a test key for development and never use a production key locally.
+When you're deploying your app to production, you'll have to create a new key in production mode to work with live data.
 
 ### Store URL
 
