@@ -1,17 +1,21 @@
-# Lemon Squeezy for Laravel
+<p align="center"><img src="https://github.com/lmsqueezy/laravel/raw/HEAD/art/readme-header.png" alt="Readme header"></p>
 
-<a href="https://github.com/lmsqueezy/laravel/actions">
-    <img src="https://github.com/lmsqueezy/laravel/actions/workflows/tests.yml/badge.svg" alt="Tests">
-</a>
-<a href="https://github.com/lmsqueezy/laravel/actions/workflows/coding-standards.yml">
-    <img src="https://github.com/lmsqueezy/laravel/actions/workflows/coding-standards.yml/badge.svg" alt="Coding Standards" />
-</a>
-<a href="https://packagist.org/packages/lemonsqueezy/laravel">
-    <img src="https://img.shields.io/packagist/v/lemonsqueezy/laravel" alt="Latest Stable Version">
-</a>
-<a href="https://packagist.org/packages/lemonsqueezy/laravel">
-    <img src="https://img.shields.io/packagist/dt/lemonsqueezy/laravel" alt="Total Downloads">
-</a>
+<p align="center">
+    <a href="https://github.com/lmsqueezy/laravel/actions">
+        <img src="https://github.com/lmsqueezy/laravel/actions/workflows/tests.yml/badge.svg" alt="Tests">
+    </a>
+    <a href="https://github.com/lmsqueezy/laravel/actions/workflows/coding-standards.yml">
+        <img src="https://github.com/lmsqueezy/laravel/actions/workflows/coding-standards.yml/badge.svg" alt="Coding Standards" />
+    </a>
+    <a href="https://packagist.org/packages/lemonsqueezy/laravel">
+        <img src="https://img.shields.io/packagist/v/lemonsqueezy/laravel" alt="Latest Stable Version">
+    </a>
+    <a href="https://packagist.org/packages/lemonsqueezy/laravel">
+        <img src="https://img.shields.io/packagist/dt/lemonsqueezy/laravel" alt="Total Downloads">
+    </a>
+</p>
+
+# Lemon Squeezy for Laravel
 
 A package to easily integrate your [Laravel](https://laravel.com) application with Lemon Squeezy. It takes the pain out of setting up a checkout experience. Easily set up payments for your products or let your customers subscribe to your product plans. Handle grace periods, pause subscriptions, or offer free trials.
 
