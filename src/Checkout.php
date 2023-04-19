@@ -121,12 +121,17 @@ class Checkout implements Responsable
             ->filter(fn ($toggle) => ! $this->{$toggle})
             ->mapWithKeys(fn ($toggle) => [$toggle => 0]);
 
+        $checkout = [];
         if ($this->fields) {
-            $params = $params->merge(array_filter($this->fields));
+            $checkout = array_merge($checkout, $this->fields);
         }
 
         if ($this->custom) {
-            $params['checkout'] = ['custom' => $this->custom];
+            $checkout = array_merge($checkout, ['custom' => $this->custom]);
+        }
+
+        if (count($checkout) > 0) {
+            $params['checkout'] = array_filter($checkout);
         }
 
         $params = $params->isNotEmpty() ? '?'.http_build_query($params->all()) : '';
