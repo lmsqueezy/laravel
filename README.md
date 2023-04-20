@@ -305,7 +305,21 @@ Subscription::query()->expired();
 
 ### Updating Payment Information
 
-Coming soon...
+To allow your customer to [update their payment details](https://docs.lemonsqueezy.com/guides/developer-guide/managing-subscriptions#updating-billing-details), like their credit card info, you can redirect them with the following method:
+
+```php
+use Illuminate\Http\Request;
+ 
+Route::get('/update-payment-info', function (Request $request) {
+    $subscription = $request->user()->subscription();
+
+    return response()->redirect(
+        $subscription->updatePaymentMethodUrl()
+    );
+});
+```
+
+To make the URL open in a more seamless overlay on top of your app (similar to the checkout overlay), you may use [Lemon.js](https://docs.lemonsqueezy.com/help/lemonjs/opening-overlays#updating-payment-details-overlay) to open the URL with the `LemonSqueezy.Url.Open()` method.
 
 ### Changing Plans
 
