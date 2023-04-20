@@ -132,8 +132,6 @@ class Checkout implements Responsable
 
         $params = ! empty($params) ? '?'.http_build_query($params) : '';
 
-        
-
         return "https://{$this->store}.lemonsqueezy.com/checkout/buy/{$this->variant}".$params;
     }
 
