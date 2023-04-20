@@ -39,7 +39,7 @@ it('can set prefilled fields with dedicated methods', function () {
         ->withDiscountCode('10PERCENTOFF');
 
     expect($checkout->url())
-        ->toBe('https://lemon.lemonsqueezy.com/checkout/buy/variant_123?name=John+Doe&email=john%40example.com&billing_address%5Bcountry%5D=US&billing_address%5Bstate%5D=NY&billing_address%5Bzip%5D=10038&tax_number=GB123456789&discount_code=10PERCENTOFF');
+        ->toBe('https://lemon.lemonsqueezy.com/checkout/buy/variant_123?checkout%5Bname%5D=John+Doe&checkout%5Bemail%5D=john%40example.com&checkout%5Bbilling_address%5D%5Bcountry%5D=US&checkout%5Bbilling_address%5D%5Bstate%5D=NY&checkout%5Bbilling_address%5D%5Bzip%5D=10038&checkout%5Btax_number%5D=GB123456789&checkout%5Bdiscount_code%5D=10PERCENTOFF');
 });
 
 it('can include custom data', function () {
@@ -50,4 +50,15 @@ it('can include custom data', function () {
 
     expect($checkout->url())
         ->toBe('https://lemon.lemonsqueezy.com/checkout/buy/variant_123?checkout%5Bcustom%5D%5Border_id%5D=789');
+});
+
+it('can include prefilled fields and custom data', function () {
+    $checkout = Checkout::make('lemon', 'variant_123')
+        ->withName('John Doe')
+        ->withCustomData([
+            'order_id' => '789',
+        ]);
+
+    expect($checkout->url())
+        ->toBe('https://lemon.lemonsqueezy.com/checkout/buy/variant_123?checkout%5Bname%5D=John+Doe&checkout%5Bcustom%5D%5Border_id%5D=789');
 });

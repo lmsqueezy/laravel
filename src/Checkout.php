@@ -119,17 +119,18 @@ class Checkout implements Responsable
     {
         $params = collect(['logo', 'media', 'description', 'code'])
             ->filter(fn ($toggle) => ! $this->{$toggle})
-            ->mapWithKeys(fn ($toggle) => [$toggle => 0]);
+            ->mapWithKeys(fn ($toggle) => [$toggle => 0])
+            ->all();
 
         if ($this->fields) {
-            $params = $params->merge(array_filter($this->fields));
+            $params['checkout'] = array_filter($this->fields);
         }
 
         if ($this->custom) {
-            $params['checkout'] = ['custom' => $this->custom];
+            $params['checkout']['custom'] = $this->custom;
         }
 
-        $params = $params->isNotEmpty() ? '?'.http_build_query($params->all()) : '';
+        $params = ! empty($params) ? '?'.http_build_query($params) : '';
 
         return "https://{$this->store}.lemonsqueezy.com/checkout/buy/{$this->variant}".$params;
     }
