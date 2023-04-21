@@ -27,7 +27,7 @@ it('can turn off toggles', function () {
         ->withoutCode();
 
     expect($checkout->url())
-        ->toBe('https://lemon.lemonsqueezy.com/checkout/buy/variant_123?logo=0&media=0&description=0&code=0');
+        ->toBe('https://lemon.lemonsqueezy.com/checkout/buy/variant_123?logo=0&media=0&desc=0&code=0');
 });
 
 it('can set prefilled fields with dedicated methods', function () {

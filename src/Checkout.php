@@ -13,7 +13,7 @@ class Checkout implements Responsable
 
     private bool $media = true;
 
-    private bool $description = true;
+    private bool $desc = true;
 
     private bool $code = true;
 
@@ -46,7 +46,7 @@ class Checkout implements Responsable
 
     public function withoutDescription(): self
     {
-        $this->description = false;
+        $this->desc = false;
 
         return $this;
     }
@@ -117,7 +117,7 @@ class Checkout implements Responsable
 
     public function url(): string
     {
-        $params = collect(['logo', 'media', 'description', 'code'])
+        $params = collect(['logo', 'media', 'desc', 'code'])
             ->filter(fn ($toggle) => ! $this->{$toggle})
             ->mapWithKeys(fn ($toggle) => [$toggle => 0])
             ->all();
