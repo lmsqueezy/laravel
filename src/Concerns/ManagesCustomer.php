@@ -50,14 +50,6 @@ trait ManagesCustomer
     }
 
     /**
-     * Get the billable model's state to associate with Lemon Squeezy.
-     */
-    public function lemonSqueezyState(): ?string
-    {
-        return $this->state ?? null; // 'NY'
-    }
-
-    /**
      * Get the billable model's zip code to associate with Lemon Squeezy.
      */
     public function lemonSqueezyZip(): ?string

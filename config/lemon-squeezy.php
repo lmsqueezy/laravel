@@ -46,13 +46,26 @@ return [
     | Lemon Squeezy Store
     |--------------------------------------------------------------------------
     |
-    | This is the URL to your Lemon Squeezy store. You can find your store
-    | URL in the Lemon Squeezy dashboard. The entered value should be the
-    | subdomain of your store URL right before the .lemonsqueezy.com part.
+    | This is the ID of your Lemon Squeezy store. You can find your store
+    | ID in the Lemon Squeezy dashboard. The entered value should be the
+    | part after the # sign.
     |
     */
 
     'store' => env('LEMON_SQUEEZY_STORE'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Redirect URL
+    |--------------------------------------------------------------------------
+    |
+    | This is the default redirect URL that will be used when a customer
+    | is redirected back to your application after completing a purchase
+    | from a checkout session in your Lemon Squeezy store.
+    |
+    */
+
+    'redirect_url' => null,
 
     /*
     |--------------------------------------------------------------------------

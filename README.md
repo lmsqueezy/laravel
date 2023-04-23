@@ -61,12 +61,12 @@ LEMON_SQUEEZY_API_KEY=your-lemon-squeezy-api-key
 
 When you're deploying your app to production, you'll have to create a new key in production mode to work with live data.
 
-### Store URL
+### Store Identifier
 
-Your store url will be used when creating checkouts for your products. Go to [your Lemon Squeezy general settings](https://app.lemonsqueezy.com/settings/general) and copy the Store URL subdomain (the part before `.lemonsqueezy.com`) into the env value below:
+Your store identifier will be used when creating checkouts for your products. Go to [your Lemon Squeezy general settings](https://app.lemonsqueezy.com/settings/general) and copy the Store ID (the part before `#` sign) into the env value below:
 
 ```ini
-LEMON_SQUEEZY_STORE=your-lemon-squeezy-subdomain
+LEMON_SQUEEZY_STORE=your-lemon-squeezy-store-id
 ```
 
 ### Billable Model
@@ -136,22 +136,22 @@ With this package, you can easily create checkouts for your customers.
 
 ### Single Payments
 
-For example, to create a checkout for a single-payment, click the "share" button of the product you want to share, copy its UUID from the share url and create a checkout using the snippet below:
+For example, to create a checkout for a single-payment, use a variant ID of a product variant you want to sell and create a checkout using the snippet below:
 
 ```php
 use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
     return response()->redirect(
-        $request->user()->checkout('your-product-uuid')
+        $request->user()->checkout('variant-id')
     );
 });
 ```
 
-This will automatically redirect your customer to a Lemon Squeezy checkout where the customer can buy your product. 
+This will automatically redirect your customer to a Lemon Squeezy checkout where the customer can buy your product.
 
-> **Note**  
-> Please note that the product UUID is not the same as the variant ID.
+> **Note**
+> When creating a checkout for your store, each time you redirect a checkout object or call `url` on the checkout object, an API call to Lemon Squeezy will be made. These calls are expensive and can be time and resource consuming for your app. If you are creating the same session over and over again you may want to cache these urls. 
 
 ### Overlay Widget
 
@@ -161,7 +161,7 @@ Instead of redirecting your customer to a checkout screen, you can also create a
 use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
-    $checkout = $request->user()->checkout('your-product-uuid');
+    $checkout = $request->user()->checkout('variant-id');
 
     return view('billing', ['checkout' => $checkout]);
 });
@@ -175,14 +175,6 @@ Now, create the button using the shipped Laravel Blade component from the packag
 </x-lemon-button>
 ```
 
-When a user clicks this button, it'll trigger the Lemon Squeezy checkout overlay. You can also, optionally request it to be rendered in dark mode:
-
-```blade
-<x-lemon-button :href="$checkout" class="px-8 py-4" dark>
-    Buy Product
-</x-lemon-button>
-```
-
 ### Prefill User Data
 
 You can easily prefill user data for checkouts by overwriting the following methods on your billable model:
@@ -191,7 +183,6 @@ You can easily prefill user data for checkouts by overwriting the following meth
 public function lemonSqueezyName(): ?string; // name
 public function lemonSqueezyEmail(): ?string; // email
 public function lemonSqueezyCountry(): ?string; // country
-public function lemonSqueezyState(): ?string; // state
 public function lemonSqueezyZip(): ?string; // zip
 public function lemonSqueezyTaxNumber(): ?string; // tax_number
 ```
@@ -205,10 +196,10 @@ use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
     return response()->redirect(
-        $request->user()->checkout('your-product-uuid')
+        $request->user()->checkout('variant-id')
             ->withName('John Doe')
             ->withEmail('john@example.com')
-            ->withBillingAddress('US', 'NY', '10038')
+            ->withBillingAddress('US', '10038') // Country & Zip Code
             ->withTaxNumber('123456679')
             ->withDiscountCode('PROMO')
     );
@@ -217,7 +208,18 @@ Route::get('/buy', function (Request $request) {
 
 ### Redirects After Purchase
 
-After a purchase the customer will be redirected to your Lemon Squeezy's store. If you want them to be redirected back to your app, you'll have to configure the url in your settings in your Lemon Squeezy dashboard for each individual product.
+To redirect customers back to your app after purchase, you may use the `redirectTo` method:
+
+```php
+$request->user()->checkout('variant-id')
+    ->redirectTo(url('/'));
+```
+
+You may also set a default url for this by configuring the `lemon-squeezy.redirect_url` in your config file:
+
+```php
+'redirect_url' => 'https://my-app.com/dashboard',
+```
 
 ### Custom Data
 
@@ -228,7 +230,7 @@ use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
     return response()->redirect(
-        $request->user()->checkout('your-product-uuid', custom: ['foo' => 'bar'])
+        $request->user()->checkout('variant-id', custom: ['foo' => 'bar'])
     );
 });
 ```
@@ -257,14 +259,14 @@ This gives you the advantage later on to make use of the `hasProduct` method on 
 
 ### Creating Subscriptions
 
-Starting subscriptions is easy. For this, we need the UUID from our product. Click the "share" button of the subscription product you want to share, copy its UUID from the share url and initiate a new subscription checkout from your billable model:
+Starting subscriptions is easy. For this, we need the variant id from our product. Copy the variant id and initiate a new subscription checkout from your billable model:
 
 ```php
 use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
     return response()->redirect(
-        $request->user()->subscribe('your-product-uuid')
+        $request->user()->subscribe('variant-id')
     );
 });
 ```

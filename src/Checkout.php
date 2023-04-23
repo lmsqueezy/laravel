@@ -15,11 +15,13 @@ class Checkout implements Responsable
 
     private bool $desc = true;
 
-    private bool $code = true;
+    private bool $discount = true;
 
-    private array $fields = [];
+    private array $checkoutData = [];
 
     private array $custom = [];
+
+    private ?string $redirectUrl;
 
     public function __construct(private string $store, private string $variant)
     {
@@ -51,32 +53,31 @@ class Checkout implements Responsable
         return $this;
     }
 
-    public function withoutCode(): self
+    public function withoutDiscountField(): self
     {
-        $this->code = false;
+        $this->discount = false;
 
         return $this;
     }
 
     public function withName(string $name): self
     {
-        $this->fields['name'] = $name;
+        $this->checkoutData['name'] = $name;
 
         return $this;
     }
 
     public function withEmail(string $email): self
     {
-        $this->fields['email'] = $email;
+        $this->checkoutData['email'] = $email;
 
         return $this;
     }
 
-    public function withBillingAddress(string $country, string $state = null, string $zip = null): self
+    public function withBillingAddress(string $country, string $zip = null): self
     {
-        $this->fields['billing_address'] = array_filter([
+        $this->checkoutData['billing_address'] = array_filter([
             'country' => $country,
-            'state' => $state,
             'zip' => $zip,
         ]);
 
@@ -85,14 +86,14 @@ class Checkout implements Responsable
 
     public function withTaxNumber(string $taxNumber): self
     {
-        $this->fields['tax_number'] = $taxNumber;
+        $this->checkoutData['tax_number'] = $taxNumber;
 
         return $this;
     }
 
     public function withDiscountCode(string $discountCode): self
     {
-        $this->fields['discount_code'] = $discountCode;
+        $this->checkoutData['discount_code'] = $discountCode;
 
         return $this;
     }
@@ -115,24 +116,51 @@ class Checkout implements Responsable
         return $this;
     }
 
+    public function redirectTo(string $url): self
+    {
+        $this->redirectUrl = $url;
+
+        return $this;
+    }
+
     public function url(): string
     {
-        $params = collect(['logo', 'media', 'desc', 'code'])
-            ->filter(fn ($toggle) => ! $this->{$toggle})
-            ->mapWithKeys(fn ($toggle) => [$toggle => 0])
-            ->all();
+        $response = LemonSqueezy::api('POST', 'checkouts', [
+            'data' => [
+                'type' => 'checkouts',
+                'attributes' => [
+                    'checkout_data' => array_merge(
+                        array_filter($this->checkoutData, fn ($value) => $value !== ''),
+                        ['custom' => $this->custom]
+                    ),
+                    'checkout_options' => [
+                        'logo' => $this->logo,
+                        'media' => $this->media,
+                        'desc' => $this->desc,
+                        'discount' => $this->discount,
+                    ],
+                    'product_options' => [
+                        'redirect_url' => $this->redirectUrl ?? config('lemon-squeezy.redirect_url'),
+                    ],
+                ],
+                'relationships' => [
+                    'store' => [
+                        'data' => [
+                            'type' => 'stores',
+                            'id' => $this->store,
+                        ],
+                    ],
+                    'variant' => [
+                        'data' => [
+                            'type' => 'variants',
+                            'id' => $this->variant,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
 
-        if ($this->fields) {
-            $params['checkout'] = array_filter($this->fields);
-        }
-
-        if ($this->custom) {
-            $params['checkout']['custom'] = $this->custom;
-        }
-
-        $params = ! empty($params) ? '?'.http_build_query($params) : '';
-
-        return "https://{$this->store}.lemonsqueezy.com/checkout/buy/{$this->variant}".$params;
+        return $response['data']['attributes']['url'];
     }
 
     public function redirect(): RedirectResponse

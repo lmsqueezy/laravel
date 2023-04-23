@@ -13,43 +13,7 @@ it('can render a button', function () {
 
     $expect = <<<'HTML'
         <a
-            href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123?embed=1"
-            class="lemonsqueezy-button"
-        >
-            Buy Now
-        </a>
-        HTML;
-
-    $view->assertSee($expect, false);
-});
-
-it('can render an overlay with a dark background', function () {
-    $view = $this->blade(
-        '<x-lemon-button :href="$href" dark>Buy Now</x-lemon-button>',
-        ['href' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']
-    );
-
-    $expect = <<<'HTML'
-        <a
-            href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123?embed=1&dark=1"
-            class="lemonsqueezy-button"
-        >
-            Buy Now
-        </a>
-        HTML;
-
-    $view->assertSee($expect, false);
-});
-
-it('can render a button with disabled toggles', function () {
-    $view = $this->blade(
-        '<x-lemon-button :href="$href">Buy Now</x-lemon-button>',
-        ['href' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123?logo=0&media=0']
-    );
-
-    $expect = <<<'HTML'
-        <a
-            href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123?logo=0&media=0&embed=1"
+            href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123"
             class="lemonsqueezy-button"
         >
             Buy Now
@@ -60,14 +24,20 @@ it('can render a button with disabled toggles', function () {
 });
 
 it('can render a checkout instance', function () {
+    Http::fake([
+        'api.lemonsqueezy.com/v1/checkouts' => Http::response([
+            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']],
+        ]),
+    ]);
+
     $view = $this->blade(
         '<x-lemon-button :href="$checkout">Buy Now</x-lemon-button>',
-        ['checkout' => Checkout::make('lemon', 'variant_123')->withoutLogo()]
+        ['checkout' => Checkout::make('store_24398', 'variant_123')]
     );
 
     $expect = <<<'HTML'
         <a
-            href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123?logo=0&embed=1"
+            href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123"
             class="lemonsqueezy-button"
         >
             Buy Now
