@@ -8,7 +8,7 @@ it('can initiate a new checkout', function () {
 
     Http::fake([
         'api.lemonsqueezy.com/v1/checkouts' => Http::response([
-            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']]
+            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']],
         ]),
     ]);
 
@@ -22,7 +22,7 @@ it('can be redirected', function () {
 
     Http::fake([
         'api.lemonsqueezy.com/v1/checkouts' => Http::response([
-            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']]
+            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']],
         ]),
     ]);
 
@@ -40,7 +40,7 @@ it('can turn off toggles', function () {
 
     Http::fake([
         'api.lemonsqueezy.com/v1/checkouts' => Http::response([
-            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']]
+            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']],
         ]),
     ]);
 
@@ -58,7 +58,7 @@ it('can set prefilled fields with dedicated methods', function () {
 
     Http::fake([
         'api.lemonsqueezy.com/v1/checkouts' => Http::response([
-            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']]
+            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']],
         ]),
     ]);
 
@@ -74,7 +74,7 @@ it('can include custom data', function () {
 
     Http::fake([
         'api.lemonsqueezy.com/v1/checkouts' => Http::response([
-            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']]
+            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']],
         ]),
     ]);
 
@@ -91,7 +91,7 @@ it('can include prefilled fields and custom data', function () {
 
     Http::fake([
         'api.lemonsqueezy.com/v1/checkouts' => Http::response([
-            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']]
+            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']],
         ]),
     ]);
 

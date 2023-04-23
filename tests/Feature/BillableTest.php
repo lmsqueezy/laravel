@@ -7,7 +7,7 @@ it('can generate a checkout for a billable', function () {
 
     Http::fake([
         'api.lemonsqueezy.com/v1/checkouts' => Http::response([
-            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']]
+            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']],
         ]),
     ]);
 
@@ -22,7 +22,7 @@ it('can generate a checkout for a billable with custom data', function () {
 
     Http::fake([
         'api.lemonsqueezy.com/v1/checkouts' => Http::response([
-            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']]
+            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']],
         ]),
     ]);
 
