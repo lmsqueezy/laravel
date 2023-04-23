@@ -16,7 +16,7 @@ trait ManagesCheckouts
         // we make an API request we'll attach the authentication identifier to this
         // checkout so we can match it back to a user when handling Lemon Squeezy webhooks.
         $custom = array_merge($custom, [
-            'billable_id' => $this->getKey(),
+            'billable_id' => (string) $this->getKey(),
             'billable_type' => $this->getMorphClass(),
         ]);
 
@@ -25,7 +25,6 @@ trait ManagesCheckouts
             ->withEmail($options['email'] ?? (string) $this->lemonSqueezyEmail())
             ->withBillingAddress(
                 $options['country'] ?? (string) $this->lemonSqueezyCountry(),
-                $options['state'] ?? (string) $this->lemonSqueezyState(),
                 $options['zip'] ?? (string) $this->lemonSqueezyZip(),
             )
             ->withTaxNumber($options['tax_number'] ?? (string) $this->lemonSqueezyTaxNumber())

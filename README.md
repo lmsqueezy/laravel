@@ -191,7 +191,6 @@ You can easily prefill user data for checkouts by overwriting the following meth
 public function lemonSqueezyName(): ?string; // name
 public function lemonSqueezyEmail(): ?string; // email
 public function lemonSqueezyCountry(): ?string; // country
-public function lemonSqueezyState(): ?string; // state
 public function lemonSqueezyZip(): ?string; // zip
 public function lemonSqueezyTaxNumber(): ?string; // tax_number
 ```
@@ -208,7 +207,7 @@ Route::get('/buy', function (Request $request) {
         $request->user()->checkout('your-product-uuid')
             ->withName('John Doe')
             ->withEmail('john@example.com')
-            ->withBillingAddress('US', 'NY', '10038')
+            ->withBillingAddress('US', '10038')
             ->withTaxNumber('123456679')
             ->withDiscountCode('PROMO')
     );
