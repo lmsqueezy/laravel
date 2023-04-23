@@ -150,6 +150,9 @@ Route::get('/buy', function (Request $request) {
 
 This will automatically redirect your customer to a Lemon Squeezy checkout where the customer can buy your product.
 
+> **Note**
+> When creating a checkout for your store, each time you redirect a checkout object or call `url` on the checkout object, an API call to Lemon Squeezy will be made. These calls are expensive and can be time and resource consuming for your app. If you are creating the same session over and over again you may want to cache these urls. 
+
 ### Overlay Widget
 
 Instead of redirecting your customer to a checkout screen, you can also create a checkout button which will render a checkout overlay on your page. To do this, pass the `$checkout` object to a view:
