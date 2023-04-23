@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'redirect_url' => env('LEMON_SQUEEZY_REDIRECT_URL'),
+    'redirect_url' => null,
 
     /*
     |--------------------------------------------------------------------------
