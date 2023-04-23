@@ -18,5 +18,7 @@
     </testsuites>
     <php>
         <env name="DB_CONNECTION" value="testing"/>
+        <env name="LEMON_SQUEEZY_API_KEY" value="fake"/>
+        <env name="LEMON_SQUEEZY_STORE" value="fake"/>
     </php>
 </phpunit>
