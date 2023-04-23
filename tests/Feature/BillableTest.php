@@ -48,6 +48,8 @@ it('cannnot overwrite the customer id and type or subscription id for a billable
 });
 
 it('needs a configured store to generate checkouts', function () {
+    config()->set('lemon-squeezy.store', null);
+
     $this->expectExceptionMessage('The Lemon Squeezy store was not configured.');
 
     (new User)->checkout('variant_123');
