@@ -313,7 +313,7 @@ if ($user->subscription()->hasVariant('your-variant-id')) {
 }
 ```
 
-The shortcut for the above would be:
+If you want to check if a subscription is on a specific variant and at the same valid you can use:
 
 ```php
 if ($user->subscribedToVariant('your-variant-id')) {
