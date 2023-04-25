@@ -275,7 +275,7 @@ class Subscription extends Model
     /**
      * Cancel the subscription.
      */
-    public function cancel(?int $date): self
+    public function cancel(): self
     {
         $response = LemonSqueezy::api('DELETE', "subscriptions/{$this->lemon_squeezy_id}");
 
@@ -287,7 +287,7 @@ class Subscription extends Model
     /**
      * Resume the subscription.
      */
-    public function resume(?int $date): self
+    public function resume(): self
     {
         if ($this->expired()) {
             throw new LogicException('Cannot resume an expired subscription.');

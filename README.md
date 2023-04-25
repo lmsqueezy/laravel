@@ -315,7 +315,7 @@ use Illuminate\Http\Request;
 Route::get('/update-payment-info', function (Request $request) {
     $subscription = $request->user()->subscription();
 
-    return response()->redirect(
+    return redirect(
         $subscription->updatePaymentMethodUrl()
     );
 });
@@ -325,19 +325,125 @@ To make the URL open in a more seamless overlay on top of your app (similar to t
 
 ### Changing Plans
 
-Coming soon...
+When a customer is subscribed to a monthly plan, they might want to upgrade to a better plan, change their payments to a yearly plan or downgrade to a cheaper plan. For these situations, you can allow them to swap plans by passing a different variant id to the `swap` method:
+
+```php
+use App\Models\User;
+
+$user = User::find(1);
+
+$user->subscription()->swap('variant-id');
+```
+
+This will swap the customer to their new subscription plan but billing will only be done on the next billing cycle. If you'd like to immediately invoice the customer you may use the `swapAndInvoice` method instead:
+
+```php
+$user = User::find(1);
+
+$user->subscription()->swapAndInvoice('variant-id');
+```
+
+#### Prorations
+
+By default, Lemon Squeezy will prorate amounts when changing plans. If you want to prevent this, you may use the `noProrate` method before executing the swap:
+
+```php
+$user = User::find(1);
+
+$user->subscription()->noProrate()->swap('variant-id');
+```
 
 ### Multiple Subscriptions
 
-Coming soon...
+In some situation you may find yourself wanting to allow your customer to subscribe to multiple subscription types. For example, a gym may offer a swimming and weight lifting subscription. You can allow your customer to subscribe to either or both.
+
+To handle the different subscriptions you may provide a `type` of subscription as the second argument when starting a new one:
+
+```php
+$user = User::find(1);
+
+$checkout = $user->subscribe('variant-id', 'swimming');
+```
+
+Now you may always refer this specific subscription type by providing the `type` argument when retrieving it:
+
+```php
+$user = User::find(1);
+
+// Swap plans...
+$user->subscription('swimming')->swap('variant-id');
+
+// Cancel...
+$user->subscription('swimming')->cancel();
+```
 
 ### Pausing Subscriptions
 
-Coming soon...
+To [pause subscriptions](https://docs.lemonsqueezy.com/guides/developer-guide/managing-subscriptions#pausing-and-unpausing-subscriptions), call the `pause` method on it:
+
+```php
+$user = User::find(1);
+
+$user->subscription()->pause();
+```
+
+Optionally, provide a date when the subscription can resume:
+
+```php
+$user = User::find(1);
+
+$user->subscription()->pause(
+    now()->addDays(5)
+);
+```
+
+This will fill in the `resumes_at` timestamp on your customer. To know if your subscription is within its paused period you can use the `onPausedPeriod` method:
+
+```php
+if ($user->subscription('default')->onPausedPeriod()) {
+    // ...
+}
+```
+
+To unpause, simply call that method on the subscription:
+
+```php
+$user->subscription()->unpause();
+```
+
+#### Pause State
+
+By default, pausing a subscription will void its usage for the remainder of the pause period. If you instead would like your customers to use your services for free, you may use the `pauseForFree` method:
+
+```php
+$user->subscription()->pauseForFree();
+```
 
 ### Cancelling Subscriptions
 
-Coming soon...
+To [cancel a subscription](https://docs.lemonsqueezy.com/guides/developer-guide/managing-subscriptions#cancelling-and-resuming-subscriptions), call the `cancel` method on it:
+
+```php
+$user = User::find(1);
+
+$user->subscription()->cancel();
+```
+
+This will set your subscription to be cancelled. If your subscription is cancelled mid-cycle, it'll enter a grace period and the `ends_at` column will be set. The customer will still have access to the services provided for the remainder of the period. You can check for its grace period by calling the `onGracePeriod` method:
+
+```php
+if ($user->subscription()->onGracePeriod()) {
+    // ...
+}
+```
+
+Immediate cancellation with Lemon Squeezy is not possible. To resume a subscription while it's still on its grace period, call the `resume` method:
+
+```php
+$user->subscription()->resume();
+```
+
+When a cancelled subscription reaches the end of its grace period it'll transition to a state of expired and won't be able to resume any longer.
 
 ### Subscription Trials
 
