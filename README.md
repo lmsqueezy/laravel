@@ -142,7 +142,7 @@ For example, to create a checkout for a single-payment, use a variant ID of a pr
 use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
-    return response()->redirect(
+    return redirect(
         $request->user()->checkout('variant-id')
     );
 });
@@ -195,7 +195,7 @@ Additionally, you may also pass this data on the fly by using the following meth
 use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
-    return response()->redirect(
+    return redirect(
         $request->user()->checkout('variant-id')
             ->withName('John Doe')
             ->withEmail('john@example.com')
@@ -229,7 +229,7 @@ You can also [pass along custom data with your checkouts](https://docs.lemonsque
 use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
-    return response()->redirect(
+    return redirect(
         $request->user()->checkout('variant-id', custom: ['foo' => 'bar'])
     );
 });
@@ -265,7 +265,7 @@ Starting subscriptions is easy. For this, we need the variant id from our produc
 use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
-    return response()->redirect(
+    return redirect(
         $request->user()->subscribe('variant-id')
     );
 });
@@ -279,7 +279,97 @@ $subscription = $user->subscription();
 
 ### Checking Subscription Status
 
-Coming soon...
+Once a customer is subscribed to your services, you can use a variety of methods to check for various states on the subscription. The most basic example, is to check if a customer is subscribed to a valid subscription:
+
+```php
+if ($user->subscribed()) {
+    // ...
+}
+```
+
+You may use this in various places in your app like middleware, policies, etc, to offer your services. To check if an individual subscription is valid, you may use the `valid` method:
+
+```php
+if ($user->subscription()->valid()) {
+    // ...
+}
+```
+
+This state will return true if your subscription is active, on trial, paused for free or on its cancelled grace period.
+
+You can also check if a subscription is on a specific product:
+
+```php
+if ($user->subscription()->hasProduct('your-product-id')) {
+    // ...
+}
+```
+
+Or on a specific variant:
+
+```php
+if ($user->subscription()->hasVariant('your-variant-id')) {
+    // ...
+}
+```
+
+The shortcut for the above would be:
+
+```php
+if ($user->subscribedToVariant('your-variant-id')) {
+    // ...
+}
+```
+
+Or if you're using [multiple subscription types](#multiple-subscriptions), you can pass a type as an extra parameter:
+
+```php
+if ($user->subscribed('swimming')) {
+    // ...
+}
+
+if ($user->subscribedToVariant('your-variant-id', 'swimming')) {
+    // ...
+}
+```
+
+#### Cancelled Status
+
+To check if a user has cancelled their subscription you may use the `cancelled` method:
+
+```php
+if ($user->subscription()->cancelled()) {
+    // ...
+}
+```
+
+When they're on their grace period, you can use the `onGracePeriod` check:
+
+```php
+if ($user->subscription()->onGracePeriod()) {
+    // ...
+}
+```
+
+If a subscription is fully cancelled and no longer on its grace period, you may use the `expired` check:
+
+```php
+if ($user->subscription()->expired()) {
+    // ...
+}
+```
+
+#### Past Due Status
+
+If a recurring payment for a subscription fails, the subscription will transition in a past due state. This means it's no longer a valid subscription and won't be active until the customer has updated their payment info and the open invoice has been paid.
+
+```php
+if ($user->subscription()->pastDue()) {
+    // ...
+}
+```
+
+In this state, you should instruct your customer to [update their payment info](#updating-payment-information). Failed payments in Lemon Squeezy are retried a couple of times. For more information on that, as well as the dunning process, head over to [the Lemon Squeezy documentation](https://docs.lemonsqueezy.com/help/online-store/recovery-dunning)
 
 #### Subscription Scopes
 
@@ -400,7 +490,7 @@ $user->subscription()->pause(
 This will fill in the `resumes_at` timestamp on your customer. To know if your subscription is within its paused period you can use the `onPausedPeriod` method:
 
 ```php
-if ($user->subscription('default')->onPausedPeriod()) {
+if ($user->subscription()->onPausedPeriod()) {
     // ...
 }
 ```
@@ -446,6 +536,10 @@ $user->subscription()->resume();
 When a cancelled subscription reaches the end of its grace period it'll transition to a state of expired and won't be able to resume any longer.
 
 ### Subscription Trials
+
+Coming soon...
+
+## Receipts
 
 Coming soon...
 

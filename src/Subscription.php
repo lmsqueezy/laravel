@@ -73,7 +73,10 @@ class Subscription extends Model
      */
     public function valid(): bool
     {
-        return $this->active() || $this->onTrial() || ($this->paused() && $this->pause_mode === 'free') || $this->onGracePeriod();
+        return $this->active() ||
+            $this->onTrial() ||
+            ($this->paused() && $this->pause_mode === 'free') ||
+            $this->onGracePeriod();
     }
 
     /**
