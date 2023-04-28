@@ -1,6 +1,12 @@
-@props(['href'])
+@props(['href', 'dark' => false])
 
-@php($href = $href instanceof LemonSqueezy\Laravel\Checkout ? $href->url() : $href)
+@if ($href instanceof LemonSqueezy\Laravel\Checkout)
+    @if ($dark)
+        @php($href = $href->dark())
+    @endif
+
+    @php($href = $href->embed()->url())
+@endif
 
 <a
     href="{!! $href !!}"

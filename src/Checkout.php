@@ -9,13 +9,17 @@ use LemonSqueezy\Laravel\Exceptions\ReservedCustomKeys;
 
 class Checkout implements Responsable
 {
-    private bool $logo = true;
+    private bool $embed = false;
 
     private bool $media = true;
+
+    private bool $logo = true;
 
     private bool $desc = true;
 
     private bool $discount = true;
+
+    private bool $dark = false;
 
     private array $checkoutData = [];
 
@@ -30,6 +34,13 @@ class Checkout implements Responsable
     public static function make(string $store, string $variant): static
     {
         return new static($store, $variant);
+    }
+
+    public function embed(): self
+    {
+        $this->embed = true;
+
+        return $this;
     }
 
     public function withoutLogo(): self
@@ -56,6 +67,13 @@ class Checkout implements Responsable
     public function withoutDiscountField(): self
     {
         $this->discount = false;
+
+        return $this;
+    }
+
+    public function dark(): self
+    {
+        $this->dark = true;
 
         return $this;
     }
@@ -134,10 +152,12 @@ class Checkout implements Responsable
                         ['custom' => $this->custom]
                     ),
                     'checkout_options' => [
+                        'embed' => $this->embed,
                         'logo' => $this->logo,
                         'media' => $this->media,
                         'desc' => $this->desc,
                         'discount' => $this->discount,
+                        'dark' => $this->dark,
                     ],
                     'product_options' => [
                         'redirect_url' => $this->redirectUrl ?? config('lemon-squeezy.redirect_url'),

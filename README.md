@@ -175,6 +175,14 @@ Now, create the button using the shipped Laravel Blade component from the packag
 </x-lemon-button>
 ```
 
+When a user clicks this button, it'll trigger the Lemon Squeezy checkout overlay. You can also, optionally request it to be rendered in dark mode:
+
+```blade
+<x-lemon-button :href="$checkout" class="px-8 py-4" dark>
+    Buy Product
+</x-lemon-button>
+```
+
 ### Prefill User Data
 
 You can easily prefill user data for checkouts by overwriting the following methods on your billable model:
@@ -537,7 +545,31 @@ When a cancelled subscription reaches the end of its grace period it'll transiti
 
 ### Subscription Trials
 
-Coming soon...
+For a thorough read on trialing in Lemon Squeezy, [have a look at their guide](https://docs.lemonsqueezy.com/guides/tutorials/saas-free-trials).
+
+### No Payment Required
+
+To allow people to signup for your product without having them to fill out their payment details, you may set the `trial_ends_at` column when creating them as a customer:
+
+```php
+use App\Models\User;
+ 
+$user = User::create([
+    // ...
+]);
+ 
+$user->createAsCustomer([
+    'trial_ends_at' => now()->addDays(10)
+]);
+```
+
+This is what's called "a generic trial" because it's not attached to any subscription. You can use the `onTrial` method to check if a customer is currently trialing your app:
+
+```php
+if ($user->onTrial()) {
+    // User is within their trial period...
+}
+``
 
 ## Receipts
 
