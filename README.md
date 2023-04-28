@@ -303,7 +303,7 @@ if ($user->subscription()->valid()) {
 }
 ```
 
-This state will return true if your subscription is active, on trial, paused for free or on its cancelled grace period.
+This method, as well as the `subscribed` method, will return true if your subscription is active, on trial, past due, paused for free or on its cancelled grace period.
 
 You can also check if a subscription is on a specific product:
 
@@ -369,7 +369,7 @@ if ($user->subscription()->expired()) {
 
 #### Past Due Status
 
-If a recurring payment for a subscription fails, the subscription will transition in a past due state. This means it's no longer a valid subscription and won't be active until the customer has updated their payment info and the open invoice has been paid.
+If a recurring payment for a subscription fails, the subscription will transition in a past due state. This means it's still a valid subscription but your customer will have a 2 weeks period where their payments will be retried.
 
 ```php
 if ($user->subscription()->pastDue()) {
@@ -569,7 +569,77 @@ This is what's called "a generic trial" because it's not attached to any subscri
 if ($user->onTrial()) {
     // User is within their trial period...
 }
-``
+```
+
+Or if you specifically also want to make sure it's a generic trial, you can use the `onGenericTrial` method:
+
+```php
+if ($user->onGenericTrial()) {
+    // User is within their "generic" trial period...
+}
+```
+
+You can also retrieve the ending date of the trial by calling the `trialEndsAt` method:
+
+```php
+if ($user->onTrial()) {
+    $trialEndsAt = $user->trialEndsAt();
+}
+```
+
+As soon as your customer is ready, or after their trial has expired, they may start their subscription:
+
+```php
+use Illuminate\Http\Request;
+
+Route::get('/buy', function (Request $request) {
+    return redirect(
+        $request->user()->subscribe('variant-id')
+    );
+});
+```
+
+Please note that when a customer starts their subscription when they're still on their generic trial, their trial will be cancelled because they have started to pay for your product.
+
+### Payment required
+
+Another option is to require payment details when people want to trial your products. This means that after the trial expires, they'll immediately be subscribed to your product. To get started with this, you'll need to [configure a trial period in your product's settings](https://docs.lemonsqueezy.com/guides/tutorials/saas-free-trials#1-create-subscription-products-with-trials). Then, let a customer start a subscription:
+
+```php
+use Illuminate\Http\Request;
+
+Route::get('/buy', function (Request $request) {
+    return redirect(
+        $request->user()->subscribe('variant-id')
+    );
+});
+```
+
+After your customer is subscribed, they'll enter their trial period which you configured and won't be charged until after this date. You'll need to give them the option to cancel their subscription before this time if they want.
+
+To check if your customer is currently on their free trial, you may use the `onTrial` method on both the billable or an individual subscription:
+
+```php
+if ($user->onTrial('default')) {
+    // ...
+}
+ 
+if ($user->subscription('default')->onTrial()) {
+    // ...
+}
+```
+
+To determine if a trial has expired, you may use the `hasExpiredTrial` method:
+
+```php
+if ($user->hasExpiredTrial('default')) {
+    // ...
+}
+ 
+if ($user->subscription('default')->hasExpiredTrial()) {
+    // ...
+}
+```
 
 ## Receipts
 

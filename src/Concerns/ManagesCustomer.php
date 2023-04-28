@@ -24,7 +24,7 @@ trait ManagesCustomer
     }
 
     /**
-     * Get the billable model's name to associate with Lemon Squeezy.
+     * Get the billable's name to associate with Lemon Squeezy.
      */
     public function lemonSqueezyName(): ?string
     {
@@ -32,7 +32,7 @@ trait ManagesCustomer
     }
 
     /**
-     * Get the billable model's email address to associate with Lemon Squeezy.
+     * Get the billable's email address to associate with Lemon Squeezy.
      */
     public function lemonSqueezyEmail(): ?string
     {
@@ -40,7 +40,7 @@ trait ManagesCustomer
     }
 
     /**
-     * Get the billable model's country to associate with Lemon Squeezy.
+     * Get the billable's country to associate with Lemon Squeezy.
      *
      * This needs to be a 2 letter code.
      */
@@ -50,7 +50,7 @@ trait ManagesCustomer
     }
 
     /**
-     * Get the billable model's zip code to associate with Lemon Squeezy.
+     * Get the billable's zip code to associate with Lemon Squeezy.
      */
     public function lemonSqueezyZip(): ?string
     {
@@ -58,7 +58,7 @@ trait ManagesCustomer
     }
 
     /**
-     * Get the billable model's tax number to associate with Lemon Squeezy.
+     * Get the billable's tax number to associate with Lemon Squeezy.
      */
     public function lemonSqueezyTaxNumber(): ?string
     {

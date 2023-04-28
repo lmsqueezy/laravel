@@ -88,6 +88,11 @@ class WebhookController extends Controller
             'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
         ]);
 
+        // Terminate the billable's generic trial at the model level if it exists...
+        if (! is_null($billable->customer->trial_ends_at)) {
+            $billable->customer->update(['trial_ends_at' => null]);
+        }
+
         SubscriptionCreated::dispatch($billable, $subscription, $payload);
     }
 

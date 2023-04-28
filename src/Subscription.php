@@ -75,8 +75,9 @@ class Subscription extends Model
     {
         return $this->active() ||
             $this->onTrial() ||
-            ($this->paused() && $this->pause_mode === 'free') ||
-            $this->onGracePeriod();
+            $this->pastDue() ||
+            $this->cancelled() ||
+            ($this->paused() && $this->pause_mode === 'free');
     }
 
     /**
