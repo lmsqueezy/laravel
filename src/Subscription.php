@@ -247,15 +247,15 @@ class Subscription extends Model
     /**
      * Swap the subscription to a new product plan.
      */
-    public function swap(string $productId, string $variantId, array $attributes = []): self
+    public function swap(string $product, string $variant, array $attributes = []): self
     {
         $response = LemonSqueezy::api('PATCH', "subscriptions/{$this->lemon_squeezy_id}", [
             'data' => [
                 'type' => 'subscriptions',
                 'id' => $this->lemon_squeezy_id,
                 'attributes' => array_merge([
-                    'product_id' => $productId,
-                    'variant_id' => $variantId,
+                    'product_id' => $product,
+                    'variant_id' => $variant,
                     'disable_prorations' => ! $this->prorate,
                 ], $attributes),
             ],
@@ -269,9 +269,9 @@ class Subscription extends Model
     /**
      * Swap the subscription to a new product plan and invoice immediately.
      */
-    public function swapAndInvoice(string $productId, string $variantId): self
+    public function swapAndInvoice(string $product, string $variant): self
     {
-        return $this->swap($productId, $variantId, [
+        return $this->swap($product, $variant, [
             'invoice_immediately' => true,
         ]);
     }

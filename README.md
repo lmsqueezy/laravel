@@ -201,11 +201,11 @@ $request->user()->checkout('variant-id')
     ->withoutSubscriptionPreview();
 ```
 
-If you want to set a different color for the checkout button you may pass a hex color code (without the `#` sign) through `withButtonColor`:
+If you want to set a different color for the checkout button you may pass a hex color code (with the leading `#` sign) through `withButtonColor`:
 
 ```php
 $request->user()->checkout('variant-id')
-    ->withButtonColor('FF2E1F');
+    ->withButtonColor('#FF2E1F');
 ```
 
 ### Prefill User Data
