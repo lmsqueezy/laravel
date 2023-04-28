@@ -25,6 +25,14 @@ We also recommend to read the Lemon Squeezy [docs](https://docs.lemonsqueezy.com
 
 > This package is a work in progress. As long as there is no v1.0.0, breaking changes may occur in v0.x releases. No upgrade path between v0.x versions will be provided.
 
+## Roadmap
+
+The below features are not yet in this package but are planned to be added in the future:
+
+- Receipts
+- License keys
+- Marketing emails check
+
 ## Requirements
 
 - PHP 8.1 or higher
@@ -641,10 +649,73 @@ if ($user->subscription('default')->hasExpiredTrial()) {
 }
 ```
 
-## Receipts
-
-Coming soon...
-
 ## Handling Webhooks
 
-Coming soon...
+Lemon Squeezy can send your app webhooks which you can react on. By default, this package alread does the bulk of the work for you. [If you've properly set up webhooks](#webhooks), it'll listen to any incoming events and update your database accordingly. We recommend enabling all event types so it's easy for you to upgrade in the future.
+
+To listen to incoming webhooks, we have two events that will be fired:
+
+- LemonSqueezy\Laravel\Events\WebhookReceived
+- LemonSqueezy\Laravel\Events\WebhookHandled
+
+The `WebhookReceived` will be fired as soon as a webhook comes in but has not been handled by the package's `WebhookController`. The `WebhookHandled` event will be fired as soon as the webhook has been processed by the package. Both events will contain the full payload of the incoming webhook.
+
+If you want to react to these events, you'll have to create listeners for them. For example, you may want to react to a subscription being updated:
+
+```php
+<?php
+ 
+namespace App\Listeners;
+ 
+use LemonSqueezy\Laravel\Events\WebhookHandled;
+ 
+class LemonSqueezyEventListener
+{
+    /**
+     * Handle received Lemon Squeezy webhooks.
+     */
+    public function handle(WebhookHandled $event): void
+    {
+        if ($event->payload['meta']['event_name'] === 'subscription_updated') {
+            // Handle the incoming event...
+        }
+    }
+}
+```
+
+For an example payload, [take a look at the Lemon Squeezy API docs](https://docs.lemonsqueezy.com/api/webhooks#webhook-requests). 
+
+Once you have a listener, wire it up in your app's `EventServiceProvider`:
+
+```php
+<?php
+ 
+namespace App\Providers;
+ 
+use App\Listeners\LemonSqueezyEventListener;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use LemonSqueezy\Laravel\Events\WebhookHandled;
+ 
+class EventServiceProvider extends ServiceProvider
+{
+    protected $listen = [
+        WebhookHandled::class => [
+            LemonSqueezyEventListener::class,
+        ],
+    ];
+}
+```
+
+### Webhook Events
+
+Instead of listening to the `WebhookHandled` event, you may also subscribe to one of the following, dedicated package events that are fired after a webhook has been handled:
+
+- `LemonSqueezy\Laravel\Events\SubscriptionCreated`
+- `LemonSqueezy\Laravel\Events\SubscriptionUpdated`
+- `LemonSqueezy\Laravel\Events\SubscriptionCancelled`
+- `LemonSqueezy\Laravel\Events\SubscriptionResumed`
+- `LemonSqueezy\Laravel\Events\SubscriptionExpired`
+- `LemonSqueezy\Laravel\Events\SubscriptionPaused`
+- `LemonSqueezy\Laravel\Events\SubscriptionUnpaused`
+
+All of these events contain a billable `$model` instance, a `$subscription` object and the event `$payload`. These can be access through their public properties.
