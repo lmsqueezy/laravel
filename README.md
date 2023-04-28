@@ -29,10 +29,12 @@ We also recommend to read the Lemon Squeezy [docs](https://docs.lemonsqueezy.com
 
 The below features are not yet in this package but are planned to be added in the future:
 
-- Subscription Invoices
+- Subscription invoices
 - License keys
 - Marketing emails check
-- Product & Variant listing
+- Product & variant listing
+- Custom priced checkouts
+- Create discount codes
 
 ## Requirements
 
@@ -192,6 +194,20 @@ When a user clicks this button, it'll trigger the Lemon Squeezy checkout overlay
 </x-lemon-button>
 ```
 
+If you're checking out subscriptions, and you don't want to to show the "You will be charged..." text, you may disable this by calling the `withoutSubscriptionPreview` method on the checkout object:
+
+```php
+$request->user()->checkout('variant-id')
+    ->withoutSubscriptionPreview();
+```
+
+If you want to set a different color for the checkout button you may pass a hex color code (without the `#` sign) through `withButtonColor`:
+
+```php
+$request->user()->checkout('variant-id')
+    ->withButtonColor('FF2E1F');
+```
+
 ### Prefill User Data
 
 You can easily prefill user data for checkouts by overwriting the following methods on your billable model:
@@ -236,6 +252,15 @@ You may also set a default url for this by configuring the `lemon-squeezy.redire
 
 ```php
 'redirect_url' => 'https://my-app.com/dashboard',
+```
+
+### Expire Checkouts
+
+You can indicate how long a checkout session should stay active by calling the `expiresAt` method on it:
+
+```php
+$request->user()->checkout('variant-id')
+    ->expiresAt(now()->addDays(3));
 ```
 
 ### Custom Data

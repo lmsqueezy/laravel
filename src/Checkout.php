@@ -2,6 +2,7 @@
 
 namespace LemonSqueezy\Laravel;
 
+use DateTimeInterface;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -21,11 +22,17 @@ class Checkout implements Responsable
 
     private bool $dark = false;
 
+    private bool $subscriptionPreview = true;
+
+    private ?string $buttonColor;
+
     private array $checkoutData = [];
 
     private array $custom = [];
 
     private ?string $redirectUrl;
+
+    private ?DateTimeInterface $expiresAt;
 
     public function __construct(private string $store, private string $variant)
     {
@@ -74,6 +81,20 @@ class Checkout implements Responsable
     public function dark(): self
     {
         $this->dark = true;
+
+        return $this;
+    }
+
+    public function withoutSubscriptionPreview(): self
+    {
+        $this->subscriptionPreview = false;
+
+        return $this;
+    }
+
+    public function withButtonColor(string $color): self
+    {
+        $this->buttonColor = $color;
 
         return $this;
     }
@@ -141,6 +162,13 @@ class Checkout implements Responsable
         return $this;
     }
 
+    public function expiresAt(DateTimeInterface $expiresAt): self
+    {
+        $this->expiresAt = $expiresAt;
+
+        return $this;
+    }
+
     public function url(): string
     {
         $response = LemonSqueezy::api('POST', 'checkouts', [
@@ -151,17 +179,22 @@ class Checkout implements Responsable
                         array_filter($this->checkoutData, fn ($value) => $value !== ''),
                         ['custom' => $this->custom]
                     ),
-                    'checkout_options' => [
+                    'checkout_options' => array_filter([
                         'embed' => $this->embed,
                         'logo' => $this->logo,
                         'media' => $this->media,
                         'desc' => $this->desc,
                         'discount' => $this->discount,
                         'dark' => $this->dark,
-                    ],
+                        'subscription_preview' => $this->subscriptionPreview,
+                        'button_color' => $this->buttonColor ?? null,
+                    ], function ($value) {
+                        return ! is_null($value);
+                    }),
                     'product_options' => [
                         'redirect_url' => $this->redirectUrl ?? config('lemon-squeezy.redirect_url'),
                     ],
+                    'expires_at' => isset($this->expiresAt) ? $this->expiresAt->format(DateTimeInterface::ATOM) : null,
                 ],
                 'relationships' => [
                     'store' => [
