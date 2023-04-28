@@ -745,3 +745,11 @@ Instead of listening to the `WebhookHandled` event, you may also subscribe to on
 - `LemonSqueezy\Laravel\Events\SubscriptionUnpaused`
 
 All of these events contain a billable `$model` instance, a `$subscription` object and the event `$payload`. These can be access through their public properties.
+
+## Changelog
+
+Check out the [CHANGELOG](CHANGELOG.md) in this repository for all the recent changes.
+
+## License
+
+Lemon Squeezy for Laravel is open-sourced software licensed under [the MIT license](LICENSE.md).
