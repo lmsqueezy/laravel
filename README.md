@@ -683,8 +683,8 @@ Lemon Squeezy can send your app webhooks which you can react on. By default, thi
 
 To listen to incoming webhooks, we have two events that will be fired:
 
-- LemonSqueezy\Laravel\Events\WebhookReceived
-- LemonSqueezy\Laravel\Events\WebhookHandled
+- `LemonSqueezy\Laravel\Events\WebhookReceived`
+- `LemonSqueezy\Laravel\Events\WebhookHandled`
 
 The `WebhookReceived` will be fired as soon as a webhook comes in but has not been handled by the package's `WebhookController`. The `WebhookHandled` event will be fired as soon as the webhook has been processed by the package. Both events will contain the full payload of the incoming webhook.
 
