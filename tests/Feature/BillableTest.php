@@ -33,7 +33,7 @@ it('can generate a checkout for a billable with custom data', function () {
         ->toBe('https://lemon.lemonsqueezy.com/checkout/buy/variant_123');
 });
 
-it('cannnot overwrite the customer id and type or subscription id for a billable', function () {
+it('can not overwrite the customer id and type or subscription id for a billable', function () {
     config()->set('lemon-squeezy.store', 'store_23432');
 
     $this->expectExceptionMessage(
