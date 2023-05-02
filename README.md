@@ -166,6 +166,8 @@ This will automatically redirect your customer to a Lemon Squeezy checkout where
 
 ### Overlay Widget
 
+> *Note:* the overlay widget currently has [a pending issue](https://github.com/lmsqueezy/laravel/issues/4).
+
 Instead of redirecting your customer to a checkout screen, you can also create a checkout button which will render a checkout overlay on your page. To do this, pass the `$checkout` object to a view:
 
 ```php
