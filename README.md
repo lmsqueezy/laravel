@@ -308,7 +308,7 @@ Starting subscriptions is easy. For this, we need the variant id from our produc
 ```php
 use Illuminate\Http\Request;
  
-Route::get('/buy', function (Request $request) {
+Route::get('/subscribe', function (Request $request) {
     return redirect(
         $request->user()->subscribe('variant-id')
     );
