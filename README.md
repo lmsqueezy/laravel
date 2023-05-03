@@ -199,7 +199,7 @@ When a user clicks this button, it'll trigger the Lemon Squeezy checkout overlay
 If you're checking out subscriptions, and you don't want to to show the "You will be charged..." text, you may disable this by calling the `withoutSubscriptionPreview` method on the checkout object:
 
 ```php
-$request->user()->checkout('variant-id')
+$request->user()->subscribe('variant-id')
     ->withoutSubscriptionPreview();
 ```
 
