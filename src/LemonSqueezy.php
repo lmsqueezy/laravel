@@ -44,7 +44,7 @@ class LemonSqueezy
         }
 
         /** @var \Illuminate\Http\Client\Response $response */
-        $response = Http::withToken($apiKey)
+        $response = Http::retry(3, 50)->withToken($apiKey)
             ->withUserAgent('LemonSqueezy\Laravel/'.static::VERSION)
             ->accept('application/vnd.api+json')
             ->contentType('application/vnd.api+json')
