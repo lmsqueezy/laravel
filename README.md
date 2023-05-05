@@ -153,9 +153,7 @@ For example, to create a checkout for a single-payment, use a variant ID of a pr
 use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
-    return redirect(
-        $request->user()->checkout('variant-id')
-    );
+    return $request->user()->checkout('variant-id');
 });
 ```
 
@@ -230,14 +228,12 @@ Additionally, you may also pass this data on the fly by using the following meth
 use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
-    return redirect(
-        $request->user()->checkout('variant-id')
-            ->withName('John Doe')
-            ->withEmail('john@example.com')
-            ->withBillingAddress('US', '10038') // Country & Zip Code
-            ->withTaxNumber('123456679')
-            ->withDiscountCode('PROMO')
-    );
+    return $request->user()->checkout('variant-id')
+        ->withName('John Doe')
+        ->withEmail('john@example.com')
+        ->withBillingAddress('US', '10038') // Country & Zip Code
+        ->withTaxNumber('123456679')
+        ->withDiscountCode('PROMO');
 });
 ```
 
@@ -273,9 +269,7 @@ You can also [pass along custom data with your checkouts](https://docs.lemonsque
 use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
-    return redirect(
-        $request->user()->checkout('variant-id', custom: ['foo' => 'bar'])
-    );
+    return $request->user()->checkout('variant-id', custom: ['foo' => 'bar']);
 });
 ```
 
@@ -309,9 +303,7 @@ Starting subscriptions is easy. For this, we need the variant id from our produc
 use Illuminate\Http\Request;
  
 Route::get('/subscribe', function (Request $request) {
-    return redirect(
-        $request->user()->subscribe('variant-id')
-    );
+    return $request->user()->subscribe('variant-id');
 });
 ```
 
@@ -629,9 +621,7 @@ As soon as your customer is ready, or after their trial has expired, they may st
 use Illuminate\Http\Request;
 
 Route::get('/buy', function (Request $request) {
-    return redirect(
-        $request->user()->subscribe('variant-id')
-    );
+    return $request->user()->subscribe('variant-id');
 });
 ```
 
@@ -645,9 +635,7 @@ Another option is to require payment details when people want to trial your prod
 use Illuminate\Http\Request;
 
 Route::get('/buy', function (Request $request) {
-    return redirect(
-        $request->user()->subscribe('variant-id')
-    );
+    return $request->user()->subscribe('variant-id');
 });
 ```
 
