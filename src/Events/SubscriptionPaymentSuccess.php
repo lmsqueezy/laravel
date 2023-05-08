@@ -7,7 +7,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use LemonSqueezy\Laravel\Subscription;
 
-class SubscriptionPaused
+class SubscriptionPaymentSuccess
 {
     use Dispatchable, SerializesModels;
 

@@ -10,6 +10,10 @@ use LemonSqueezy\Laravel\Events\SubscriptionCancelled;
 use LemonSqueezy\Laravel\Events\SubscriptionCreated;
 use LemonSqueezy\Laravel\Events\SubscriptionExpired;
 use LemonSqueezy\Laravel\Events\SubscriptionPaused;
+use LemonSqueezy\Laravel\Events\SubscriptionPaymentFailed;
+
+use LemonSqueezy\Laravel\Events\SubscriptionPaymentRecovered;
+use LemonSqueezy\Laravel\Events\SubscriptionPaymentSuccess;
 use LemonSqueezy\Laravel\Events\SubscriptionResumed;
 use LemonSqueezy\Laravel\Events\SubscriptionUnpaused;
 use LemonSqueezy\Laravel\Events\SubscriptionUpdated;
@@ -36,7 +40,7 @@ final class WebhookController extends Controller
     /**
      * Handle a Lemon Squeezy webhook call.
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request) : Response
     {
         $payload = $request->all();
 
@@ -44,14 +48,15 @@ final class WebhookController extends Controller
             return new Response('Webhook received but no event name was found.');
         }
 
-        $method = 'handle'.Str::studly($payload['meta']['event_name']);
+        $method = 'handle' . Str::studly($payload['meta']['event_name']);
 
         WebhookReceived::dispatch($payload);
 
         if (method_exists($this, $method)) {
             try {
                 $this->{$method}($payload);
-            } catch (InvalidCustomPayload $e) {
+            }
+            catch (InvalidCustomPayload $e) {
                 return new Response('Webhook skipped due to invalid custom data.');
             }
 
@@ -66,7 +71,7 @@ final class WebhookController extends Controller
     /**
      * @throws InvalidCustomPayload
      */
-    public function handleSubscriptionCreated(array $payload): void
+    public function handleSubscriptionCreated(array $payload) : void
     {
         $custom = $payload['meta']['custom_data'] ?? null;
 
@@ -83,27 +88,27 @@ final class WebhookController extends Controller
         );
 
         $subscription = $billable->subscriptions()->create([
-            'type' => $custom['subscription_type'] ?? Subscription::DEFAULT_TYPE,
+            'type'             => $custom['subscription_type'] ?? Subscription::DEFAULT_TYPE,
             'lemon_squeezy_id' => $payload['data']['id'],
-            'status' => $attributes['status'],
-            'product_id' => $attributes['product_id'],
-            'variant_id' => $attributes['variant_id'],
-            'card_brand' => $attributes['card_brand'] ?? null,
-            'card_last_four' => $attributes['card_last_four'] ?? null,
-            'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
-            'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
-            'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
+            'status'           => $attributes['status'],
+            'product_id'       => $attributes['product_id'],
+            'variant_id'       => $attributes['variant_id'],
+            'card_brand'       => $attributes['card_brand'] ?? null,
+            'card_last_four'   => $attributes['card_last_four'] ?? null,
+            'trial_ends_at'    => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
+            'renews_at'        => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
+            'ends_at'          => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
         ]);
 
         // Terminate the billable's generic trial at the model level if it exists...
         if (! is_null($billable->customer->trial_ends_at)) {
-            $billable->customer->update(['trial_ends_at' => null]);
+            $billable->customer->update([ 'trial_ends_at' => null ]);
         }
 
         SubscriptionCreated::dispatch($billable, $subscription, $payload);
     }
 
-    private function handleSubscriptionUpdated(array $payload): void
+    private function handleSubscriptionUpdated(array $payload) : void
     {
         if (! $subscription = $this->findSubscription($payload['data']['id'])) {
             return;
@@ -114,7 +119,7 @@ final class WebhookController extends Controller
         SubscriptionUpdated::dispatch($subscription->billable, $subscription, $payload);
     }
 
-    private function handleSubscriptionCancelled(array $payload): void
+    private function handleSubscriptionCancelled(array $payload) : void
     {
         if (! $subscription = $this->findSubscription($payload['data']['id'])) {
             return;
@@ -125,7 +130,7 @@ final class WebhookController extends Controller
         SubscriptionCancelled::dispatch($subscription->billable, $subscription, $payload);
     }
 
-    private function handleSubscriptionResumed(array $payload): void
+    private function handleSubscriptionResumed(array $payload) : void
     {
         if (! $subscription = $this->findSubscription($payload['data']['id'])) {
             return;
@@ -136,7 +141,7 @@ final class WebhookController extends Controller
         SubscriptionResumed::dispatch($subscription->billable, $subscription, $payload);
     }
 
-    private function handleSubscriptionExpired(array $payload): void
+    private function handleSubscriptionExpired(array $payload) : void
     {
         if (! $subscription = $this->findSubscription($payload['data']['id'])) {
             return;
@@ -147,7 +152,7 @@ final class WebhookController extends Controller
         SubscriptionExpired::dispatch($subscription->billable, $subscription, $payload);
     }
 
-    private function handleSubscriptionPaused(array $payload): void
+    private function handleSubscriptionPaused(array $payload) : void
     {
         if (! $subscription = $this->findSubscription($payload['data']['id'])) {
             return;
@@ -158,7 +163,7 @@ final class WebhookController extends Controller
         SubscriptionPaused::dispatch($subscription->billable, $subscription, $payload);
     }
 
-    private function handleSubscriptionUnpaused(array $payload): void
+    private function handleSubscriptionUnpaused(array $payload) : void
     {
         if (! $subscription = $this->findSubscription($payload['data']['id'])) {
             return;
@@ -169,20 +174,47 @@ final class WebhookController extends Controller
         SubscriptionUnpaused::dispatch($subscription->billable, $subscription, $payload);
     }
 
+    private function handleSubscriptionPaymentSuccess(array $payload) : void
+    {
+        if (! $subscription = $this->findSubscription($payload['data']['attributes']['id'])) {
+            return;
+        }
+
+        SubscriptionPaymentSuccess::dispatch($subscription->billable, $subscription, $payload);
+    }
+
+    private function handleSubscriptionPaymentFailed(array $payload) : void
+    {
+        if (! $subscription = $this->findSubscription($payload['data']['attributes']['id'])) {
+            return;
+        }
+
+        SubscriptionPaymentFailed::dispatch($subscription->billable, $subscription, $payload);
+    }
+
+    private function handleSubscriptionPaymentRecovered(array $payload) : void
+    {
+        if (! $subscription = $this->findSubscription($payload['data']['attributes']['id'])) {
+            return;
+        }
+
+        SubscriptionPaymentRecovered::dispatch($subscription->billable, $subscription, $payload);
+    }
+
     /**
      * @return \LemonSqueezy\Laravel\Billable
      */
     private function findOrCreateCustomer(int|string $billableId, string $billableType, string $customerId)
     {
         return LemonSqueezy::$customerModel::firstOrCreate([
-            'billable_id' => $billableId,
+            'billable_id'   => $billableId,
             'billable_type' => $billableType,
         ], [
-            'lemon_squeezy_id' => $customerId,
-        ])->billable;
+                'lemon_squeezy_id' => $customerId,
+            ])->billable;
     }
 
-    private function findSubscription(string $subscriptionId): ?Subscription
+    private function findSubscription(string $subscriptionId) : ?Subscription
     {
         return LemonSqueezy::$subscriptionModel::firstWhere('lemon_squeezy_id', $subscriptionId);
     }
