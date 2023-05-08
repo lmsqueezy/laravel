@@ -76,7 +76,7 @@ class WebhookController extends Controller
         $billable = $this->findOrCreateCustomer((string) $attributes['customer_id'], $custom);
 
         $subscription = $billable->subscriptions()->create([
-            'type' => $custom['subscription_type'] ?? 'default',
+            'type' => $custom['subscription_type'] ?? Subscription::DEFAULT_TYPE,
             'lemon_squeezy_id' => $payload['data']['id'],
             'status' => $attributes['status'],
             'product_id' => $attributes['product_id'],

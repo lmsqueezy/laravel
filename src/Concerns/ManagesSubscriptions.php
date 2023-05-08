@@ -20,7 +20,7 @@ trait ManagesSubscriptions
     /**
      * Get a subscription instance by type.
      */
-    public function subscription(string $type = 'default'): ?Subscription
+    public function subscription(string $type = Subscription::DEFAULT_TYPE): ?Subscription
     {
         return $this->subscriptions->where('type', $type)->first();
     }
@@ -28,7 +28,7 @@ trait ManagesSubscriptions
     /**
      * Determine if the billable is on trial.
      */
-    public function onTrial(string $type = 'default', string $variant = null): bool
+    public function onTrial(string $type = Subscription::DEFAULT_TYPE, string $variant = null): bool
     {
         if (func_num_args() === 0 && $this->onGenericTrial()) {
             return true;
@@ -46,7 +46,7 @@ trait ManagesSubscriptions
     /**
      * Determine if the billable's trial has ended.
      */
-    public function hasExpiredTrial(string $type = 'default', string $variant = null): bool
+    public function hasExpiredTrial(string $type = Subscription::DEFAULT_TYPE, string $variant = null): bool
     {
         if (func_num_args() === 0 && $this->hasExpiredGenericTrial()) {
             return true;
@@ -88,7 +88,7 @@ trait ManagesSubscriptions
     /**
      * Get the ending date of the trial.
      */
-    public function trialEndsAt(string $type = 'default'): ?Carbon
+    public function trialEndsAt(string $type = Subscription::DEFAULT_TYPE): ?Carbon
     {
         if ($subscription = $this->subscription($type)) {
             return $subscription->trial_ends_at;
@@ -100,7 +100,7 @@ trait ManagesSubscriptions
     /**
      * Determine if the billable has a valid subscription.
      */
-    public function subscribed(string $type = 'default', string $variant = null): bool
+    public function subscribed(string $type = Subscription::DEFAULT_TYPE, string $variant = null): bool
     {
         $subscription = $this->subscription($type);
 
@@ -114,7 +114,7 @@ trait ManagesSubscriptions
     /**
      * Determine if the billable has a valid subscription for the given variant.
      */
-    public function subscribedToVariant(string $variant, string $type = 'default'): bool
+    public function subscribedToVariant(string $variant, string $type = Subscription::DEFAULT_TYPE): bool
     {
         $subscription = $this->subscription($type);
 

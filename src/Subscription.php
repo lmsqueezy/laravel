@@ -34,6 +34,8 @@ class Subscription extends Model
 
     const STATUS_EXPIRED = 'expired';
 
+    const DEFAULT_TYPE = 'default';
+
     /**
      * The table associated with the model.
      *

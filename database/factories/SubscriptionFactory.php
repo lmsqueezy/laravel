@@ -26,7 +26,7 @@ class SubscriptionFactory extends Factory
         return [
             'billable_id' => rand(1, 1000),
             'billable_type' => 'App\\Models\\User',
-            'type' => 'default',
+            'type' => Subscription::DEFAULT_TYPE,
             'lemon_squeezy_id' => rand(1, 1000),
             'status' => Subscription::STATUS_ACTIVE,
             'product_id' => rand(1, 1000),

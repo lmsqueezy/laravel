@@ -483,7 +483,7 @@ $user->subscription()->noProrate()->swap('variant-id');
 
 In some situation you may find yourself wanting to allow your customer to subscribe to multiple subscription types. For example, a gym may offer a swimming and weight lifting subscription. You can allow your customer to subscribe to either or both.
 
-To handle the different subscriptions you may provide a `type` of subscription as the second argument when starting a new one:
+To handle the different subscriptions you may provide a `type` of subscription as the second argument to `subscribe` when starting a new one:
 
 ```php
 $user = User::find(1);
@@ -496,10 +496,13 @@ Now you may always refer this specific subscription type by providing the `type`
 ```php
 $user = User::find(1);
 
-// Swap plans...
-$user->subscription('swimming')->swap('variant-id');
+// Retrieve the swimming subscription type...
+$subscription = $user->subscription('swimming');
 
-// Cancel...
+// Swap plans for the gym subscription type...
+$user->subscription('gym')->swap('variant-id');
+
+// Cancel the swimming subscription...
 $user->subscription('swimming')->cancel();
 ```
 
@@ -644,11 +647,11 @@ After your customer is subscribed, they'll enter their trial period which you co
 To check if your customer is currently on their free trial, you may use the `onTrial` method on both the billable or an individual subscription:
 
 ```php
-if ($user->onTrial('default')) {
+if ($user->onTrial()) {
     // ...
 }
  
-if ($user->subscription('default')->onTrial()) {
+if ($user->subscription()->onTrial()) {
     // ...
 }
 ```
@@ -656,11 +659,11 @@ if ($user->subscription('default')->onTrial()) {
 To determine if a trial has expired, you may use the `hasExpiredTrial` method:
 
 ```php
-if ($user->hasExpiredTrial('default')) {
+if ($user->hasExpiredTrial()) {
     // ...
 }
  
-if ($user->subscription('default')->hasExpiredTrial()) {
+if ($user->subscription()->hasExpiredTrial()) {
     // ...
 }
 ```
