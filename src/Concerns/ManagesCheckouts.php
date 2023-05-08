@@ -3,8 +3,8 @@
 namespace LemonSqueezy\Laravel\Concerns;
 
 use LemonSqueezy\Laravel\Checkout;
-use LemonSqueezy\Laravel\Subscription;
 use LemonSqueezy\Laravel\Exceptions\MissingStore;
+use LemonSqueezy\Laravel\Subscription;
 
 trait ManagesCheckouts
 {
