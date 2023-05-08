@@ -12,11 +12,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('billable_id');
             $table->string('billable_type');
-            $table->string('lemon_squeezy_id')->unique();
+            $table->string('lemon_squeezy_id')->nullable()->unique();
             $table->timestamp('trial_ends_at')->nullable();
             $table->timestamps();
 
-            $table->index(['billable_id', 'billable_type']);
+            $table->unique(['billable_id', 'billable_type']);
         });
     }
 };
