@@ -105,6 +105,14 @@ class Subscription extends Model
     }
 
     /**
+     * Determine if the subscription's trial has expired.
+     */
+    public function hasExpiredTrial(): bool
+    {
+        return $this->trial_ends_at && $this->trial_ends_at->isPast();
+    }
+
+    /**
      * Filter query by active.
      */
     public function scopeActive(Builder $query): void
