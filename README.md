@@ -763,7 +763,7 @@ Instead of listening to the `WebhookHandled` event, you may also subscribe to on
 - `LemonSqueezy\Laravel\Events\SubscriptionPaused`
 - `LemonSqueezy\Laravel\Events\SubscriptionUnpaused`
 
-All of these events contain a billable `$model` instance, a `$subscription` object and the event `$payload`. These can be access through their public properties.
+All of these events contain a billable `$model` instance, a `$subscription` object and the event `$payload`. These can be accessed through their public properties.
 
 ## Changelog
 
