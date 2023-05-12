@@ -19,4 +19,9 @@ return new class extends Migration
             $table->unique(['billable_id', 'billable_type']);
         });
     }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('lemon_squeezy_customers');
+    }
 };
