@@ -29,4 +29,9 @@ return new class extends Migration
             $table->index(['billable_id', 'billable_type']);
         });
     }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('lemon_squeezy_subscriptions');
+    }
 };
