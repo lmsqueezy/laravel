@@ -283,6 +283,12 @@ When working with custom data there are a few reserved keywords for this library
 
 Attempting to use any of these will result in an exception being thrown.
 
+## Customers
+
+### Updating Customers
+
+Right now, it's not possible to update customer objects. Meaning, when they fill out their name, email address, city, region and country initially, there's no possibility of updating it later. To change these fields for a customer in Lemon Squeezy, you'll need to let your customer [contact Lemon Squeezy support](https://www.lemonsqueezy.com/help) so they can do it for you.
+
 ## Subscriptions
 
 ### Setting Up Subscription Products
