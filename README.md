@@ -74,7 +74,7 @@ When you're deploying your app to production, you'll have to create a new key in
 
 ### Store Identifier
 
-Your store identifier will be used when creating checkouts for your products. Go to [your Lemon Squeezy general settings](https://app.lemonsqueezy.com/settings/general) and copy the Store ID (the part after the `#` sign) into the env value below:
+Your store identifier will be used when creating checkouts for your products. Go to [your Lemon Squeezy stores settings](https://app.lemonsqueezy.com/settings/stores) and copy the Store ID (the part after the `#` sign) into the env value below:
 
 ```ini
 LEMON_SQUEEZY_STORE=your-lemon-squeezy-store-id
