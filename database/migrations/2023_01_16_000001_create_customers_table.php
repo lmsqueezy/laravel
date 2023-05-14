@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('lemon_squeezy_customers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('billable_id');
+            $table->string('billable_id');
             $table->string('billable_type');
             $table->string('lemon_squeezy_id')->nullable()->unique();
             $table->timestamp('trial_ends_at')->nullable();
