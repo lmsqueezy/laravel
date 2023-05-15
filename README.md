@@ -49,8 +49,9 @@ There are a few steps you'll need to take to install the package:
 2. Creating an API Key
 3. Connecting your store
 4. Configuring the Billable Model
-5. Connecting to Lemon JS
-6. Setting up webhooks
+5. Running Migrations
+6. Connecting to Lemon JS
+7. Setting up webhooks
 
 We'll go over each of these below.
 
@@ -93,7 +94,17 @@ class User extends Authenticatable
 }
 ```
 
-Now your user model will have access to methods from our package to create checkouts in Lemon Squeezy for your products.
+Now your user model will have access to methods from our package to create checkouts in Lemon Squeezy for your products. Note that you can make any model type a billable as you wish. It's not required to use one specific model class.
+
+### Running Migrations
+
+The package comes with some migrations to store data received from Lemon Squeezy by webhooks. It'll add a `lemon_squeezy_customers` table which holds all info about a customer. This table is connected to a billable model of any model type you wish. It'll also add a `lemon_squeezy_subscriptions` table which holds info about subscriptions. Install these migrations by simply running `artisan migrate`:
+
+```bash
+php artisan migrate
+```
+
+If you want to customize these migrations, you can [overwrite them](#overwriting-migrations).
 
 ### Lemon JS
 
@@ -140,6 +151,27 @@ LEMON_SQUEEZY_SIGNING_SECRET=your-webhook-signing-secret
 ```
 
 Any incoming webhook will now first be verified before being executed.
+
+### Overwriting Migrations
+
+Lemon Squeezy for Laravel ships with some migrations to hold data sent over. If you're using something like a string based identifier for your billable model, like a UUID, or want to adjust something to the migrations you can overwrite them. First, publish these with the following command:
+
+```bash
+php artisan vendor:publish --tag="lemon-squeezy-migrations"
+```
+
+Then, ignore the package's migrations in your `AppServiceProvider`'s `register` method:
+
+```
+use LemonSqueezy\Laravel\LemonSqueezy;
+
+public function register(): void
+{
+    LemonSqueezy::ignoreMigrations();
+}
+```
+
+Now you'll rely on your own migrations rather than the package one. Please note though that you're now responsible as well for keeping these in sync withe package one manually whenever you upgrade the package.
 
 ## Checkouts
 
