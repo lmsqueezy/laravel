@@ -515,14 +515,14 @@ This requires you to have set up [Lemon.js](#lemon-js).
 
 ### Changing Plans
 
-When a customer is subscribed to a monthly plan, they might want to upgrade to a better plan, change their payments to a yearly plan or downgrade to a cheaper plan. For these situations, you can allow them to swap plans by passing a different variant id to the `swap` method:
+When a customer is subscribed to a monthly plan, they might want to upgrade to a better plan, change their payments to a yearly plan or downgrade to a cheaper plan. For these situations, you can allow them to swap plans by passing a different variant id with its product id to the `swap` method:
 
 ```php
 use App\Models\User;
 
 $user = User::find(1);
 
-$user->subscription()->swap('variant-id');
+$user->subscription()->swap('product-id', 'variant-id');
 ```
 
 This will swap the customer to their new subscription plan but billing will only be done on the next billing cycle. If you'd like to immediately invoice the customer you may use the `swapAndInvoice` method instead:
@@ -530,7 +530,7 @@ This will swap the customer to their new subscription plan but billing will only
 ```php
 $user = User::find(1);
 
-$user->subscription()->swapAndInvoice('variant-id');
+$user->subscription()->swapAndInvoice('product-id', 'variant-id');
 ```
 
 #### Prorations
@@ -540,7 +540,7 @@ By default, Lemon Squeezy will prorate amounts when changing plans. If you want 
 ```php
 $user = User::find(1);
 
-$user->subscription()->noProrate()->swap('variant-id');
+$user->subscription()->noProrate()->swap('product-id', 'variant-id');
 ```
 
 ### Multiple Subscriptions
@@ -564,7 +564,7 @@ $user = User::find(1);
 $subscription = $user->subscription('swimming');
 
 // Swap plans for the gym subscription type...
-$user->subscription('gym')->swap('variant-id');
+$user->subscription('gym')->swap('product-id', 'variant-id');
 
 // Cancel the swimming subscription...
 $user->subscription('swimming')->cancel();
