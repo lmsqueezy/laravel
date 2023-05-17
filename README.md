@@ -642,7 +642,7 @@ When a cancelled subscription reaches the end of its grace period it'll transiti
 
 For a thorough read on trialing in Lemon Squeezy, [have a look at their guide](https://docs.lemonsqueezy.com/guides/tutorials/saas-free-trials).
 
-### No Payment Required
+#### No Payment Required
 
 To allow people to signup for your product without having them to fill out their payment details, you may set the `trial_ends_at` column when creating them as a customer:
 
@@ -694,7 +694,7 @@ Route::get('/buy', function (Request $request) {
 
 Please note that when a customer starts their subscription when they're still on their generic trial, their trial will be cancelled because they have started to pay for your product.
 
-### Payment required
+#### Payment required
 
 Another option is to require payment details when people want to trial your products. This means that after the trial expires, they'll immediately be subscribed to your product. To get started with this, you'll need to [configure a trial period in your product's settings](https://docs.lemonsqueezy.com/guides/tutorials/saas-free-trials#1-create-subscription-products-with-trials). Then, let a customer start a subscription:
 
