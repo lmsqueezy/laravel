@@ -543,6 +543,18 @@ $user = User::find(1);
 $user->subscription()->noProrate()->swap('product-id', 'variant-id');
 ```
 
+### Changing The Billing Date
+
+To change the date of the month on which your customer gets billed for their subscription, you may use the `anchorBillingCycleOn` method:
+
+```php
+$user = User::find(1);
+
+$user->subscription()->anchorBillingCycleOn(21);
+```
+
+In the above example, the customer will now get billed on the 21st of each month going forward. For more info, see [the Lemon Squeezy docs](https://docs.lemonsqueezy.com/guides/developer-guide/managing-subscriptions#changing-the-billing-date).
+
 ### Multiple Subscriptions
 
 In some situation you may find yourself wanting to allow your customer to subscribe to multiple subscription types. For example, a gym may offer a swimming and weight lifting subscription. You can allow your customer to subscribe to either or both.
@@ -731,6 +743,18 @@ if ($user->subscription()->hasExpiredTrial()) {
     // ...
 }
 ```
+
+##### Ending Trials Early
+
+To end a trial with payment upfront early you may use the `endTrial` method on a subscription:
+
+```php
+$user = User::find(1);
+
+$user->subscription()->endTrial();
+```
+
+This method will move the billing achor to the current day and thus ending any trial period the customer had.
 
 ## Handling Webhooks
 

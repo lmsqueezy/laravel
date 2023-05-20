@@ -255,6 +255,14 @@ class Subscription extends Model
     }
 
     /**
+     * End the current trial by resetting the billing anchor to today.
+     */
+    public function endTrial(): self
+    {
+        return $this->anchorBillingCycleOn(0);
+    }
+
+    /**
      * Swap the subscription to a new product plan.
      */
     public function swap(string $product, string $variant, array $attributes = []): self
