@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/0.2.0...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/0.2.1...main)
+
+## [0.2.1](https://github.com/lmsqueezy/laravel/compare/0.2.0...0.2.1) - 2023-05-20
+
+- Add "down" method for migrations by @Flatroy in https://github.com/lmsqueezy/laravel/pull/19
+- Add endTrial method and document billing anchor by @driesvints in https://github.com/lmsqueezy/laravel/commit/2d63056363fd345ef8971d2d1651f628ef7599f1
 
 ## [0.2.0](https://github.com/lmsqueezy/laravel/compare/0.1.0...0.2.0) - 2023-05-08
 
