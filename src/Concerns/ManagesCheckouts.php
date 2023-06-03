@@ -30,6 +30,7 @@ trait ManagesCheckouts
             )
             ->withTaxNumber($options['tax_number'] ?? (string) $this->lemonSqueezyTaxNumber())
             ->withDiscountCode($options['discount_code'] ?? '')
+            ->withCustomPrice($options['custom_price'] ?? null)
             ->withCustomData($custom);
     }
 

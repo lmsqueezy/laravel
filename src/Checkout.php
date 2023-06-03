@@ -34,6 +34,8 @@ class Checkout implements Responsable
 
     private ?DateTimeInterface $expiresAt;
 
+    private ?int $customPrice = null;
+    
     public function __construct(private string $store, private string $variant)
     {
     }
@@ -169,12 +171,20 @@ class Checkout implements Responsable
         return $this;
     }
 
+    public function withCustomPrice(?int $customPrice): self
+    {
+        $this->customPrice = $customPrice;
+
+        return $this;
+    }
+
     public function url(): string
     {
         $response = LemonSqueezy::api('POST', 'checkouts', [
             'data' => [
                 'type' => 'checkouts',
                 'attributes' => [
+                    'custom_price' => $this->customPrice,
                     'checkout_data' => array_merge(
                         array_filter($this->checkoutData, fn ($value) => $value !== ''),
                         ['custom' => $this->custom]
