@@ -194,6 +194,18 @@ This will automatically redirect your customer to a Lemon Squeezy checkout where
 > **Note**
 > When creating a checkout for your store, each time you redirect a checkout object or call `url` on the checkout object, an API call to Lemon Squeezy will be made. These calls are expensive and can be time and resource consuming for your app. If you are creating the same session over and over again you may want to cache these urls. 
 
+#### Single Payments with Custom Price
+
+For example, to create a checkout for a single-payment with custom price, use a variant ID of a product variant you want to sell at custom price and create a checkout with custom price using the snippet below:
+
+```php
+use Illuminate\Http\Request;
+ 
+Route::get('/buy', function (Request $request) {
+    return $request->user()->checkout('variant-id')->withCustomPrice(20000);
+});
+```
+
 ### Overlay Widget
 
 Instead of redirecting your customer to a checkout screen, you can also create a checkout button which will render a checkout overlay on your page. To do this, pass the `$checkout` object to a view:
