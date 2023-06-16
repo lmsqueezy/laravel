@@ -33,7 +33,6 @@ The below features are not yet in this package but are planned to be added in th
 - License keys
 - Marketing emails check
 - Product & variant listing
-- Custom priced checkouts
 - Create discount codes
 
 ## Requirements
