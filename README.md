@@ -140,7 +140,13 @@ Please review [our upgrade guide](./UPGRADE.md) when upgrading to a new version.
 
 ## Configuration
 
-The package offers various way to configure your experience with integrating with Lemon Squeezy.
+The package offers various way to configure your experience with integrating with Lemon Squeezy. 
+
+By default, we don't recommend publishing the config file as most things can be configured with environment variables. Should you still want to adjust the config file, you can publish it with the following command:
+
+```bash
+php artisan vendor:publish --tag="lemon-squeezy-config"
+```
 
 ### Verifying Webhook Signatures
 
@@ -281,6 +287,8 @@ You may also set a default url for this by configuring the `lemon-squeezy.redire
 ```php
 'redirect_url' => 'https://my-app.com/dashboard',
 ```
+
+In order to do this you'll need to [publish your config file](#configuration).
 
 ### Expire Checkouts
 
