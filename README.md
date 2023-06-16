@@ -194,17 +194,21 @@ This will automatically redirect your customer to a Lemon Squeezy checkout where
 > **Note**
 > When creating a checkout for your store, each time you redirect a checkout object or call `url` on the checkout object, an API call to Lemon Squeezy will be made. These calls are expensive and can be time and resource consuming for your app. If you are creating the same session over and over again you may want to cache these urls. 
 
-#### Single Payments with Custom Price
+#### Custom Priced Charges
 
-For example, to create a checkout for a single-payment with custom price, use a variant ID of a product variant you want to sell at custom price and create a checkout with custom price using the snippet below:
+You can also overwrite the amount of a product variant by calling the `charge` method on a customer:
 
 ```php
 use Illuminate\Http\Request;
  
 Route::get('/buy', function (Request $request) {
-    return $request->user()->checkout('variant-id')->withCustomPrice(20000);
+    return $request->user()->charge(2500, 'variant-id');
 });
 ```
+
+The amount should be a positive integer in cents.
+
+You'll still need to provide a variant ID but can overwrite the price as you see fit. One thing you can do is create a "generic" product with a specific currency which you can dynamically charge against.
 
 ### Overlay Widget
 

@@ -35,6 +35,16 @@ trait ManagesCheckouts
     }
 
     /**
+     * Create a new checkout instance to sell a product with a custom price.
+     */
+    public function charge(int $amount, string $variant, array $options = [], array $custom = [])
+    {
+        return $this->checkout($variant, array_merge($options, [
+            'custom_price' => $amount,
+        ]), $custom);
+    }
+
+    /**
      * Subscribe the customer to a new plan variant.
      */
     public function subscribe(string $variant, string $type = Subscription::DEFAULT_TYPE, array $options = [], array $custom = []): Checkout
