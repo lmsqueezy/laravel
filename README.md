@@ -556,6 +556,9 @@ $user = User::find(1);
 $user->subscription()->swapAndInvoice('product-id', 'variant-id');
 ```
 
+> **Note**
+> You'll notice in the above methods that you both need to provide a product ID and variant ID and might wonder why that is. Can't you derive the product ID from the variant ID? Unfortuntately that's only possible when swapping to variants from the same product. When swapping to a different product alltogether you are required to also provide the product ID in the Lemon Squeezy API. Therefor, we've made the decision to make this uniform and just always require the product ID as well.
+
 #### Prorations
 
 By default, Lemon Squeezy will prorate amounts when changing plans. If you want to prevent this, you may use the `noProrate` method before executing the swap:
