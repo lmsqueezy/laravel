@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/0.2.1...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.0.0...main)
+
+## [1.0.0](https://github.com/lmsqueezy/laravel/compare/0.2.1...1.0.0) - 2023-06-16
+
+- First stable release
+- Add support for custom price at checkout by @mraheelkhan in https://github.com/lmsqueezy/laravel/pull/28
+- Add remaining events by @driesvints in https://github.com/lmsqueezy/laravel/pull/30
 
 ## [0.2.1](https://github.com/lmsqueezy/laravel/compare/0.2.0...0.2.1) - 2023-05-20
 
