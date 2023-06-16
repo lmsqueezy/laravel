@@ -120,7 +120,7 @@ Lemon Squeezy uses its own JavaScript library to initiate its checkout widget. W
 
 ### Webhooks
 
-Finally, make sure to set up incoming webhooks. This is both needed in development as in production. Go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the url to your exposed local app. You can use [Ngrok](https://ngrok.com/), [Expose](https://github.com/beyondcode/expose) or another tool of your preference for this.
+Finally, make sure to set up incoming webhooks. This is both needed in development as in production. Go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the url to your exposed local app. You can use [Ngrok](https://ngrok.com/), [Expose](https://github.com/beyondcode/expose) or another tool of your preference for this. Laravel also has solutions for sharing your site with [Valet](https://laravel.com/docs/valet#sharing-sites) and [Sail](https://laravel.com/docs/10.x/sail#sharing-your-site).
 
 Make sure to select all event types. The path you should point to is `/lemon-squeezy/webhook` by default. **We also very much recommend to [verify webhook signatures](#verifying-webhook-signatures).**
 
