@@ -23,8 +23,6 @@ Lemon Squeezy for Laravel is maintained by [Dries Vints](https://twitter.com/dri
 
 We also recommend to read the Lemon Squeezy [docs](https://docs.lemonsqueezy.com/help) and [developer guide](https://docs.lemonsqueezy.com/guides/developer-guide).
 
-> This package is a work in progress. As long as there is no v1.0.0, breaking changes may occur in v0.x releases. No upgrade path between v0.x versions will be provided.
-
 ## Roadmap
 
 The below features are not yet in this package but are planned to be added in the future:
