@@ -841,6 +841,8 @@ class EventServiceProvider extends ServiceProvider
 
 Instead of listening to the `WebhookHandled` event, you may also subscribe to one of the following, dedicated package events that are fired after a webhook has been handled:
 
+- `LemonSqueezy\Laravel\Events\OrderCreated`
+- `LemonSqueezy\Laravel\Events\OrderRefunded`
 - `LemonSqueezy\Laravel\Events\SubscriptionCreated`
 - `LemonSqueezy\Laravel\Events\SubscriptionUpdated`
 - `LemonSqueezy\Laravel\Events\SubscriptionCancelled`
@@ -848,8 +850,12 @@ Instead of listening to the `WebhookHandled` event, you may also subscribe to on
 - `LemonSqueezy\Laravel\Events\SubscriptionExpired`
 - `LemonSqueezy\Laravel\Events\SubscriptionPaused`
 - `LemonSqueezy\Laravel\Events\SubscriptionUnpaused`
+- `LemonSqueezy\Laravel\Events\SubscriptionPaymentSuccess`
+- `LemonSqueezy\Laravel\Events\SubscriptionPaymentFailed`
+- `LemonSqueezy\Laravel\Events\SubscriptionPaymentRecovered`
+- `LemonSqueezy\Laravel\Events\LicenseKeyCreated`
 
-All of these events contain a billable `$model` instance, a `$subscription` object and the event `$payload`. These can be accessed through their public properties.
+All of these events contain a billable `$model` instance and the event `$payload`. The subscription events also contain the `$subscription` object. These can be accessed through their public properties.
 
 ## Changelog
 
