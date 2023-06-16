@@ -30,7 +30,18 @@ trait ManagesCheckouts
             )
             ->withTaxNumber($options['tax_number'] ?? (string) $this->lemonSqueezyTaxNumber())
             ->withDiscountCode($options['discount_code'] ?? '')
+            ->withCustomPrice($options['custom_price'] ?? null)
             ->withCustomData($custom);
+    }
+
+    /**
+     * Create a new checkout instance to sell a product with a custom price.
+     */
+    public function charge(int $amount, string $variant, array $options = [], array $custom = [])
+    {
+        return $this->checkout($variant, array_merge($options, [
+            'custom_price' => $amount,
+        ]), $custom);
     }
 
     /**
