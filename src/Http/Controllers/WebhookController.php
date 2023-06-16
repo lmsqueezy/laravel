@@ -6,10 +6,15 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
+use LemonSqueezy\Laravel\Events\OrderCreated;
+use LemonSqueezy\Laravel\Events\OrderRefunded;
 use LemonSqueezy\Laravel\Events\SubscriptionCancelled;
 use LemonSqueezy\Laravel\Events\SubscriptionCreated;
 use LemonSqueezy\Laravel\Events\SubscriptionExpired;
 use LemonSqueezy\Laravel\Events\SubscriptionPaused;
+use LemonSqueezy\Laravel\Events\SubscriptionPaymentFailed;
+use LemonSqueezy\Laravel\Events\SubscriptionPaymentRecovered;
+use LemonSqueezy\Laravel\Events\SubscriptionPaymentSuccess;
 use LemonSqueezy\Laravel\Events\SubscriptionResumed;
 use LemonSqueezy\Laravel\Events\SubscriptionUnpaused;
 use LemonSqueezy\Laravel\Events\SubscriptionUpdated;
@@ -63,24 +68,26 @@ final class WebhookController extends Controller
         return new Response('Webhook received but no handler found.');
     }
 
-    /**
-     * @throws InvalidCustomPayload
-     */
+    public function handleOrderCreated(array $payload): void
+    {
+        $billable = $this->resolveBillable($payload);
+
+        OrderCreated::dispatch($billable, $payload);
+    }
+
+    public function handleOrderRefunded(array $payload): void
+    {
+        $billable = $this->resolveBillable($payload);
+
+        OrderRefunded::dispatch($billable, $payload);
+    }
+
     public function handleSubscriptionCreated(array $payload): void
     {
         $custom = $payload['meta']['custom_data'] ?? null;
-
-        if (! isset($custom) || ! is_array($custom) || ! isset($custom['billable_id'], $custom['billable_type'])) {
-            throw new InvalidCustomPayload;
-        }
-
         $attributes = $payload['data']['attributes'];
 
-        $billable = $this->findOrCreateCustomer(
-            $custom['billable_id'],
-            (string) $custom['billable_type'],
-            (string) $attributes['customer_id']
-        );
+        $billable = $this->resolveBillable($payload);
 
         $subscription = $billable->subscriptions()->create([
             'type' => $custom['subscription_type'] ?? Subscription::DEFAULT_TYPE,
@@ -167,6 +174,54 @@ final class WebhookController extends Controller
         $subscription = $subscription->sync($payload['data']['attributes']);
 
         SubscriptionUnpaused::dispatch($subscription->billable, $subscription, $payload);
+    }
+
+    private function handleSubscriptionPaymentSuccess(array $payload): void
+    {
+        if ($subscription = $this->findSubscription($payload['data']['id'])) {
+            SubscriptionPaymentSuccess::dispatch($subscription->billable, $subscription, $payload);
+        }
+    }
+
+    private function handleSubscriptionPaymentFailed(array $payload): void
+    {
+        if ($subscription = $this->findSubscription($payload['data']['id'])) {
+            SubscriptionPaymentFailed::dispatch($subscription->billable, $subscription, $payload);
+        }
+    }
+
+    private function handleSubscriptionPaymentRecovered(array $payload): void
+    {
+        if ($subscription = $this->findSubscription($payload['data']['id'])) {
+            SubscriptionPaymentRecovered::dispatch($subscription->billable, $subscription, $payload);
+        }
+    }
+
+    private function handleLicenseKeyCreated(array $payload): void
+    {
+        $billable = $this->resolveBillable($payload);
+
+        OrderRefunded::dispatch($billable, $payload);
+    }
+
+    /**
+     * @return \LemonSqueezy\Laravel\Billable
+     *
+     * @throws InvalidCustomPayload
+     */
+    private function resolveBillable(array $payload)
+    {
+        $custom = $payload['meta']['custom_data'] ?? null;
+
+        if (! isset($custom) || ! is_array($custom) || ! isset($custom['billable_id'], $custom['billable_type'])) {
+            throw new InvalidCustomPayload;
+        }
+
+        return $this->findOrCreateCustomer(
+            $custom['billable_id'],
+            (string) $custom['billable_type'],
+            (string) $payload['data']['attributes']['customer_id']
+        );
     }
 
     /**
