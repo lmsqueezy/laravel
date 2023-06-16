@@ -35,7 +35,7 @@ class Checkout implements Responsable
     private ?DateTimeInterface $expiresAt;
 
     private ?int $customPrice = null;
-    
+
     public function __construct(private string $store, private string $variant)
     {
     }
