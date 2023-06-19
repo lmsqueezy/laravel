@@ -165,7 +165,7 @@ php artisan vendor:publish --tag="lemon-squeezy-migrations"
 
 Then, ignore the package's migrations in your `AppServiceProvider`'s `register` method:
 
-```
+```php
 use LemonSqueezy\Laravel\LemonSqueezy;
 
 public function register(): void
