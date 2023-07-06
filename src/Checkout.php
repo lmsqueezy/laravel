@@ -36,6 +36,10 @@ class Checkout implements Responsable
 
     private ?int $customPrice = null;
 
+    private ?string $description = null; // Added new description property  = null
+    private ?string $productName = null; // Added new description property  = null
+    private ?string $thankYouNote = null; // Added new description property  = null
+
     public function __construct(private string $store, private string $variant)
     {
     }
@@ -55,6 +59,27 @@ class Checkout implements Responsable
     public function withoutLogo(): self
     {
         $this->logo = false;
+
+        return $this;
+    }
+
+    public function withDescription(string $description): self //added
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function withproductName(string $productName): self //added 
+    {
+        $this->productName = $productName;
+
+        return $this;
+    }
+
+    public function withthankYouNote(string $thankYouNote): self //added thankYouNote
+    {
+        $this->thankYouNote = $thankYouNote;
 
         return $this;
     }
@@ -202,7 +227,11 @@ class Checkout implements Responsable
                         return ! is_null($value);
                     }),
                     'product_options' => [
-                        'redirect_url' => $this->redirectUrl ?? config('lemon-squeezy.redirect_url'),
+                        'name' => $this->productName,  // Added name field to product_options
+                        'description' => $this->description,  // Added description field to product_options
+                        'receipt_thank_you_note' => $this->thankYouNote, // Added thank you note at email response field to product_options
+                        'redirect_url' => $this->redirectUrl ?? config('lemon-squeezy.redirect_url'), 
+                  
                     ],
                     'expires_at' => isset($this->expiresAt) ? $this->expiresAt->format(DateTimeInterface::ATOM) : null,
                 ],
@@ -222,7 +251,7 @@ class Checkout implements Responsable
                 ],
             ],
         ]);
-
+        //dd($response['data']['attributes']['product_options']['receipt_thank_you_note']);
         return $response['data']['attributes']['url'];
     }
 
