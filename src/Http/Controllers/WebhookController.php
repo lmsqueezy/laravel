@@ -178,21 +178,21 @@ final class WebhookController extends Controller
 
     private function handleSubscriptionPaymentSuccess(array $payload): void
     {
-        if ($subscription = $this->findSubscription($payload['data']['id'])) {
+        if ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) {
             SubscriptionPaymentSuccess::dispatch($subscription->billable, $subscription, $payload);
         }
     }
 
     private function handleSubscriptionPaymentFailed(array $payload): void
     {
-        if ($subscription = $this->findSubscription($payload['data']['id'])) {
+        if ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) {
             SubscriptionPaymentFailed::dispatch($subscription->billable, $subscription, $payload);
         }
     }
 
     private function handleSubscriptionPaymentRecovered(array $payload): void
     {
-        if ($subscription = $this->findSubscription($payload['data']['id'])) {
+        if ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) {
             SubscriptionPaymentRecovered::dispatch($subscription->billable, $subscription, $payload);
         }
     }
