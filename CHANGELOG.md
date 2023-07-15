@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.0.0...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.0.1...main)
+
+## [1.0.1](https://github.com/lmsqueezy/laravel/compare/1.0.0...1.0.1) - 2023-07-15
+
+- Fix can't find Subscription from SubscriptionPayment by [@ycs77](https://github.com/ycs77) in https://github.com/lmsqueezy/laravel/pull/33
 
 ## [1.0.0](https://github.com/lmsqueezy/laravel/compare/0.2.1...1.0.0) - 2023-06-16
 
