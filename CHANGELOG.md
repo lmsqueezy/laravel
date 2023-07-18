@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.0.1...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.1.0...main)
+
+## [1.1.0](https://github.com/lmsqueezy/laravel/compare/1.0.1...1.1.0) - 2023-07-18
+
+- Add support for custom name, description and receipt_thank_you_note at checkout by [@UrosCodes](https://github.com/UrosCodes) in https://github.com/lmsqueezy/laravel/pull/34
 
 ## [1.0.1](https://github.com/lmsqueezy/laravel/compare/1.0.0...1.0.1) - 2023-07-15
 
