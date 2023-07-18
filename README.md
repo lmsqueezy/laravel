@@ -286,6 +286,25 @@ Route::get('/buy', function (Request $request) {
 });
 ```
 
+### Product Details
+
+You can overwrite additional data for product checkouts with the `withProductName` and `withDescription` methods:
+
+```php
+$request->user()->checkout('variant-id')
+    ->withProductName('Ebook')
+    ->withDescription('A thrilling novel!');
+```
+
+### Receipt Thank You
+
+Additionally, you can customize the thank you note for the order receipt email.
+
+```php
+$request->user()->checkout('variant-id')
+    ->withThankYouNote('Thanks for your purchase!');
+```
+
 ### Redirects After Purchase
 
 To redirect customers back to your app after purchase, you may use the `redirectTo` method:
