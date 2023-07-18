@@ -30,6 +30,12 @@ class Checkout implements Responsable
 
     private array $custom = [];
 
+    private ?string $productName = null;
+
+    private ?string $description = null;
+
+    private ?string $thankYouNote = null;
+
     private ?string $redirectUrl;
 
     private ?DateTimeInterface $expiresAt;
@@ -157,6 +163,27 @@ class Checkout implements Responsable
         return $this;
     }
 
+    public function withProductName(string $productName): self
+    {
+        $this->productName = $productName;
+
+        return $this;
+    }
+
+    public function withDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function withThankYouNote(string $thankYouNote): self
+    {
+        $this->thankYouNote = $thankYouNote;
+
+        return $this;
+    }
+
     public function redirectTo(string $url): self
     {
         $this->redirectUrl = $url;
@@ -201,9 +228,12 @@ class Checkout implements Responsable
                     ], function ($value) {
                         return ! is_null($value);
                     }),
-                    'product_options' => [
+                    'product_options' => array_filter([
+                        'name' => $this->productName,
+                        'description' => $this->description,
+                        'receipt_thank_you_note' => $this->thankYouNote,
                         'redirect_url' => $this->redirectUrl ?? config('lemon-squeezy.redirect_url'),
-                    ],
+                    ]),
                     'expires_at' => isset($this->expiresAt) ? $this->expiresAt->format(DateTimeInterface::ATOM) : null,
                 ],
                 'relationships' => [
