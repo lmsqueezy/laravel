@@ -18,6 +18,7 @@ use LemonSqueezy\Laravel\Events\SubscriptionPaymentSuccess;
 use LemonSqueezy\Laravel\Events\SubscriptionResumed;
 use LemonSqueezy\Laravel\Events\SubscriptionUnpaused;
 use LemonSqueezy\Laravel\Events\SubscriptionUpdated;
+use LemonSqueezy\Laravel\Events\LicenseKeyCreated;
 use LemonSqueezy\Laravel\Events\WebhookHandled;
 use LemonSqueezy\Laravel\Events\WebhookReceived;
 use LemonSqueezy\Laravel\Exceptions\InvalidCustomPayload;
@@ -201,7 +202,7 @@ final class WebhookController extends Controller
     {
         $billable = $this->resolveBillable($payload);
 
-        OrderRefunded::dispatch($billable, $payload);
+        LicenseKeyCreated::dispatch($billable, $payload);
     }
 
     /**
