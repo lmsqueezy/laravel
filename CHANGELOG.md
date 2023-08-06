@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.1.0...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.1.1...main)
+
+## [1.1.1](https://github.com/lmsqueezy/laravel/compare/1.1.0...1.1.1) - 2023-08-06
+
+- Dispatching the correct event name when a license is created by [@abishekrsrikaanth](https://github.com/abishekrsrikaanth) in https://github.com/lmsqueezy/laravel/pull/35
 
 ## [1.1.0](https://github.com/lmsqueezy/laravel/compare/1.0.1...1.1.0) - 2023-07-18
 
