@@ -272,7 +272,7 @@ class Checkout implements Responsable
                         'redirect_url' => $this->redirectUrl ?? config('lemon-squeezy.redirect_url'),
                         'receipt_button_text' => $this->receiptButtonText,
                         'receipt_link_url' => $this->receiptLinkUrl,
-                        'enabled_variants' => $this->enabled_variants
+                        'enabled_variants' => $this->enabledVariants
                     ]),
                     'expires_at' => isset($this->expiresAt) ? $this->expiresAt->format(DateTimeInterface::ATOM) : null,
                 ],
