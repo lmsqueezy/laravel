@@ -801,7 +801,7 @@ This method will move the billing achor to the current day and thus ending any t
 
 ## Handling Webhooks
 
-Lemon Squeezy can send your app webhooks which you can react on. By default, this package alread does the bulk of the work for you. [If you've properly set up webhooks](#webhooks), it'll listen to any incoming events and update your database accordingly. We recommend enabling all event types so it's easy for you to upgrade in the future.
+Lemon Squeezy can send your app webhooks which you can react on. By default, this package already does the bulk of the work for you. [If you've properly set up webhooks](#webhooks), it'll listen to any incoming events and update your database accordingly. We recommend enabling all event types so it's easy for you to upgrade in the future.
 
 To listen to incoming webhooks, we have two events that will be fired:
 
