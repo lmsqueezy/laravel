@@ -34,7 +34,15 @@ class Checkout implements Responsable
 
     private ?string $description = null;
 
+    private array $productMedia = [];
+
     private ?string $thankYouNote = null;
+
+    private ?string $receiptButtonText = null;
+
+    private ?string $receiptLinkUrl = null;
+
+    private array $enabledVariants = [];
 
     private ?string $redirectUrl;
 
@@ -177,9 +185,37 @@ class Checkout implements Responsable
         return $this;
     }
 
+    public function withProductMedia(array $productMedia): self
+    {
+        $this->productMedia = $productMedia;
+
+        return $this;
+    }
+
     public function withThankYouNote(string $thankYouNote): self
     {
         $this->thankYouNote = $thankYouNote;
+
+        return $this;
+    }
+
+    public function withReceiptButtonText(string $receiptButtonText): self
+    {
+        $this->receiptButtonText = $receiptButtonText;
+
+        return $this;
+    }
+
+    public function withReceiptLinkUrl(string $receiptLinkUrl): self
+    {
+        $this->receiptLinkUrl = $receiptLinkUrl;
+
+        return $this;
+    }
+
+    public function withEnabledVariants(array $enabledVariants): self
+    {
+        $this->enabledVariants = $enabledVariants;
 
         return $this;
     }
@@ -231,8 +267,12 @@ class Checkout implements Responsable
                     'product_options' => array_filter([
                         'name' => $this->productName,
                         'description' => $this->description,
+                        'media' => $this->productMedia,
                         'receipt_thank_you_note' => $this->thankYouNote,
                         'redirect_url' => $this->redirectUrl ?? config('lemon-squeezy.redirect_url'),
+                        'receipt_button_text' => $this->receiptButtonText,
+                        'receipt_link_url' => $this->receiptLinkUrl,
+                        'enabled_variants' => $this->enabled_variants
                     ]),
                     'expires_at' => isset($this->expiresAt) ? $this->expiresAt->format(DateTimeInterface::ATOM) : null,
                 ],
