@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use LemonSqueezy\Laravel\Events\LicenseKeyCreated;
+use LemonSqueezy\Laravel\Events\LicenseKeyUpdated;
 use LemonSqueezy\Laravel\Events\OrderCreated;
 use LemonSqueezy\Laravel\Events\OrderRefunded;
 use LemonSqueezy\Laravel\Events\SubscriptionCancelled;
@@ -203,6 +204,13 @@ final class WebhookController extends Controller
         $billable = $this->resolveBillable($payload);
 
         LicenseKeyCreated::dispatch($billable, $payload);
+    }
+
+    private function handleLicenseKeyUpdated(array $payload): void
+    {
+        $billable = $this->resolveBillable($payload);
+
+        LicenseKeyUpdated::dispatch($billable, $payload);
     }
 
     /**
