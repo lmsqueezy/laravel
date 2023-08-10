@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.1.1...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.1.2...main)
+
+## [1.1.2](https://github.com/lmsqueezy/laravel/compare/1.1.1...1.1.2) - 2023-08-10
+
+- Adding Event and Webhook handler to get license updates by [@abishekrsrikaanth](https://github.com/abishekrsrikaanth) in https://github.com/lmsqueezy/laravel/pull/41
 
 ## [1.1.1](https://github.com/lmsqueezy/laravel/compare/1.1.0...1.1.1) - 2023-08-06
 
