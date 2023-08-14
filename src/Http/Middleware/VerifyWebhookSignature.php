@@ -32,6 +32,6 @@ class VerifyWebhookSignature
     {
         $hash = hash_hmac('sha256', $payload, config('lemon-squeezy.signing_secret'));
 
-        return $hash !== $signature;
+        return ! hash_equals($hash, $signature);
     }
 }
