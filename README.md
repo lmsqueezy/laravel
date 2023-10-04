@@ -873,6 +873,7 @@ Instead of listening to the `WebhookHandled` event, you may also subscribe to on
 - `LemonSqueezy\Laravel\Events\SubscriptionPaymentFailed`
 - `LemonSqueezy\Laravel\Events\SubscriptionPaymentRecovered`
 - `LemonSqueezy\Laravel\Events\LicenseKeyCreated`
+- `LemonSqueezy\Laravel\Events\LicenseKeyUpdated`
 
 All of these events contain a billable `$model` instance and the event `$payload`. The subscription events also contain the `$subscription` object. These can be accessed through their public properties.
 
