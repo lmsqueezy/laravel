@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.1.2...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.2.0...main)
+
+## [1.2.0](https://github.com/lmsqueezy/laravel/compare/1.1.2...1.2.0) - 2023-10-04
+
+- Support for customer portals by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/46
+- Use `hash_equals` when validating webhook signature by [@thinkverse](https://github.com/thinkverse) in https://github.com/lmsqueezy/laravel/pull/42
 
 ## [1.1.2](https://github.com/lmsqueezy/laravel/compare/1.1.1...1.1.2) - 2023-08-10
 
