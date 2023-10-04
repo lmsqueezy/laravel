@@ -3,7 +3,10 @@
 namespace LemonSqueezy\Laravel\Concerns;
 
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Http\RedirectResponse;
 use LemonSqueezy\Laravel\Customer;
+use LemonSqueezy\Laravel\Exceptions\InvalidCustomer;
+use LemonSqueezy\Laravel\LemonSqueezy;
 
 trait ManagesCustomer
 {
@@ -63,5 +66,45 @@ trait ManagesCustomer
     public function lemonSqueezyTaxNumber(): ?string
     {
         return $this->tax_number ?? null; // 'GB123456789'
+    }
+
+    /**
+     * Get the customer portal url for this billable.
+     */
+    public function customerPortalUrl(): string
+    {
+        $this->assertCustomerExists();
+
+        $response = LemonSqueezy::api('GET', "customers/{$this->lemon_squeezy_id}");
+
+        return $response['data']['attributes']['urls']['customer_portal'];
+    }
+
+    /**
+     * Generate a redirect response to the billable's customer portal.
+     */
+    public function redirectToCustomerPortal(): RedirectResponse
+    {
+        return new RedirectResponse($this->customerPortalUrl());
+    }
+
+    /**
+     * Determine if the billable has a Lemon Squeezy customer ID.
+     */
+    public function hasLemonSqueezyId(): bool
+    {
+        return ! is_null($this->lemon_squeezy_id);
+    }
+
+    /**
+     * Determine if the billable has a Lemon Squeezy customer ID and throw an exception if not.
+     *
+     * @throws InvalidCustomer
+     */
+    protected function assertCustomerExists(): void
+    {
+        if (! $this->hasLemonSqueezyId()) {
+            throw InvalidCustomer::notYetCreated($this);
+        }
     }
 }

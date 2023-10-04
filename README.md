@@ -357,9 +357,25 @@ Attempting to use any of these will result in an exception being thrown.
 
 ## Customers
 
-### Updating Customers
+### Customer Portal
 
-Right now, it's not possible to update customer objects. Meaning, when they fill out their name, email address, city, region and country initially, there's no possibility of updating it later. To change these fields for a customer in Lemon Squeezy, you'll need to let your customer [contact Lemon Squeezy support](https://www.lemonsqueezy.com/help) so they can do it for you.
+Customers may easily manage their personal data like their name, email address, etc by visiting their [customer portal](https://docs.lemonsqueezy.com/guides/developer-guide/customer-portal). Lemon Squeezy for Laravel makes it easy to redirect customers to this by calling `redirectToCustomerPortal` on the billable:
+
+```php
+use Illuminate\Http\Request;
+ 
+Route::get('/customer-portal', function (Request $request) {
+    return $request->user()->redirectToCustomerPortal();
+});
+```
+
+In order to call this method your billable already needs to have a subscription or made a purchase through Lemon Squeezy. Also, this method will perform an underlying API call so make sure to place this redirect behind a route which you can link to in your app.
+
+Optionally, you also get the signed customer portal url directly:
+
+```php
+$url = $user->customerPortalUrl();
+```
 
 ## Subscriptions
 

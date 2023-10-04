@@ -54,3 +54,23 @@ it('needs a configured store to generate checkouts', function () {
 
     (new User)->checkout('variant_123');
 });
+
+it('can generate a customer portal link for a billable', function () {
+    config()->set('lemon-squeezy.store', 'store_23432');
+
+    Http::fake([
+        'api.lemonsqueezy.com/v1/customers/1' => Http::response([
+            'data' => ['attributes' => ['urls' => [
+                'customer_portal' => 'https://my-store.lemonsqueezy.com/billing?expires=1666869343&signature=xxxxx',
+            ]]],
+        ]),
+    ]);
+
+    $user = new User;
+    $user->lemon_squeezy_id = 1;
+
+    $url = $user->customerPortalUrl();
+
+    expect($url)
+        ->toBe('https://my-store.lemonsqueezy.com/billing?expires=1666869343&signature=xxxxx');
+});
