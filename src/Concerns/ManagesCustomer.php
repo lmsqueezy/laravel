@@ -75,7 +75,7 @@ trait ManagesCustomer
     {
         $this->assertCustomerExists();
 
-        $response = LemonSqueezy::api('GET', "customers/{$this->lemon_squeezy_id}");
+        $response = LemonSqueezy::api('GET', "customers/{$this->customer->lemon_squeezy_id}");
 
         return $response['data']['attributes']['urls']['customer_portal'];
     }
@@ -89,21 +89,13 @@ trait ManagesCustomer
     }
 
     /**
-     * Determine if the billable has a Lemon Squeezy customer ID.
-     */
-    public function hasLemonSqueezyId(): bool
-    {
-        return ! is_null($this->lemon_squeezy_id);
-    }
-
-    /**
-     * Determine if the billable has a Lemon Squeezy customer ID and throw an exception if not.
+     * Determine if the billable is already a Lemon Squeezy customer and throw an exception if not.
      *
      * @throws InvalidCustomer
      */
     protected function assertCustomerExists(): void
     {
-        if (! $this->hasLemonSqueezyId()) {
+        if (is_null($this->customer)) {
             throw InvalidCustomer::notYetCreated($this);
         }
     }

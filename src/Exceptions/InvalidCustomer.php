@@ -9,6 +9,6 @@ class InvalidCustomer extends Exception
 {
     public static function notYetCreated(Model $owner): static
     {
-        return new static(class_basename($owner).' is not a Stripe customer yet. See the createAsStripeCustomer method.');
+        return new static(class_basename($owner).' is not a Lemon Squeezy customer yet.');
     }
 }
