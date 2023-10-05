@@ -9,7 +9,7 @@ use LemonSqueezy\Laravel\Exceptions\LemonSqueezyApiError;
 
 class LemonSqueezy
 {
-    const VERSION = '1.2.0';
+    const VERSION = '1.2.1';
 
     /**
      * Indicates if migrations will be run.
