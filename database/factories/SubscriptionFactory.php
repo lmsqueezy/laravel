@@ -50,7 +50,6 @@ class SubscriptionFactory extends Factory
             Customer::factory()->create([
                 'billable_id' => $subscription->billable_id,
                 'billable_type' => $subscription->billable_type,
-                'lemon_squeezy_id' => $subscription->lemon_squeezy_id,
             ]);
         });
     }

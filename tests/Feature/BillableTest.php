@@ -67,7 +67,7 @@ it('can generate a customer portal link for a billable', function () {
     ]);
 
     $user = new User;
-    $user->lemon_squeezy_id = 1;
+    $user->customer = (object) ['lemon_squeezy_id' => 1];
 
     $url = $user->customerPortalUrl();
 
