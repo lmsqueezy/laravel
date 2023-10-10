@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.2.1...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.2.2...main)
+
+## [1.2.2](https://github.com/lmsqueezy/laravel/compare/1.2.1...1.2.2) - 2023-10-10
+
+- PHP 8.3 support by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/48
 
 ## [1.2.1](https://github.com/lmsqueezy/laravel/compare/1.2.0...1.2.1) - 2023-10-05
 
