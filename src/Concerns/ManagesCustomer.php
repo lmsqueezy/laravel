@@ -95,7 +95,7 @@ trait ManagesCustomer
      */
     protected function assertCustomerExists(): void
     {
-        if (is_null($this->customer)) {
+        if (is_null($this->customer) || is_null($this->customer->lemon_squeezy_id)) {
             throw InvalidCustomer::notYetCreated($this);
         }
     }
