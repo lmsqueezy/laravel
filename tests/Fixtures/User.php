@@ -2,12 +2,14 @@
 
 namespace Tests\Fixtures;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use LemonSqueezy\Laravel\Billable;
+use Tests\Fixtures\Factories\UserFactory;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use Billable;
+    use Billable, HasFactory;
 
     public function getKey()
     {
@@ -17,5 +19,10 @@ class User extends Model
     public function getMorphClass()
     {
         return 'users';
+    }
+
+    protected static function newFactory()
+    {
+        return new UserFactory();
     }
 }

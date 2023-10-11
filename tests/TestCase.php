@@ -21,10 +21,6 @@ class TestCase extends OrchestraTestCase
 
     protected function defineDatabaseMigrations()
     {
-        $this->artisan('migrate');
-
-        $this->beforeApplicationDestroyed(
-            fn () => $this->artisan('migrate:rollback')
-        );
+        $this->loadLaravelMigrations();
     }
 }

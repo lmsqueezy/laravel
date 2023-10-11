@@ -1,5 +1,6 @@
 <?php
 
+use LemonSqueezy\Laravel\Customer;
 use Tests\Fixtures\User;
 
 it('can generate a checkout for a billable', function () {
@@ -73,4 +74,12 @@ it('can generate a customer portal link for a billable', function () {
 
     expect($url)
         ->toBe('https://my-store.lemonsqueezy.com/billing?expires=1666869343&signature=xxxxx');
+});
+
+it('can determine the generic trial on a billable', function () {
+    $user = User::factory()->create();
+
+    $customer = $user->createAsCustomer();
+
+    expect($customer)->toBeInstanceOf(Customer::class);
 });
