@@ -28,6 +28,7 @@ We also recommend to read the Lemon Squeezy [docs](https://docs.lemonsqueezy.com
 The below features are not yet in this package but are planned to be added in the future:
 
 - Subscription invoices
+- Metered Billing
 - License keys
 - Marketing emails check
 - Product & variant listing
