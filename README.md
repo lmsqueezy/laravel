@@ -33,6 +33,7 @@ The below features are not yet in this package but are planned to be added in th
 - Marketing emails check
 - Product & variant listing
 - Create discount codes
+- Nova integration
 
 ## Requirements
 
