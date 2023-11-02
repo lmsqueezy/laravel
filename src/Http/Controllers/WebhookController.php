@@ -109,6 +109,11 @@ final class WebhookController extends Controller
             $billable->customer->update(['trial_ends_at' => null]);
         }
 
+        // Set the billable's lemon squeezy id if it was on generic trial at the model level
+        if (is_null($billable->customer->lemon_squeezy_id)) {
+            $billable->customer->update(['lemon_squeezy_id' => $attributes['customer_id']]);
+        }
+
         SubscriptionCreated::dispatch($billable, $subscription, $payload);
     }
 
