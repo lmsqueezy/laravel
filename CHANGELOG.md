@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.2.3...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.2.4...main)
+
+## [1.2.4](https://github.com/lmsqueezy/laravel/compare/1.2.3...1.2.4) - 2023-11-02
+
+- Fix missing lemon_squeezy_id if billable was on generic trial by [@pdziewa](https://github.com/pdziewa) in https://github.com/lmsqueezy/laravel/pull/52
 
 ## [1.2.3](https://github.com/lmsqueezy/laravel/compare/1.2.2...1.2.3) - 2023-10-10
 
