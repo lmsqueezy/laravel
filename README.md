@@ -123,6 +123,18 @@ Finally, make sure to set up incoming webhooks. This is both needed in developme
 
 Make sure to select all event types. The path you should point to is `/lemon-squeezy/webhook` by default. **We also very much recommend to [verify webhook signatures](#verifying-webhook-signatures).**
 
+If you wish to use [Ngrok](https://ngrok.com/) or [Expose](https://github.com/beyondcode/expose) to recieve incoming hooks then you may also use the `artisan lmsqueezy:listen` command. This command will send a webhook endpoint to the Lemon Squeezy API and remove the webhook when quitting the command. 
+
+### Webhooks
+
+Finally, make sure to set up incoming webhooks. This is necessary in both development and production environments. Go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the URL to your exposed local app. You can use [Ngrok](https://ngrok.com/), [Expose](https://github.com/beyondcode/expose), or another tool of your preference for this purpose. Laravel also offers solutions for sharing your site with [Valet](https://laravel.com/docs/valet#sharing-sites), [Sail](https://laravel.com/docs/10.x/sail#sharing-your-site), and [Herd](https://herd.laravel.com).
+
+Make sure to select all event types. The path you should point to is `/lemon-squeezy/webhook` by default. **We highly recommend verifying webhook signatures, as described in [Verifying Webhook Signatures](#verifying-webhook-signatures).**
+
+If you intend to use [Ngrok](https://ngrok.com/) or [Expose](https://github.com/beyondcode/expose) to receive incoming webhooks, you can leverage the `artisan lmsqueezy:listen` command. This command will conveniently set up a webhook via the Lemon Squeezy API and automatically remove it when you exit the command.
+
+In the event that the created webhooks are not tidied up for any reason, you can also utilize the `--cleanup` option to remove all webhooks associated with the same domains as those configured in Ngrok or Expose.
+
 #### Webhooks & CSRF Protection
 
 Incoming webhooks should not be affected by [CSRF protection](https://laravel.com/docs/csrf). To prevent this, add your webhook path to the except list of your `App\Http\Middleware\VerifyCsrfToken` middleware:
