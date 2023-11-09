@@ -42,6 +42,8 @@ class Checkout implements Responsable
 
     private ?int $customPrice = null;
 
+    private int $quantity = 1;
+
     public function __construct(private string $store, private string $variant)
     {
     }
@@ -141,6 +143,16 @@ class Checkout implements Responsable
     public function withDiscountCode(string $discountCode): self
     {
         $this->checkoutData['discount_code'] = $discountCode;
+
+        return $this;
+    }
+
+    public function withQuantity(int $quantity): self
+    {
+        $this->checkoutData['variant_quantities'] = [
+            'variant_id' => $this->variant,
+            'quantity' => $quantity,
+        ];
 
         return $this;
     }
