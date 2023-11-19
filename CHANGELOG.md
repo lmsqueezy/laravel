@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.2.4...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.3.0...main)
+
+## [1.3.0](https://github.com/lmsqueezy/laravel/compare/1.2.4...1.3.0) - 2023-11-19
+
+- Implement Orders by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/60
 
 ## [1.2.4](https://github.com/lmsqueezy/laravel/compare/1.2.3...1.2.4) - 2023-11-02
 
