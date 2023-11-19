@@ -32,6 +32,11 @@ class LemonSqueezy
     public static string $subscriptionModel = Subscription::class;
 
     /**
+     * The order model class name.
+     */
+    public static string $orderModel = Order::class;
+
+    /**
      * Perform a Lemon Squeezy API call.
      *
      * @throws Exception
@@ -87,5 +92,13 @@ class LemonSqueezy
     public static function useSubscriptionModel(string $subscriptionModel): void
     {
         static::$subscriptionModel = $subscriptionModel;
+    }
+
+    /**
+     * Set the order model class name.
+     */
+    public static function useOrderModel(string $orderModel): void
+    {
+        static::$orderModel = $orderModel;
     }
 }
