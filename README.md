@@ -396,10 +396,10 @@ To retrieve a list of orders for a specific customer, simply call the saved mode
     @foreach ($billable->orders as $order)
         <td>{{ $order->ordered_at->toFormattedDateString() }}</td>
         <td>{{ $order->order_number }}</td>
-        <td>{{ $order->subtotal }}</td>
-        <td>{{ $order->discount_total }}</td>
-        <td>{{ $order->tax }}</td>
-        <td>{{ $order->total }}</td>
+        <td>{{ $order->subtotal() }}</td>
+        <td>{{ $order->discount() }}</td>
+        <td>{{ $order->tax() }}</td>
+        <td>{{ $order->total() }}</td>
         <td>{{ $order->receipt_url }}</td>
     @endforeach
 </table>

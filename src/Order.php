@@ -141,6 +141,38 @@ class Order extends Model
     }
 
     /**
+     * Get the order's subtotal.
+     */
+    public function subtotal(): string
+    {
+        return LemonSqueezy::formatAmount($this->subtotal, $this->currency);
+    }
+
+    /**
+     * Get the order's discount total.
+     */
+    public function discount(): string
+    {
+        return LemonSqueezy::formatAmount($this->discount_total, $this->currency);
+    }
+
+    /**
+     * Get the order's tax.
+     */
+    public function tax(): string
+    {
+        return LemonSqueezy::formatAmount($this->tax, $this->currency);
+    }
+
+    /**
+     * Get the order's total.
+     */
+    public function total(): string
+    {
+        return LemonSqueezy::formatAmount($this->total, $this->currency);
+    }
+
+    /**
      * Sync the order with the given attributes.
      */
     public function sync(array $attributes): self

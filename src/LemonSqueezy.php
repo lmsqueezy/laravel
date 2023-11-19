@@ -6,6 +6,11 @@ use Exception;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use LemonSqueezy\Laravel\Exceptions\LemonSqueezyApiError;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Formatter\IntlMoneyFormatter;
+use Money\Money;
+use NumberFormatter;
 
 class LemonSqueezy
 {
@@ -60,6 +65,26 @@ class LemonSqueezy
         }
 
         return $response;
+    }
+
+    /**
+     * Format the given amount into a displayable currency.
+     */
+    public static function formatAmount(int $amount, string $currency, string $locale = null, array $options = []): string
+    {
+        $money = new Money($amount, new Currency(strtoupper($currency)));
+
+        $locale = $locale ?? config('lemon_squeezy.currency_locale');
+
+        $numberFormatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
+
+        if (isset($options['min_fraction_digits'])) {
+            $numberFormatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, $options['min_fraction_digits']);
+        }
+
+        $moneyFormatter = new IntlMoneyFormatter($numberFormatter, new ISOCurrencies());
+
+        return $moneyFormatter->format($money);
     }
 
     /**
