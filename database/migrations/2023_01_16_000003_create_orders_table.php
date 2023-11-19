@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('billable_type');
             $table->string('lemon_squeezy_id')->unique();
             $table->string('customer_id');
-            $table->uuid('identifier')->unique();
             $table->string('product_id');
             $table->string('variant_id');
             $table->integer('order_number')->unique();
@@ -23,7 +22,7 @@ return new class extends Migration
             $table->integer('discount_total');
             $table->integer('tax');
             $table->integer('total');
-            $table->string('tax_name');
+            $table->string('tax_name')->nullable();
             $table->string('status');
             $table->string('receipt_url')->nullable();
             $table->boolean('refunded');
