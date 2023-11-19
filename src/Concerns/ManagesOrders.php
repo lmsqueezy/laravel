@@ -21,7 +21,7 @@ trait ManagesOrders
      */
     public function hasPurchasedProduct(string $productId): bool
     {
-        return $this->orders()->where('product_id', $productId)->exists();
+        return $this->orders()->where('product_id', $productId)->where('status', static::STATUS_PAID)->exists();
     }
 
     /**
@@ -29,6 +29,6 @@ trait ManagesOrders
      */
     public function hasPurchasedVariant(string $variantId): bool
     {
-        return $this->orders()->where('variant_id', $variantId)->exists();
+        return $this->orders()->where('variant_id', $variantId)->where('status', static::STATUS_PAID)->exists();
     }
 }
