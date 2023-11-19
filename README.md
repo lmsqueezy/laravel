@@ -383,6 +383,80 @@ $url = $user->customerPortalUrl();
 
 Besides the customer portal for managing subscriptions, [Lemon Squeezy also has a "My Orders" portal](https://docs.lemonsqueezy.com/help/online-store/my-orders) to manage all of your purchases for a customer account. This does involve a mixture of purchases across multiple vendors. If this is something you wish your customers can find, you can link to [`https://app.lemonsqueezy.com/my-orders`](https://app.lemonsqueezy.com/my-orders) and tell them to login with the email address they performed the purchase with.
 
+## Orders
+
+Lemon Squeezy allows you to retrieve a list of all orders made for your store. You can then use this list to present all orders to your customers.
+
+### Retrieving Orders
+
+To retrieve a list of orders for a specific customer, simply call the saved models in the database:
+
+```blade
+<table>
+    @foreach ($billable->orders as $order)
+        <td>{{ $order->ordered_at->toFormattedDateString() }}</td>
+        <td>{{ $order->order_number }}</td>
+        <td>{{ $order->subtotal() }}</td>
+        <td>{{ $order->discount() }}</td>
+        <td>{{ $order->tax() }}</td>
+        <td>{{ $order->total() }}</td>
+        <td>{{ $order->receipt_url }}</td>
+    @endforeach
+</table>
+```
+
+### Checking Order Status
+
+To check if an individual order is paid, you may use the `paid` method:
+
+```php
+if ($order->paid()) {
+    // ...
+}
+```
+
+Besides that, you have three other checks you can do: `pending`, `failed` & `refunded`. If the order is `refunded`, you may also use the `refunded_at` timestamp:
+
+```blade
+@if ($order->refunded())
+    Order {{ $order->order_number }} was rufunded on {{ $order->refunded_at->toFormattedDateString() }}
+@endif
+```
+
+You can also check if an order was for a specific product:
+
+```php
+if ($order->hasProduct('your-product-id')) {
+    // ...
+}
+```
+
+Or for a specific variant:
+
+```php
+if ($order->hasVariant('your-variant-id')) {
+    // ...
+}
+```
+
+Additionally, you may check if a customer has purchased a specific product:
+
+```php
+if ($billable->hasPurchasedProduct('your-product-id')) {
+    // ...
+}
+```
+
+Or a specific variant:
+
+```php
+if ($billable->hasPurchasedVariant('your-variant-id')) {
+    // ...
+}
+```
+
+These two checks will both make sure the correct product or variant was purchased and paid for. This is useful as well if you're offering a feature in your app like lifetime access.
+
 ## Subscriptions
 
 ### Setting Up Subscription Products

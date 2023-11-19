@@ -29,7 +29,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, soap
+          extensions: dom, curl, libxml, mbstring, zip, soap, intl
           coverage: none
 
       - name: Install dependencies
