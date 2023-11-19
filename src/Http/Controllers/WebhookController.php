@@ -86,6 +86,7 @@ final class WebhookController extends Controller
                 'customer_id' => $attributes['customer_id'],
                 'product_id' => $order['product_id'],
                 'variant_id' => $order['variant_id'],
+                'identifier' => $attributes['identifier'],
                 'order_number' => $attributes['order_number'],
                 'currency' => $attributes['currency'],
                 'subtotal' => $attributes['subtotal'],

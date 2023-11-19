@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('billable_type');
             $table->string('lemon_squeezy_id')->unique();
             $table->string('customer_id');
+            $table->uuid('identifier')->unique();
             $table->string('product_id');
             $table->string('variant_id');
             $table->integer('order_number')->unique();
