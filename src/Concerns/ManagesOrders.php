@@ -4,7 +4,6 @@ namespace LemonSqueezy\Laravel\Concerns;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use LemonSqueezy\Laravel\LemonSqueezy;
-use LemonSqueezy\Laravel\Order;
 
 trait ManagesOrders
 {
