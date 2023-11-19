@@ -379,6 +379,10 @@ Optionally, you also get the signed customer portal url directly:
 $url = $user->customerPortalUrl();
 ```
 
+#### My Orders
+
+Besides the customer portal for managing subscriptions, [Lemon Squeezy also has a "My Orders" portal](https://docs.lemonsqueezy.com/help/online-store/my-orders) to manage all of your purchases for a customer account. This does involve a mixture of purchases across multiple vendors. If this is something you wish your customers can find, you can link to [`https://app.lemonsqueezy.com/my-orders`](https://app.lemonsqueezy.com/my-orders) and tell them to login with the email address they performed the purchase with.
+
 ## Subscriptions
 
 ### Setting Up Subscription Products
