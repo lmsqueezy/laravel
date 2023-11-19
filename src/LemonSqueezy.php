@@ -74,7 +74,7 @@ class LemonSqueezy
     {
         $money = new Money($amount, new Currency(strtoupper($currency)));
 
-        $locale = $locale ?? config('lemon_squeezy.currency_locale');
+        $locale = $locale ?? config('lemon-squeezy.currency_locale');
 
         $numberFormatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
 
