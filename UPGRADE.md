@@ -14,4 +14,4 @@ php artisan migrate
 
 And now your webhooks will start saving newly made orders. If you're overwriting your migrations, you'll need to create [this migration](./database/migrations/2023_01_16_000003_create_orders_table.php) manually.
 
-Previously made order unfortunately need to be stored manually but we're planning on making a sync command in the future to make this more easily.
+Previously made orders unfortunately need to be stored manually but we're planning on making a sync command in the future to make this more easily.
