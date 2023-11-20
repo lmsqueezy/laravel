@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.3.1...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.3.2...main)
+
+## [1.3.2](https://github.com/lmsqueezy/laravel/compare/1.3.1...1.3.2) - 2023-11-20
+
+- Add indexes by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/63
 
 ## [1.3.1](https://github.com/lmsqueezy/laravel/compare/1.3.0...1.3.1) - 2023-11-20
 
