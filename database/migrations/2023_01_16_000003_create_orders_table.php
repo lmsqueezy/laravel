@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('discount_total');
             $table->integer('tax');
             $table->integer('total');
-            $table->string('tax_name');
+            $table->string('tax_name')->nullable();
             $table->string('status');
             $table->string('receipt_url')->nullable();
             $table->boolean('refunded');

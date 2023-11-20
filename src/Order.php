@@ -179,8 +179,8 @@ class Order extends Model
     {
         $this->update([
             'customer_id' => $attributes['customer_id'],
-            'product_id' => $attributes['product_id'],
-            'variant_id' => $attributes['variant_id'],
+            'product_id' => $attributes['first_order_item']['product_id'],
+            'variant_id' => $attributes['first_order_item']['variant_id'],
             'order_number' => $attributes['order_number'],
             'currency' => $attributes['currency'],
             'subtotal' => $attributes['subtotal'],
