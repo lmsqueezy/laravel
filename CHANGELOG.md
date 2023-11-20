@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.3.0...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.3.1...main)
+
+## [1.3.1](https://github.com/lmsqueezy/laravel/compare/1.3.0...1.3.1) - 2023-11-20
+
+- Fixes for orders by [@calebporzio](https://github.com/calebporzio) in https://github.com/lmsqueezy/laravel/pull/62
 
 ## [1.3.0](https://github.com/lmsqueezy/laravel/compare/1.2.4...1.3.0) - 2023-11-19
 
