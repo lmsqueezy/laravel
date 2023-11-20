@@ -14,7 +14,7 @@ use NumberFormatter;
 
 class LemonSqueezy
 {
-    const VERSION = '1.3.0';
+    const VERSION = '1.3.1';
 
     /**
      * Indicates if migrations will be run.
