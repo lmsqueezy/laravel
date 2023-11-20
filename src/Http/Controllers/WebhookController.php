@@ -79,13 +79,12 @@ final class WebhookController extends Controller
         // Todo v2: Remove this check
         if (Schema::hasTable((new LemonSqueezy::$orderModel)->getTable())) {
             $attributes = $payload['data']['attributes'];
-            firstOrderItem = $payload['data']['attributes']['first_order_item'];
 
             $order = $billable->orders()->create([
                 'lemon_squeezy_id' => $payload['data']['id'],
                 'customer_id' => $attributes['customer_id'],
-                'product_id' => firstOrderItem['product_id'],
-                'variant_id' => firstOrderItem['variant_id'],
+                'product_id' => firstOrderItem['first_order_item']['product_id'],
+                'variant_id' => firstOrderItem['first_order_item']['variant_id'],
                 'identifier' => $attributes['identifier'],
                 'order_number' => $attributes['order_number'],
                 'currency' => $attributes['currency'],
