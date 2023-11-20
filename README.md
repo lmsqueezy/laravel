@@ -419,7 +419,7 @@ Besides that, you have three other checks you can do: `pending`, `failed` & `ref
 
 ```blade
 @if ($order->refunded())
-    Order {{ $order->order_number }} was rufunded on {{ $order->refunded_at->toFormattedDateString() }}
+    Order {{ $order->order_number }} was refunded on {{ $order->refunded_at->toFormattedDateString() }}
 @endif
 ```
 
