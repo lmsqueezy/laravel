@@ -393,7 +393,7 @@ To retrieve a list of orders for a specific customer, simply call the saved mode
 
 ```blade
 <table>
-    @foreach ($billable->orders as $order)
+    @foreach ($user->orders as $order)
         <td>{{ $order->ordered_at->toFormattedDateString() }}</td>
         <td>{{ $order->order_number }}</td>
         <td>{{ $order->subtotal() }}</td>
@@ -442,7 +442,7 @@ if ($order->hasVariant('your-variant-id')) {
 Additionally, you may check if a customer has purchased a specific product:
 
 ```php
-if ($billable->hasPurchasedProduct('your-product-id')) {
+if ($user->hasPurchasedProduct('your-product-id')) {
     // ...
 }
 ```
@@ -450,7 +450,7 @@ if ($billable->hasPurchasedProduct('your-product-id')) {
 Or a specific variant:
 
 ```php
-if ($billable->hasPurchasedVariant('your-variant-id')) {
+if ($user->hasPurchasedVariant('your-variant-id')) {
     // ...
 }
 ```
