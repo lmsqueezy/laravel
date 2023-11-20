@@ -15,8 +15,8 @@ return new class extends Migration
             $table->string('lemon_squeezy_id')->unique();
             $table->string('customer_id');
             $table->uuid('identifier')->unique();
-            $table->string('product_id');
-            $table->string('variant_id');
+            $table->string('product_id')->index();
+            $table->string('variant_id')->index();
             $table->integer('order_number')->unique();
             $table->string('currency');
             $table->integer('subtotal');
