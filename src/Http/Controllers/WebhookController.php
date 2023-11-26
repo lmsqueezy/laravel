@@ -5,6 +5,7 @@ namespace LemonSqueezy\Laravel\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use LemonSqueezy\Laravel\Events\LicenseKeyCreated;
 use LemonSqueezy\Laravel\Events\LicenseKeyUpdated;
@@ -25,6 +26,7 @@ use LemonSqueezy\Laravel\Events\WebhookReceived;
 use LemonSqueezy\Laravel\Exceptions\InvalidCustomPayload;
 use LemonSqueezy\Laravel\Http\Middleware\VerifyWebhookSignature;
 use LemonSqueezy\Laravel\LemonSqueezy;
+use LemonSqueezy\Laravel\Order;
 use LemonSqueezy\Laravel\Subscription;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -74,14 +76,51 @@ final class WebhookController extends Controller
     {
         $billable = $this->resolveBillable($payload);
 
-        OrderCreated::dispatch($billable, $payload);
+        // Todo v2: Remove this check
+        if (Schema::hasTable((new LemonSqueezy::$orderModel)->getTable())) {
+            $attributes = $payload['data']['attributes'];
+
+            $order = $billable->orders()->create([
+                'lemon_squeezy_id' => $payload['data']['id'],
+                'customer_id' => $attributes['customer_id'],
+                'product_id' => $attributes['product_id'],
+                'variant_id' => $attributes['variant_id'],
+                'order_number' => $attributes['order_number'],
+                'currency' => $attributes['currency'],
+                'subtotal' => $attributes['subtotal'],
+                'discount_total' => $attributes['discount_total'],
+                'tax' => $attributes['tax'],
+                'total' => $attributes['total'],
+                'tax_name' => $attributes['tax_name'],
+                'status' => $attributes['status'],
+                'receipt_url' => $attributes['urls']['receipt'] ?? null,
+                'refunded' => $attributes['refunded'],
+                'refunded_at' => $attributes['refunded_at'] ? Carbon::make($attributes['refunded_at']) : null,
+                'ordered_at' => Carbon::make($attributes['created_at']),
+            ]);
+        } else {
+            $order = null;
+        }
+
+        OrderCreated::dispatch($billable, $order, $payload);
     }
 
     public function handleOrderRefunded(array $payload): void
     {
         $billable = $this->resolveBillable($payload);
 
-        OrderRefunded::dispatch($billable, $payload);
+        // Todo v2: Remove this check
+        if (Schema::hasTable((new LemonSqueezy::$orderModel)->getTable())) {
+            if (! $order = $this->findOrder($payload['data']['id'])) {
+                return;
+            }
+
+            $order = $order->sync($payload['data']['attributes']);
+        } else {
+            $order = null;
+        }
+
+        OrderRefunded::dispatch($billable, $order, $payload);
     }
 
     public function handleSubscriptionCreated(array $payload): void
@@ -254,5 +293,10 @@ final class WebhookController extends Controller
     private function findSubscription(string $subscriptionId): ?Subscription
     {
         return LemonSqueezy::$subscriptionModel::firstWhere('lemon_squeezy_id', $subscriptionId);
+    }
+
+    private function findOrder(string $orderId): ?Order
+    {
+        return LemonSqueezy::$orderModel::firstWhere('lemon_squeezy_id', $orderId);
     }
 }
