@@ -8,22 +8,19 @@ use Illuminate\Contracts\Console\Isolatable;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Http\Client\Response;
 use Illuminate\Process\InvokedProcess;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use LemonSqueezy\Laravel\Exceptions\ListenException;
-use Ramsey\Uuid\Uuid;
+use LemonSqueezy\Laravel\LemonSqueezy;
 
-use function Laravel\Prompts\alert;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
 use function Laravel\Prompts\select;
 
-class Listen extends Command implements Isolatable, PromptsForMissingInput
+class ListenCommand extends Command implements Isolatable, PromptsForMissingInput
 {
     /**
      * The name and signature of the console command.
@@ -37,24 +34,29 @@ class Listen extends Command implements Isolatable, PromptsForMissingInput
      *
      * @var string
      */
-    protected $description = 'Listens to Lemon Squeezy webhooks via expose or ngrok';
+    protected $description = 'Listens to Lemon Squeezy webhooks via expose or ngrok.';
 
-    protected array $api = [
-        'ngrok' => 'http://localhost:4040/api',
-        'lemonsqueezy' => 'https://api.lemonsqueezy.com/v1',
-    ];
-
-    protected array $cleanupWebhookDomains = [
+    /**
+     * The available services.
+     */
+    protected array $services = [
         'expose' => [
-            'sharedwithexpose.com',
+            'domain' => 'sharedwithexpose.com',
         ],
         'ngrok' => [
-            'ngrok-free.app',
+            'api' => 'http://localhost:4040/api',
+            'domain' => 'ngrok-free.app',
         ],
     ];
 
+    /**
+     * The currently invoked process instance.
+     */
     protected InvokedProcess $process;
 
+    /**
+     * The currently in-use Lemon Squeezy webhook ID.
+     */
     protected int $webhookId;
 
     /**
@@ -62,46 +64,63 @@ class Listen extends Command implements Isolatable, PromptsForMissingInput
      */
     public function handle()
     {
-        try {
-            $this->validateArguments();
-            $this->handleEnvironment();
-            $this->handleCleanup();
-            $this->handleService();
-        } catch (\Throwable $th) {
-            if ($th instanceof ListenException) {
-                match($th->getCode()) {
-                    Command::SUCCESS => info($th->getMessage()),
-                    Command::FAILURE => error($th->getMessage()),
-                };
-
-                return $th->getCode();
-            }
-        
-            error($th->getMessage());
-            return Command::FAILURE;
-        }
+        $this->validateArguments();
+        $this->handleEnvironment();
+        $this->handleCleanup();
+        $this->handleService();
 
         return Command::SUCCESS;
     }
 
+    protected function validateArguments()
+    {
+        Validator::make($this->arguments() + config('lemon-squeezy'), [
+            'api_key' => [
+                'required',
+            ],
+            'service' => [
+                'required',
+                'string',
+                'in:expose,ngrok,test',
+            ],
+            'signing_secret' => [
+                'required',
+            ],
+            'store' => [
+                'required',
+            ],
+        ],[
+            'api_key.required' => 'The LEMON_SQUEEZY_API_KEY environment variable is required.',
+            'signing_secret.required' => 'The LEMON_SQUEEZY_SIGNING_SECRET environment variable is required.',
+            'store.required' => 'The LEMON_SQUEEZY_STORE environment variable is required.',
+        ])->validate();
+    }
+
     protected function handleEnvironment(): void
     {
-        throw_if(
-            $this->argument('service') === 'test',
-            ListenException::usingTestService()
-        );
+        if ($this->argument('service') === 'test') {
+            info('lmsqueezy:listen is using the test service.');
 
-        throw_if(
-            !App::environment('local'),
-            ListenException::notLocalEnvironment()
-        );
+            exit(Command::SUCCESS);
+        }
+
+        if (! App::environment('testing')) {
+            error('lmsqueezy:listen can only be used in local environment.');
+
+            exit(Command::FAILURE);
+        }
     }
 
     protected function handleCleanup(): void
     {
         if ($this->option('cleanup')) {
             note("Cleaning up webhooks for '{$this->argument('service')}' service...");
-            $this->cleanupWebhooks();
+
+            $cleaned = $this->cleanupWebhooks();
+
+            if ($cleaned === 0) {
+                error('No webhooks found to clean.');
+            }
 
             exit(Command::SUCCESS);
         }
@@ -129,30 +148,6 @@ class Listen extends Command implements Isolatable, PromptsForMissingInput
     protected function handleTrap(int $signal): void
     {
         $this->teardownWebhook();
-    }
-
-    protected function validateArguments()
-    {
-        Validator::make($this->arguments() + config('lemon-squeezy'), [
-            'api_key' => [
-                'required',
-            ],
-            'service' => [
-                'required',
-                'string',
-                'in:expose,ngrok,test',
-            ],
-            'signing_secret' => [
-                'required',
-            ],
-            'store' => [
-                'required',
-            ],
-        ],[
-            'api_key.required' => 'The LEMON_SQUEEZY_API_KEY environment variable is required.',
-            'signing_secret.required' => 'The LEMON_SQUEEZY_SIGNING_SECRET environment variable is required.',
-            'store.required' => 'The LEMON_SQUEEZY_STORE environment variable is required.',
-        ])->validate();
     }
 
     protected function promptForMissingArgumentsUsing()
@@ -188,7 +183,7 @@ class Listen extends Command implements Isolatable, PromptsForMissingInput
             'expose',
             'share',
             config('app.url'),
-            sprintf('--subdomain=%s', Uuid::uuid4()),
+            sprintf('--subdomain=%s', sha1(time())),
         ]);
 
         while ($this->process->running()) {
@@ -221,7 +216,7 @@ class Listen extends Command implements Isolatable, PromptsForMissingInput
         while ($this->process->running()) {
             if (is_null($tunnel)) {
                 $result = Http::retry(5, 1000)
-                    ->get("{$this->api['ngrok']}/tunnels")
+                    ->get("{$this->services['ngrok']['api']}/tunnels")
                     ->json();
 
                 $tunnel = $result['tunnels'][0]['public_url'] ?? null;
@@ -235,7 +230,7 @@ class Listen extends Command implements Isolatable, PromptsForMissingInput
             }
 
             if ($tunnel) {
-                $result = Http::get("{$this->api['ngrok']}/requests/http?limit=50")->json('requests');
+                $result = Http::get("{$this->services['ngrok']['api']}/requests/http?limit=50")->json('requests');
 
                 foreach ($result as $request) {
                     if (! in_array($request['id'], $logs)) {
@@ -302,13 +297,11 @@ class Listen extends Command implements Isolatable, PromptsForMissingInput
 
         $result = Http::withToken(config('lemon-squeezy.api_key'))
             ->retry(3, 250)
-            ->post(
-                "{$this->api['lemonsqueezy']}/webhooks",
-                $data
-            );
+            ->post(LemonSqueezy::API."/webhooks", $data);
 
         if ($result->status() !== 201) {
             error('Failed to setup webhook.');
+
             exit(1);
         }
 
@@ -327,14 +320,13 @@ class Listen extends Command implements Isolatable, PromptsForMissingInput
         note("\nCleaning up webhook on Lemon Squeezy...");
 
         if ($this->deleteWebhook($this->webhookId)->status() !== 204) {
-            error(
-                "Failed to remove webhook, use --cleanup to remove all {$this->argument('service')}. domains"
-            );
+            error("Failed to remove webhook, use --cleanup to remove all {$this->argument('service')}. domains");
 
             return;
         }
 
         unset($this->webhookId);
+
         info('✅ Webhook removed successfully.');
     }
 
@@ -342,9 +334,7 @@ class Listen extends Command implements Isolatable, PromptsForMissingInput
     {
         return Http::withToken(config('lemon-squeezy.api_key'))
             ->retry(3, 250)
-            ->delete(
-                "{$this->api['lemonsqueezy']}/webhooks/{$webhookId}"
-            );
+            ->delete(LemonSqueezy::API."/webhooks/{$webhookId}");
     }
 
     protected function fetchWebhooks(): array
@@ -353,53 +343,45 @@ class Listen extends Command implements Isolatable, PromptsForMissingInput
         $fetchPage = 0;
         $webhooks = [];
 
-        while($fetch) {
-
+        while ($fetch) {
             $result = Http::withToken(config('lemon-squeezy.api_key'))
                 ->retry(3, 250)
                 ->get(sprintf(
                     '%s/webhooks/?filter[store_id]=%s%s',
-                    $this->api['lemonsqueezy'],
+                    LemonSqueezy::API,
                     config('lemon-squeezy.store'),
                     $fetchPage > 0 ? "&page[number]={$fetchPage}" : '',
                 ))
                 ->json();
-            
+
             $fetchPage++;
 
             $page = $result['meta']['page'];
 
-            if($page['currentPage'] === $page['lastPage']) {
+            if ($page['currentPage'] === $page['lastPage']) {
                 $fetch = false;
             }
 
-            collect($result['data'])->pluck('attributes.url', 'id')->each(
-                function($url, $id) use (&$webhooks) {
-                    $webhooks[$id] = $url;
-                }
-            );
+            foreach (collect($result['data'])->pluck('attributes.url', 'id') as $id => $url) {
+                $webhooks[$id] = $url;
+            }
         }
-        
+
         return $webhooks;
     }
 
-    protected function cleanupWebhooks(): void
+    protected function cleanupWebhooks(): int
     {
-        collect($this->fetchWebhooks())
-            ->filter(fn ($url, $id) => collect($this->cleanupWebhookDomains[$this->argument('service')])
-                ->reduce(fn ($carry, $domain) => $carry || Str::endsWith($url, $domain), false)
-            )
-            ->tap(function($collection) {
-                throw_if(
-                    $collection->count() < 1,
-                    ListenException::noWebhooksFound()
-                );
-
-                return $collection;
-            })->each(function ($url, $id) {
+        return collect($this->fetchWebhooks())
+            ->filter(function ($url, $id) {
+                collect($this->services[$this->argument('service')]['domain'])
+                    ->reduce(fn ($carry, $domain) => $carry || Str::endsWith($url, $domain), false);
+            })
+            ->each(function ($url, $id) {
                 $this->deleteWebhook($id)->status() === 204
                     ? info("✅ Webhook {$id} removed successfully.")
                     : error("Failed to remove webhook {$id}.");
-            });
+            })
+            ->count();
     }
 }
