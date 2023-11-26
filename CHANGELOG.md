@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.2.4...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.3.2...main)
+
+## [1.3.2](https://github.com/lmsqueezy/laravel/compare/1.3.1...1.3.2) - 2023-11-20
+
+- Add indexes by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/63
+
+## [1.3.1](https://github.com/lmsqueezy/laravel/compare/1.3.0...1.3.1) - 2023-11-20
+
+- Fixes for orders by [@calebporzio](https://github.com/calebporzio) in https://github.com/lmsqueezy/laravel/pull/62
+
+## [1.3.0](https://github.com/lmsqueezy/laravel/compare/1.2.4...1.3.0) - 2023-11-19
+
+- Implement Orders by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/60
 
 ## [1.2.4](https://github.com/lmsqueezy/laravel/compare/1.2.3...1.2.4) - 2023-11-02
 

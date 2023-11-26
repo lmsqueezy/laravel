@@ -83,8 +83,9 @@ final class WebhookController extends Controller
             $order = $billable->orders()->create([
                 'lemon_squeezy_id' => $payload['data']['id'],
                 'customer_id' => $attributes['customer_id'],
-                'product_id' => $attributes['product_id'],
-                'variant_id' => $attributes['variant_id'],
+                'product_id' => $attributes['first_order_item']['product_id'],
+                'variant_id' => $attributes['first_order_item']['variant_id'],
+                'identifier' => $attributes['identifier'],
                 'order_number' => $attributes['order_number'],
                 'currency' => $attributes['currency'],
                 'subtotal' => $attributes['subtotal'],
