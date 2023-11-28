@@ -42,6 +42,11 @@ class LemonSqueezy
     public static string $orderModel = Order::class;
 
     /**
+     * The discount model class name.
+     */
+    public static string $discountModel = Discount::class;
+
+    /**
      * Perform a Lemon Squeezy API call.
      *
      * @throws Exception
@@ -125,5 +130,13 @@ class LemonSqueezy
     public static function useOrderModel(string $orderModel): void
     {
         static::$orderModel = $orderModel;
+    }
+
+    /**
+     * Set the discount model class name.
+     */
+    public static function useDiscountModel(string $discountModel): void
+    {
+        static::$discountModel = $discountModel;
     }
 }

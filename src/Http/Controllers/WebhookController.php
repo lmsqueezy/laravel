@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use LemonSqueezy\Laravel\Events\DiscountApplied;
+use LemonSqueezy\Laravel\Events\DiscountCreated;
+use LemonSqueezy\Laravel\Events\DiscountDeleted;
+use LemonSqueezy\Laravel\Events\DiscountExpired;
+use LemonSqueezy\Laravel\Events\DiscountRedemptionLimitReached;
+use LemonSqueezy\Laravel\Events\DiscountUpdated;
+use LemonSqueezy\Laravel\Events\DiscountValidationFailed;
 use LemonSqueezy\Laravel\Events\LicenseKeyCreated;
 use LemonSqueezy\Laravel\Events\LicenseKeyUpdated;
 use LemonSqueezy\Laravel\Events\OrderCreated;
@@ -257,6 +264,56 @@ final class WebhookController extends Controller
 
         LicenseKeyUpdated::dispatch($billable, $payload);
     }
+
+    private function handleDiscountCreated(array $payload): void
+    {
+        $billable = $this->resolveBillable($payload);
+
+        DiscountCreated::dispatch($billable, $payload);
+    }
+
+    private function handleDiscountApplied(array $payload): void
+    {
+        $billable = $this->resolveBillable($payload);
+
+        DiscountApplied::dispatch($billable, $payload);
+    }
+
+    private function handleDiscountDeleted(array $payload): void
+    {
+        $billable = $this->resolveBillable($payload);
+
+        DiscountDeleted::dispatch($billable, $payload);
+    }
+
+    private function handleDiscountExpired(array $payload): void
+    {
+        $billable = $this->resolveBillable($payload);
+
+        DiscountExpired::dispatch($billable, $payload);
+    }
+
+    private function handleDiscountRedemptionLimitReached(array $payload): void
+    {
+        $billable = $this->resolveBillable($payload);
+
+        DiscountRedemptionLimitReached::dispatch($billable, $payload);
+    }
+
+    private function handleDiscountUpdated(array $payload): void
+    {
+        $billable = $this->resolveBillable($payload);
+
+        DiscountUpdated::dispatch($billable, $payload);
+    }
+
+    private function handleDiscountValidationFailed(array $payload): void
+    {
+        $billable = $this->resolveBillable($payload);
+
+        DiscountValidationFailed::dispatch($billable, $payload);
+    }
+
 
     /**
      * @return \LemonSqueezy\Laravel\Billable
