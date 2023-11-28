@@ -3,6 +3,7 @@
 namespace LemonSqueezy\Laravel;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use LemonSqueezy\Laravel\Database\Factories\DiscountRedemptionFactory;
@@ -40,7 +41,7 @@ class DiscountRedemption extends Model
      */
     public function discount(): BelongsTo
     {
-        return $this->belongsTo(Discount::class, 'discount_id');
+        return $this->belongsTo(Discount::class);
     }
 
     /**
@@ -48,7 +49,7 @@ class DiscountRedemption extends Model
      */
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class, 'order_id');
+        return $this->belongsTo(Order::class);
     }
 
      /**

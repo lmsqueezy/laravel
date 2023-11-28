@@ -47,6 +47,11 @@ class LemonSqueezy
     public static string $discountModel = Discount::class;
 
     /**
+     * The discount redemption model class name.
+     */
+    public static string $discountRedemptionModel = DiscountRedemption::class;
+
+    /**
      * Perform a Lemon Squeezy API call.
      *
      * @throws Exception

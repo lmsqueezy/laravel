@@ -73,7 +73,7 @@ it('can check if discount has reached max redemptions', function () {
     
     // Mock the redemptions relationship to return the created redemption
     $discount->setRelation('redemptions', collect([$redemption]));
-
+    
     // Assert that the discount has reached its max redemptions
     expect($discount->hasReachedMaxRedemptions())->toBeTrue();
 });

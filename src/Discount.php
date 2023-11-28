@@ -50,14 +50,6 @@ class Discount extends Model
     ];
 
     /**
-     * Get the billable model related to the customer.
-     */
-    public function billable(): MorphTo
-    {
-        return $this->morphTo();
-    }
-
-    /**
      * Determine if the discount code is valid.
      */ 
     public function isValidCode(string $code): bool
@@ -160,7 +152,7 @@ class Discount extends Model
      */
     public function redemptions(): HasMany
     {
-        return $this->hasMany(DiscountRedemption::class, 'discount_id');
+        return $this->hasMany(DiscountRedemption::class);
     }
 
     /**
