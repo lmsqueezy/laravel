@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('discount_id')->references('id')->on('lemon_squeezy_discounts')->onDelete('cascade');
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('order_id')->references('id')->on('lemon_squeezy_orders')->onDelete('cascade');
 
             $table->index(['billable_id', 'billable_type']);
         });
