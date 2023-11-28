@@ -26,6 +26,8 @@ return new class extends Migration
             $table->integer('duration_in_months')->nullable();
             $table->string('status');
             $table->timestamps();
+
+            $table->index(['billable_id', 'billable_type']);
         });
     }
 

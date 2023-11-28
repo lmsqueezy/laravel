@@ -49,6 +49,14 @@ class Discount extends Model
         'duration_in_months' => 'integer',
     ];
 
+     /**
+     * Get the billable model related to the customer.
+     */
+    public function billable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
     /**
      * Determine if the discount code is valid.
      */ 

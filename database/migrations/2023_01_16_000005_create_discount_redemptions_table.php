@@ -10,12 +10,17 @@ return new class extends Migration
     {
         Schema::create('lemon_squeezy_discount_redemptions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('billable_id');
+            $table->string('billable_type');
+            $table->string('lemon_squeezy_id')->unique();
             $table->unsignedBigInteger('discount_id');
             $table->unsignedBigInteger('order_id');
             $table->timestamps();
 
             $table->foreign('discount_id')->references('id')->on('lemon_squeezy_discounts')->onDelete('cascade');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+
+            $table->index(['billable_id', 'billable_type']);
         });
     }
 

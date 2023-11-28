@@ -36,6 +36,14 @@ class DiscountRedemption extends Model
         'updated_at' => 'datetime',
     ];
 
+     /**
+     * Get the billable model related to the customer.
+     */
+    public function billable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
     /**
      * Get the discount associated with the redemption.
      */
