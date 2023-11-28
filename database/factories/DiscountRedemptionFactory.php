@@ -27,8 +27,8 @@ class DiscountRedemptionFactory extends Factory
             'billable_id' => rand(1, 1000),
             'billable_type' => 'App\\Models\\User',
             'lemon_squeezy_id' => rand(1, 1000),
-            'discount_id' => Discount::factory(),
-            'order_id' => Order::factory(),
+            'discount_id' => rand(1, 1000),
+            'order_id' => rand(1, 1000),
         ];
     }
 }
