@@ -85,7 +85,11 @@ class Discount extends Model
         if ($this->status !== 'published') {
             return false;
         }
-    
+
+        if ($this->starts_at && $this->starts_at->isFuture()) {
+            return false;
+        }
+
         if ($this->expires_at && $this->expires_at->isPast()) {
             return false;
         }
@@ -93,6 +97,17 @@ class Discount extends Model
         if ($this->duration === 'once' && $this->redemptions()->count() > 0) {
             return false;
         }
+
+        if ($this->duration === 'repeating') {
+            $endActivePeriod = $this->starts_at->addMonths($this->duration_in_months);
+            if (now()->greaterThan($endActivePeriod)) {
+                return false;
+            }
+
+            if ($this->hasReachedMaxRedemptions()) {
+                return false;
+            }
+        }    
     
         return true;
     }
