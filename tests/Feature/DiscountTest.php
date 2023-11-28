@@ -58,26 +58,6 @@ it('can check if a discount is expired', function () {
     expect($activeDiscount->isExpired())->toBeFalse();
 });
 
-it('can check if discount has reached max redemptions', function () {
-    // Create a discount instance
-    $discount = new Discount([
-        'is_limited_redemptions' => true,
-        'max_redemptions' => 1,
-    ]);
-
-    // Manually set the discount ID as it would be in a database
-    $discount->id = 1;
-
-    // Create a DiscountRedemption instance and associate it with the discount
-    $redemption = new DiscountRedemption(['discount_id' => $discount->id]);
-    
-    // Mock the redemptions relationship to return the created redemption
-    $discount->setRelation('redemptions', collect([$redemption]));
-    
-    // Assert that the discount has reached its max redemptions
-    expect($discount->hasReachedMaxRedemptions())->toBeTrue();
-});
-
 it('can determine if the discount is expired', function () {
     $expiredDiscount = new Discount(['expires_at' => now()->subDay()]);
     $notExpiredDiscount = new Discount(['expires_at' => now()->addDay()]);

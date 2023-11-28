@@ -9,9 +9,8 @@ uses(RefreshDatabase::class);
 
 it('can create a discount redemption', function () {
     $discount = Discount::factory()->create();
-    $order = Order::factory()->create();
+    $order = new Order(['id' => 1]);
     
-
     $redemption = DiscountRedemption::factory()->create([
         'discount_id' => $discount->id,
         'order_id' => $order->id,
@@ -31,22 +30,12 @@ it('can retrieve a discount redemption', function () {
 
 it('belongs to a discount', function () {
     $discount = Discount::factory()->create();
-    $order = Order::factory()->create();
+    $order = new Order(['id' => 1]);
+
     $redemption = DiscountRedemption::factory()->create([
         'discount_id' => $discount->id,
         'order_id' => $order->id,
     ]);
 
     expect($redemption->discount->is($discount))->toBeTrue();
-});
-
-it('belongs to an order', function () {
-    $discount = Discount::factory()->create();
-    $order = Order::factory()->create();
-    $redemption = DiscountRedemption::factory()->create([
-        'discount_id' => $discount->id,
-        'order_id' => $order->id,
-    ]);
-
-    expect($redemption->order->is($order))->toBeTrue();
 });

@@ -3,9 +3,10 @@
 namespace LemonSqueezy\Laravel;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use LemonSqueezy\Laravel\Database\Factories\OrderFactory;
 
 /**
@@ -170,6 +171,14 @@ class Order extends Model
     public function total(): string
     {
         return LemonSqueezy::formatAmount($this->total, $this->currency);
+    }
+
+    /**
+     * Get the redemptions for the discount.
+     */
+    public function redemptions(): HasMany
+    {
+        return $this->hasMany(DiscountRedemption::class);
     }
 
     /**
