@@ -82,11 +82,19 @@ class Discount extends Model
      */
     public function isActive(): bool
     {
-        return $this->status === 'published' &&
-            (!$this->expires_at || !$this->expires_at->isPast()) &&
-            !$this->is_limited_to_products &&
-            !($this->is_limited_redemptions && $this->max_redemptions && $this->max_redemptions <= $this->redemptions()->count()) &&
-            !($this->duration === 'once' && $this->redemptions()->count() > 0);
+        if ($this->status !== 'published') {
+            return false;
+        }
+    
+        if ($this->expires_at && $this->expires_at->isPast()) {
+            return false;
+        }
+    
+        if ($this->duration === 'once' && $this->redemptions()->count() > 0) {
+            return false;
+        }
+    
+        return true;
     }
 
     /**
