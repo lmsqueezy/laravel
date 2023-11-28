@@ -47,19 +47,6 @@ class DiscountFactory extends Factory
     }
 
     /**
-     * Configure the model factory.
-     */
-    public function configure(): self
-    {
-        return $this->afterCreating(function ($subscription) {
-            Customer::factory()->create([
-                'billable_id' => $subscription->billable_id,
-                'billable_type' => $subscription->billable_type,
-            ]);
-        });
-    }
-
-    /**
      * Mark the discount as active.
      */
     public function activeDiscount(): self

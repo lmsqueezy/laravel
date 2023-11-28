@@ -2,10 +2,8 @@
 
 namespace LemonSqueezy\Laravel\Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use LemonSqueezy\Laravel\DiscountRedemption;
-use LemonSqueezy\Laravel\Discount;
-use LemonSqueezy\Laravel\Order;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DiscountRedemptionFactory extends Factory
 {
