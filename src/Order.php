@@ -181,6 +181,23 @@ class Order extends Model
         return $this->hasMany(DiscountRedemption::class);
     }
 
+    public function applyDiscount(Discount $discount): self
+    {
+        // Calculate the discount amount based on the discount rules
+        $discountAmount = $discount->calculateDiscountAmount($this->subtotal);
+
+        // Subtract the discount amount from the order's total
+        $this->total -= $discountAmount;
+
+        // Update the discount_total field with the discount amount
+        $this->discount_total = $discountAmount;
+
+        // Save the order
+        $this->save();
+
+        return $this;
+    }
+
     /**
      * Sync the order with the given attributes.
      */

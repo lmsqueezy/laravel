@@ -60,7 +60,7 @@ class Discount extends Model
     /**
      * Determine if the discount code is valid.
      */ 
-    public function isValidCode(string $code): bool
+    public static function isValidCode(string $code): bool
     {
         return preg_match('/^[A-Z0-9]{3,256}$/', $code);
     }
@@ -93,22 +93,19 @@ class Discount extends Model
         if ($this->expires_at && $this->expires_at->isPast()) {
             return false;
         }
-    
-        if ($this->duration === 'once' && $this->redemptions()->count() > 0) {
+
+        if ($this->is_limited_redemptions && $this->hasReachedMaxRedemptions()) {
             return false;
         }
 
-        if ($this->duration === 'repeating') {
-            $endActivePeriod = $this->starts_at->addMonths($this->duration_in_months);
-            if (now()->greaterThan($endActivePeriod)) {
+        if ($this->duration === 'repeating' && $this->starts_at) {
+            $monthsSinceStart = now()->diffInMonths($this->starts_at);
+            $monthsIntoCurrentPeriod = $monthsSinceStart % $this->duration_in_months;
+            if ($monthsIntoCurrentPeriod >= $this->duration_in_months) {
                 return false;
             }
+        }
 
-            if ($this->hasReachedMaxRedemptions()) {
-                return false;
-            }
-        }    
-    
         return true;
     }
 
@@ -121,6 +118,14 @@ class Discount extends Model
             DiscountRedemption::create([
                 'discount_id' => $this->id,
                 'order_id' => $orderId,
+                'billable_id' => $this->billable_id,
+                'billable_type' => $this->billable_type,
+                'lemon_squeezy_id' => $this->lemon_squeezy_id,
+                'discount_name' => $this->name,
+                'discount_code' => $this->code,
+                'discount_amount' => $this->amount,
+                'discount_amount_type' => $this->amount_type,
+                'amount' => $this->amount,
             ]);
         }
     }

@@ -14,4 +14,14 @@ trait ManagesDiscountRedemptions
     {
         return $this->morphMany(LemonSqueezy::$discountRedemptionModel, 'billable')->orderByDesc('created_at');
     }
+
+    public function hasAppliedDiscount(string $discountId): bool
+    {
+        return $this->discountRedemptions()->where('discount_id', $discountId)->exists();
+    }
+
+    public function hasAppliedDiscountToOrder(string $orderId): bool
+    {
+        return $this->discountRedemptions()->where('order_id', $orderId)->exists();
+    }
 }

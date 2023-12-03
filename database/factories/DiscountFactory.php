@@ -24,13 +24,15 @@ class DiscountFactory extends Factory
      */
     public function definition(): array
     {
+        $customer = Customer::factory()->create();
+
         $amountType = $this->faker->randomElement(['percent', 'fixed']);
         $amount = $amountType === 'percent' ? $this->faker->numberBetween(1, 100) : $this->faker->numberBetween(100, 10000); // Percentage or amount in cents
 
         return [
-            'billable_id' => rand(1, 1000),
-            'billable_type' => 'App\\Models\\User',
-            'lemon_squeezy_id' => rand(1, 1000),
+            'billable_id' => $customer->id,
+            'billable_type' => 'LemonSqueezy\\Laravel\\Customer',
+            'lemon_squeezy_id' => $customer->lemon_squeezy_id,
             'name' => $this->faker->word,
             'code' => $this->faker->regexify('[A-Z0-9]{3,256}'),
             'amount' => $amount,

@@ -68,8 +68,13 @@ class DiscountRedemption extends Model
         $this->update([
             'discount_id' => $attributes['discount_id'],
             'order_id' => $attributes['order_id'],
+            'discount_name' => $attributes['discount_name'],
+            'discount_code' => $attributes['discount_code'],
+            'discount_amount' => $attributes['discount_amount'],
+            'discount_amount_type' => $attributes['discount_amount_type'],
+            'amount' => $attributes['amount'],
         ]);
-
+    
         return $this;
     }
 

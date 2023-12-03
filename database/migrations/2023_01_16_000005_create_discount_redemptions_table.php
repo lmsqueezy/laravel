@@ -15,6 +15,11 @@ return new class extends Migration
             $table->string('lemon_squeezy_id')->unique();
             $table->unsignedBigInteger('discount_id');
             $table->unsignedBigInteger('order_id');
+            $table->string('discount_name');
+            $table->string('discount_code');
+            $table->integer('discount_amount');
+            $table->string('discount_amount_type');
+            $table->integer('amount');
             $table->timestamps();
 
             $table->foreign('discount_id')->references('id')->on('lemon_squeezy_discounts')->onDelete('cascade');
