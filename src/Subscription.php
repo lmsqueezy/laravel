@@ -247,7 +247,7 @@ class Subscription extends Model
     /**
      * Increment the quantity of a subscription item.
      */
-    public function incrementQuantity($count = 1)
+    public function incrementQuantity(int $count = 1): self
     {
         $item = $this->subscriptionItem();
 
@@ -257,7 +257,7 @@ class Subscription extends Model
     /**
      * Decrement the quantity of a subscription item.
      */
-    public function decrementQuantity($count = 1)
+    public function decrementQuantity(int $count = 1): self
     {
         $item = $this->subscriptionItem();
 
