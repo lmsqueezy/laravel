@@ -12,7 +12,9 @@ use LemonSqueezy\Laravel\Concerns\Prorates;
 use LemonSqueezy\Laravel\Database\Factories\SubscriptionFactory;
 use LogicException;
 
-// This is a temporary solution, until library get's updated
+/**
+ * @property \LemonSqueezy\Laravel\Billable $billable
+ */
 class Subscription extends Model
 {
     use HasFactory;
