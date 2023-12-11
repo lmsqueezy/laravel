@@ -579,6 +579,27 @@ if ($user->subscription()->pastDue()) {
 
 In this state, you should instruct your customer to [update their payment info](#updating-payment-information). Failed payments in Lemon Squeezy are retried a couple of times. For more information on that, as well as the dunning process, head over to [the Lemon Squeezy documentation](https://docs.lemonsqueezy.com/help/online-store/recovery-dunning)
 
+
+#### Subscription Quantity
+
+Sometimes subscriptions are affected by "quantity". For example, a project management application might charge $10 per month per project. To easily increment or decrement your subscription's quantity, use the `incrementQuantity` and `decrementQuantity` methods:
+
+    $user = User::find(1);
+
+    $user->subscription()->incrementQuantity();
+
+    // Add five to the subscription's current quantity...
+    $user->subscription()->incrementQuantity(5);
+
+    $user->subscription()->decrementQuantity();
+
+    // Subtract five from the subscription's current quantity...
+    $user->subscription()->decrementQuantity(5);
+
+Alternatively, you may set a specific quantity using the `updateQuantity` method:
+
+    $user->subscription()->updateQuantity(10);
+
 #### Subscription Scopes
 
 Various subscriptions scopes are available to query subscriptions in specific states:
