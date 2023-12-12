@@ -119,21 +119,25 @@ Lemon Squeezy uses its own JavaScript library to initiate its checkout widget. W
 
 ### Webhooks
 
-Finally, make sure to set up incoming webhooks. This is both needed in development as in production. Go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the url to your exposed local app. You can use [Ngrok](https://ngrok.com/), [Expose](https://github.com/beyondcode/expose) or another tool of your preference for this. Laravel also has solutions for sharing your site with [Valet](https://laravel.com/docs/valet#sharing-sites), [Sail](https://laravel.com/docs/10.x/sail#sharing-your-site) and [Herd](https://herd.laravel.com).
+Finally, make sure to set up incoming webhooks. This is both needed in development as in production. The easiest way to set this up is with the `php artisan lmsqueezy:listen` command that ships with this package. This command will setup a webhook through the Lemon Squeezy API, start listening for any events and remove the webhook when quitting the command. Currently, this command supports [Ngrok](https://ngrok.com/) and [Expose](https://github.com/beyondcode/expose).
 
-Make sure to select all event types. The path you should point to is `/lemon-squeezy/webhook` by default. **We also very much recommend to [verify webhook signatures](#verifying-webhook-signatures).**
+```bash
+php artisan lmsqueezy:listen
+```
 
-If you wish to use [Ngrok](https://ngrok.com/) or [Expose](https://github.com/beyondcode/expose) to recieve incoming hooks then you may also use the `artisan lmsqueezy:listen` command. This command will send a webhook endpoint to the Lemon Squeezy API and remove the webhook when quitting the command. 
+Although this command should always cleanup the webhook after itself, you may wish to cleanup any lingering webhooks with the `--cleanup` flag:
 
-### Webhooks
+```bash
+php artisan lmsqueezy:listen --cleanup
+```
 
-Finally, make sure to set up incoming webhooks. This is necessary in both development and production environments. Go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the URL to your exposed local app. You can use [Ngrok](https://ngrok.com/), [Expose](https://github.com/beyondcode/expose), or another tool of your preference for this purpose. Laravel also offers solutions for sharing your site with [Valet](https://laravel.com/docs/valet#sharing-sites), [Sail](https://laravel.com/docs/10.x/sail#sharing-your-site), and [Herd](https://herd.laravel.com).
+**We also very much recommend to [verify webhook signatures](#verifying-webhook-signatures) in production.**
 
-Make sure to select all event types. The path you should point to is `/lemon-squeezy/webhook` by default. **We highly recommend verifying webhook signatures, as described in [Verifying Webhook Signatures](#verifying-webhook-signatures).**
+#### Manual Webhooks Setup
 
-If you intend to use [Ngrok](https://ngrok.com/) or [Expose](https://github.com/beyondcode/expose) to receive incoming webhooks, you can leverage the `artisan lmsqueezy:listen` command. This command will conveniently set up a webhook via the Lemon Squeezy API and automatically remove it when you exit the command.
+Alternatively you may setup webhooks manually. Go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the url to your exposed local app. You can use [Ngrok](https://ngrok.com/), [Expose](https://github.com/beyondcode/expose) or another tool of your preference for this. Laravel also has solutions for sharing your site with [Valet](https://laravel.com/docs/valet#sharing-sites), [Sail](https://laravel.com/docs/10.x/sail#sharing-your-site) and [Herd](https://herd.laravel.com).
 
-In the event that the created webhooks are not tidied up for any reason, you can also utilize the `--cleanup` option to remove all webhooks associated with the same domains as those configured in Ngrok or Expose.
+Make sure to select all event types. The path you should point to is `/lemon-squeezy/webhook` by default.
 
 #### Webhooks & CSRF Protection
 
