@@ -119,9 +119,25 @@ Lemon Squeezy uses its own JavaScript library to initiate its checkout widget. W
 
 ### Webhooks
 
-Finally, make sure to set up incoming webhooks. This is both needed in development as in production. Go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the url to your exposed local app. You can use [Ngrok](https://ngrok.com/), [Expose](https://github.com/beyondcode/expose) or another tool of your preference for this. Laravel also has solutions for sharing your site with [Valet](https://laravel.com/docs/valet#sharing-sites), [Sail](https://laravel.com/docs/10.x/sail#sharing-your-site) and [Herd](https://herd.laravel.com).
+Finally, make sure to set up incoming webhooks. This is both needed in development as in production. The easiest way to set this up is with the `php artisan lmsqueezy:listen` command that ships with this package. This command will setup a webhook through the Lemon Squeezy API, start listening for any events and remove the webhook when quitting the command. Currently, this command supports [Ngrok](https://ngrok.com/) and [Expose](https://github.com/beyondcode/expose).
 
-Make sure to select all event types. The path you should point to is `/lemon-squeezy/webhook` by default. **We also very much recommend to [verify webhook signatures](#verifying-webhook-signatures).**
+```bash
+php artisan lmsqueezy:listen
+```
+
+Although this command should always cleanup the webhook after itself, you may wish to cleanup any lingering webhooks with the `--cleanup` flag:
+
+```bash
+php artisan lmsqueezy:listen --cleanup
+```
+
+**We also very much recommend to [verify webhook signatures](#verifying-webhook-signatures) in production.**
+
+#### Manual Webhooks Setup
+
+Alternatively you may setup webhooks manually. Go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the url to your exposed local app. You can use [Ngrok](https://ngrok.com/), [Expose](https://github.com/beyondcode/expose) or another tool of your preference for this. Laravel also has solutions for sharing your site with [Valet](https://laravel.com/docs/valet#sharing-sites), [Sail](https://laravel.com/docs/10.x/sail#sharing-your-site) and [Herd](https://herd.laravel.com).
+
+Make sure to select all event types. The path you should point to is `/lemon-squeezy/webhook` by default.
 
 #### Webhooks & CSRF Protection
 

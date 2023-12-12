@@ -5,6 +5,7 @@ namespace LemonSqueezy\Laravel;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use LemonSqueezy\Laravel\Console\ListenCommand;
 use LemonSqueezy\Laravel\Http\Controllers\WebhookController;
 
 class LemonSqueezyServiceProvider extends ServiceProvider
@@ -24,6 +25,7 @@ class LemonSqueezyServiceProvider extends ServiceProvider
         $this->bootPublishing();
         $this->bootDirectives();
         $this->bootComponents();
+        $this->bootCommands();
     }
 
     protected function bootRoutes(): void
@@ -77,5 +79,14 @@ class LemonSqueezyServiceProvider extends ServiceProvider
     protected function bootComponents(): void
     {
         Blade::component('lemon-squeezy::components.button', 'lemon-button');
+    }
+
+    protected function bootCommands(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                ListenCommand::class,
+            ]);
+        }
     }
 }

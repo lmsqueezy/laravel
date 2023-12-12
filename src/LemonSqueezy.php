@@ -16,6 +16,8 @@ class LemonSqueezy
 {
     const VERSION = '1.3.3';
 
+    const API = 'https://api.lemonsqueezy.com/v1';
+
     /**
      * Indicates if migrations will be run.
      */
@@ -58,7 +60,7 @@ class LemonSqueezy
             ->withUserAgent('LemonSqueezy\Laravel/'.static::VERSION)
             ->accept('application/vnd.api+json')
             ->contentType('application/vnd.api+json')
-            ->$method("https://api.lemonsqueezy.com/v1/{$uri}", $payload);
+            ->$method(static::API."/{$uri}", $payload);
 
         if ($response->failed()) {
             throw new LemonSqueezyApiError($response['errors'][0]['detail'], (int) $response['errors'][0]['status']);
