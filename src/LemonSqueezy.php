@@ -14,7 +14,7 @@ use NumberFormatter;
 
 class LemonSqueezy
 {
-    const VERSION = '1.3.2';
+    const VERSION = '1.3.3';
 
     const API = 'https://api.lemonsqueezy.com/v1';
 
@@ -72,7 +72,7 @@ class LemonSqueezy
     /**
      * Format the given amount into a displayable currency.
      */
-    public static function formatAmount(int $amount, string $currency, string $locale = null, array $options = []): string
+    public static function formatAmount(int $amount, string $currency, ?string $locale = null, array $options = []): string
     {
         $money = new Money($amount, new Currency(strtoupper($currency)));
 

@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.3.2...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.3.3...main)
+
+## [1.3.3](https://github.com/lmsqueezy/laravel/compare/1.3.2...1.3.3) - 2023-12-12
+
+- Fix missing Illuminate Builder import in Order model by [@rvetrsek](https://github.com/rvetrsek) in https://github.com/lmsqueezy/laravel/pull/68
 
 ## [1.3.2](https://github.com/lmsqueezy/laravel/compare/1.3.1...1.3.2) - 2023-11-20
 

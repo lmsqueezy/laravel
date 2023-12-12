@@ -121,7 +121,7 @@ class Checkout implements Responsable
         return $this;
     }
 
-    public function withBillingAddress(string $country, string $zip = null): self
+    public function withBillingAddress(string $country, ?string $zip = null): self
     {
         $this->checkoutData['billing_address'] = array_filter([
             'country' => $country,

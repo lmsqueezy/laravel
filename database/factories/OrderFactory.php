@@ -98,7 +98,7 @@ class OrderFactory extends Factory
     /**
      * Mark the order as being refunded.
      */
-    public function refunded(DateTimeInterface $refundedAt = null): self
+    public function refunded(?DateTimeInterface $refundedAt = null): self
     {
         return $this->state([
             'status' => Order::STATUS_REFUNDED,
