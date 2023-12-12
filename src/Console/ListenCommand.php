@@ -156,11 +156,12 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
 
     protected function process(array $commands): InvokedProcess
     {
-        return $this->process = Process::timeout(120)->start($commands, function (string $type, string $output) {
-            if ($this->option('verbose') || isset($this->webhookId)) {
-                note($output);
-            }
-        });
+        return $this->process = Process::timeout(120)
+            ->start($commands, function (string $type, string $output) {
+                if ($this->option('verbose') || isset($this->webhookId)) {
+                    note($output);
+                }
+            });
     }
 
     protected function expose(): void
@@ -172,15 +173,16 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             'share',
             route('lemon-squeezy.webhook'),
             sprintf('--subdomain=%s', sha1(time())),
+            '--no-interaction',
         ]);
 
         while ($this->process->running()) {
-            if (is_null($tunnel)) {
+            if (is_null($tunnel)) {logger($this->process->latestOutput());
                 if (preg_match(
                     '/Public HTTPS:\s+(http[s]?:\/\/[^\s]+)/',
                     $this->process->latestOutput(),
-                    $matches)
-                ) {
+                    $matches
+                )) {
                     $tunnel = $matches[1];
                     $this->setupWebhook($tunnel);
                 }
@@ -200,6 +202,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             'http',
             route('lemon-squeezy.webhook'),
             '--host-header=rewrite',
+            '--no-interaction',
         ]);
 
         while ($this->process->running()) {
@@ -216,7 +219,8 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             }
 
             if ($tunnel) {
-                $result = Http::get("{$this->services['ngrok']['api']}/requests/http?limit=50")->json('requests');
+                $result = Http::get("{$this->services['ngrok']['api']}/requests/http?limit=50")
+                    ->json('requests');
 
                 foreach ($result as $request) {
                     if (! in_array($request['id'], $logs)) {
@@ -226,11 +230,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                             '%s %s %s %s',
                             $request['response']['status_code'],
                             $request['request']['method'],
-                            Str::padRight(
-                                Str::limit($request['request']['uri'], 48, ''),
-                                48,
-                                '.'
-                            ),
+                            Str::padRight(Str::limit($request['request']['uri'], 48, ''), 48, '.'),
                             Carbon::parse($request['response']['headers']['Date'][0])->format('H:i:s'),
                         ));
                     }
