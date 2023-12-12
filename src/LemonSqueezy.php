@@ -70,7 +70,7 @@ class LemonSqueezy
     /**
      * Format the given amount into a displayable currency.
      */
-    public static function formatAmount(int $amount, string $currency, string $locale = null, array $options = []): string
+    public static function formatAmount(int $amount, string $currency, ?string $locale = null, array $options = []): string
     {
         $money = new Money($amount, new Currency(strtoupper($currency)));
 

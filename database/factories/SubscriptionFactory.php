@@ -57,7 +57,7 @@ class SubscriptionFactory extends Factory
     /**
      * Mark the subscription as being within a trial period.
      */
-    public function trialing(DateTimeInterface $trialEndsAt = null): self
+    public function trialing(?DateTimeInterface $trialEndsAt = null): self
     {
         return $this->state([
             'status' => Subscription::STATUS_ON_TRIAL,
@@ -78,7 +78,7 @@ class SubscriptionFactory extends Factory
     /**
      * Mark the subscription as paused.
      */
-    public function paused(DateTimeInterface $resumesAt = null): self
+    public function paused(?DateTimeInterface $resumesAt = null): self
     {
         return $this->state([
             'status' => Subscription::STATUS_PAUSED,

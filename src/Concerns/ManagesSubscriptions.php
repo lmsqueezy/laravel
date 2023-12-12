@@ -28,7 +28,7 @@ trait ManagesSubscriptions
     /**
      * Determine if the billable is on trial.
      */
-    public function onTrial(string $type = Subscription::DEFAULT_TYPE, string $variant = null): bool
+    public function onTrial(string $type = Subscription::DEFAULT_TYPE, ?string $variant = null): bool
     {
         if (func_num_args() === 0 && $this->onGenericTrial()) {
             return true;
@@ -46,7 +46,7 @@ trait ManagesSubscriptions
     /**
      * Determine if the billable's trial has ended.
      */
-    public function hasExpiredTrial(string $type = Subscription::DEFAULT_TYPE, string $variant = null): bool
+    public function hasExpiredTrial(string $type = Subscription::DEFAULT_TYPE, ?string $variant = null): bool
     {
         if (func_num_args() === 0 && $this->hasExpiredGenericTrial()) {
             return true;
@@ -100,7 +100,7 @@ trait ManagesSubscriptions
     /**
      * Determine if the billable has a valid subscription.
      */
-    public function subscribed(string $type = Subscription::DEFAULT_TYPE, string $variant = null): bool
+    public function subscribed(string $type = Subscription::DEFAULT_TYPE, ?string $variant = null): bool
     {
         $subscription = $this->subscription($type);
 

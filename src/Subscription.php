@@ -333,7 +333,7 @@ class Subscription extends Model
     /**
      * Pause the subscription and prevent the user from using the service.
      */
-    public function pause(DateTimeInterface $resumesAt = null): self
+    public function pause(?DateTimeInterface $resumesAt = null): self
     {
         $response = LemonSqueezy::api('PATCH', "subscriptions/{$this->lemon_squeezy_id}", [
             'data' => [
@@ -356,7 +356,7 @@ class Subscription extends Model
     /**
      * Pause the subscription but let the user continue to use the service for free.
      */
-    public function pauseForFree(DateTimeInterface $resumesAt = null): self
+    public function pauseForFree(?DateTimeInterface $resumesAt = null): self
     {
         $response = LemonSqueezy::api('PATCH', "subscriptions/{$this->lemon_squeezy_id}", [
             'data' => [
