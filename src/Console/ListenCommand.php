@@ -91,7 +91,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             'store' => [
                 'required',
             ],
-        ],[
+        ], [
             'api_key.required' => 'The LEMON_SQUEEZY_API_KEY environment variable is required.',
             'signing_secret.required' => 'The LEMON_SQUEEZY_SIGNING_SECRET environment variable is required.',
             'store.required' => 'The LEMON_SQUEEZY_STORE environment variable is required.',
@@ -177,7 +177,8 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         ]);
 
         while ($this->process->running()) {
-            if (is_null($tunnel)) {logger($this->process->latestOutput());
+            if (is_null($tunnel)) {
+                logger($this->process->latestOutput());
                 if (preg_match(
                     '/Public HTTPS:\s+(http[s]?:\/\/[^\s]+)/',
                     $this->process->latestOutput(),
@@ -284,7 +285,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
 
         $result = Http::withToken(config('lemon-squeezy.api_key'))
             ->retry(3, 250)
-            ->post(LemonSqueezy::API."/webhooks", $data);
+            ->post(LemonSqueezy::API.'/webhooks', $data);
 
         if ($result->status() !== 201) {
             error('Failed to setup webhook.');
