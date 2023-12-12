@@ -178,7 +178,6 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
 
         while ($this->process->running()) {
             if (is_null($tunnel)) {
-                logger($this->process->latestOutput());
                 if (preg_match(
                     '/Public HTTPS:\s+(http[s]?:\/\/[^\s]+)/',
                     $this->process->latestOutput(),
