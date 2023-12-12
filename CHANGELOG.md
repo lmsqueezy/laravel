@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.3.3...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.4.0...main)
+
+## [1.4.0](https://github.com/lmsqueezy/laravel/compare/1.3.3...1.4.0) - 2023-12-12
+
+* `artisan lmsqueezy:listen` by [@DanielHudson](https://github.com/DanielHudson) in https://github.com/lmsqueezy/laravel/pull/54
 
 ## [1.3.3](https://github.com/lmsqueezy/laravel/compare/1.3.2...1.3.3) - 2023-12-12
 
