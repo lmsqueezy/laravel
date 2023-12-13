@@ -2,7 +2,7 @@
 
 Future upgrade notes will be placed here.
 
-## Upgrading To 1.3 From 1.x
+## Upgrading To v1.3 From 1.x
 
 ### New Order Model
 
