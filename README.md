@@ -141,7 +141,8 @@ Currently, this command supports [Ngrok](https://ngrok.com/) and [Expose](https:
 
 For production, we'll need to setup things manually. Go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the url to your app's domain. The path you should point to is `/lemon-squeezy/webhook` by default. Make sure to select all event types.
 
-**We also very much recommend to [verify webhook signatures](#verifying-webhook-signatures) in production.**
+> **Note**  
+> We also very much recommend to [verify webhook signatures](#verifying-webhook-signatures) in production.
 
 #### Webhooks & CSRF Protection
 
