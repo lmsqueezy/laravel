@@ -217,7 +217,7 @@ Route::get('/buy', function (Request $request) {
 
 This will automatically redirect your customer to a Lemon Squeezy checkout where the customer can buy your product.
 
-> **Note**
+> [!NOTE]
 > When creating a checkout for your store, each time you redirect a checkout object or call `url` on the checkout object, an API call to Lemon Squeezy will be made. These calls are expensive and can be time and resource consuming for your app. If you are creating the same session over and over again you may want to cache these urls. 
 
 #### Custom Priced Charges
@@ -690,7 +690,7 @@ $user = User::find(1);
 $user->subscription()->swapAndInvoice('product-id', 'variant-id');
 ```
 
-> **Note**
+> [!NOTE]
 > You'll notice in the above methods that you both need to provide a product ID and variant ID and might wonder why that is. Can't you derive the product ID from the variant ID? Unfortuntately that's only possible when swapping to variants between the same product. When swapping to a different product alltogether you are required to also provide the product ID in the Lemon Squeezy API. Therefor, we've made the decision to make this uniform and just always require the product ID as well.
 
 #### Prorations
