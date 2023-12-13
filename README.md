@@ -119,9 +119,11 @@ Lemon Squeezy uses its own JavaScript library to initiate its checkout widget. W
 
 ### Webhooks
 
+Finally, make sure to set up incoming webhooks. This is both needed in development as in production.
+
 #### Webhooks In Development
 
-Finally, make sure to set up incoming webhooks. This is both needed in development as in production. The easiest way to set this up is with the `php artisan lmsqueezy:listen` command that ships with this package. This command will setup a webhook through the Lemon Squeezy API, start listening for any events and remove the webhook when quitting the command.
+The easiest way to set this up while developing your app is with the `php artisan lmsqueezy:listen` command that ships with this package. This command will setup a webhook through the Lemon Squeezy API, start listening for any events and remove the webhook when quitting the command.
 
 ```bash
 php artisan lmsqueezy:listen
