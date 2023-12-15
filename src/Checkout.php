@@ -150,8 +150,10 @@ class Checkout implements Responsable
     public function withQuantity(int $quantity): self
     {
         $this->checkoutData['variant_quantities'] = [
-            'variant_id' => $this->variant,
-            'quantity' => $quantity,
+            [
+                'variant_id' => (int) $this->variant,
+                'quantity' => $quantity,
+            ],
         ];
 
         return $this;
