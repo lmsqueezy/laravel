@@ -37,11 +37,14 @@ class Subscription extends Model
     const DEFAULT_TYPE = 'default';
 
     /**
-     * The table associated with the model.
+     * Get the table associated with the model.
      *
-     * @var string
+     * @return string
      */
-    protected $table = 'lemon_squeezy_subscriptions';
+    public function getTable()
+    {
+        return config('lemon-squeezy.tables.subscriptions', 'lemon_squeezy_subscriptions');
+    }
 
     /**
      * The attributes that are not mass assignable.

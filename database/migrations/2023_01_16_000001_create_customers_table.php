@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('lemon_squeezy_customers', function (Blueprint $table) {
+        Schema::create(config('lemon-squeezy.tables.customers', 'lemon_squeezy_customers'), function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('billable_id');
             $table->string('billable_type');
@@ -22,6 +22,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('lemon_squeezy_customers');
+        Schema::dropIfExists(config('lemon-squeezy.tables.customers', 'lemon_squeezy_customers'));
     }
 };

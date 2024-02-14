@@ -25,11 +25,14 @@ class Order extends Model
     const STATUS_REFUNDED = 'refunded';
 
     /**
-     * The table associated with the model.
+     * Get the table associated with the model.
      *
-     * @var string
+     * @return string
      */
-    protected $table = 'lemon_squeezy_orders';
+    public function getTable()
+    {
+        return config('lemon-squeezy.tables.orders', 'lemon_squeezy_orders');
+    }
 
     /**
      * The attributes that are not mass assignable.

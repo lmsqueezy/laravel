@@ -15,11 +15,15 @@ class Customer extends Model
     use HasFactory;
 
     /**
-     * The table associated with the model.
+     * Get the table associated with the model.
      *
-     * @var string
+     * @return string
      */
-    protected $table = 'lemon_squeezy_customers';
+
+    public function getTable()
+    {
+        return config('lemon-squeezy.tables.customers', 'lemon_squeezy_customers');
+    }
 
     /**
      * The attributes that are not mass assignable.

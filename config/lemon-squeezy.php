@@ -80,4 +80,20 @@ return [
 
     'currency_locale' => env('LEMON_SQUEEZY_CURRENCY_LOCALE', 'en'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Table Names
+    |--------------------------------------------------------------------------
+    |
+    | The table names used by Lemon Squeezy to store orders, customers, and
+    | subscriptions. These values are used by the package's eloquent models
+    | and migrations.
+    |
+    */
+
+    'tables' => [
+        'orders'        => 'lemon_squeezy_orders',
+        'customers'     => 'lemon_squeezy_customers',
+        'subscriptions' => 'lemon_squeezy_subscriptions'
+    ]
 ];
