@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.4.0...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.0...main)
+
+## [1.5.0](https://github.com/lmsqueezy/laravel/compare/1.4.0...1.5.0) - 2024-03-08
+
+* Laravel v11 by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/75
 
 ## [1.4.0](https://github.com/lmsqueezy/laravel/compare/1.3.3...1.4.0) - 2023-12-12
 
