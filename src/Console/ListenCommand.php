@@ -266,7 +266,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                         'license_key_created',
                         'license_key_updated',
                     ],
-                    'secret' => config('lemon-squeezy.signing_secret') ?: Str::limit(Hash::make(config('lemon-squeezy.api_key')), 32, '')
+                    'secret' => config('lemon-squeezy.signing_secret') ?: Str::random(32),
                 ],
                 'relationships' => [
                     'store' => [
