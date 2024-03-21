@@ -9,7 +9,6 @@ use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Http\Client\Response;
 use Illuminate\Process\InvokedProcess;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Validator;
