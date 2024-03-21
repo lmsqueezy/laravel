@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.0...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.1...main)
+
+## [1.5.1](https://github.com/lmsqueezy/laravel/compare/1.5.0...1.5.1) - 2024-03-21
+
+* Fix listen command with webhook secret by [@DanielHudson](https://github.com/DanielHudson) in https://github.com/lmsqueezy/laravel/pull/78
 
 ## [1.5.0](https://github.com/lmsqueezy/laravel/compare/1.4.0...1.5.0) - 2024-03-08
 
