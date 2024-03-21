@@ -9,6 +9,7 @@ use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Http\Client\Response;
 use Illuminate\Process\InvokedProcess;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Validator;
@@ -85,15 +86,11 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                 'string',
                 'in:expose,ngrok,test',
             ],
-            'signing_secret' => [
-                'required',
-            ],
             'store' => [
                 'required',
             ],
         ], [
             'api_key.required' => 'The LEMON_SQUEEZY_API_KEY environment variable is required.',
-            'signing_secret.required' => 'The LEMON_SQUEEZY_SIGNING_SECRET environment variable is required.',
             'store.required' => 'The LEMON_SQUEEZY_STORE environment variable is required.',
         ])->validate();
     }
@@ -269,7 +266,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                         'license_key_created',
                         'license_key_updated',
                     ],
-                    'secret' => config('lemon-squeezy.signing_secret'),
+                    'secret' => config('lemon-squeezy.signing_secret') ?: Str::random(32),
                 ],
                 'relationships' => [
                     'store' => [
