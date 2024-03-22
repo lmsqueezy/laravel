@@ -67,7 +67,12 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
     public function handle()
     {
         $this->validateArguments();
-        $this->handleEnvironment();
+
+        $errorCode = $this->handleEnvironment();
+        if ($errorCode !== null) {
+            return $errorCode;
+        }
+
         $this->handleCleanup();
         $this->handleService();
 
@@ -94,19 +99,21 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         ])->validate();
     }
 
-    protected function handleEnvironment(): void
+    protected function handleEnvironment(): int|null
     {
         if ($this->argument('service') === 'test') {
             info('lmsqueezy:listen is using the test service.');
 
-            exit(Command::SUCCESS);
+            return Command::SUCCESS;
         }
 
         if (! App::environment('local')) {
             error('lmsqueezy:listen can only be used in local environment.');
 
-            exit(Command::FAILURE);
+            return Command::FAILURE;
         }
+
+        return null;
     }
 
     protected function handleCleanup(): void
