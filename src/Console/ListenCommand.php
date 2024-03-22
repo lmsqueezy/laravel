@@ -99,7 +99,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         ])->validate();
     }
 
-    protected function handleEnvironment(): int|null
+    protected function handleEnvironment(): ?int
     {
         if ($this->argument('service') === 'test') {
             info('lmsqueezy:listen is using the test service.');
