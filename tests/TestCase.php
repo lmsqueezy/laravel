@@ -3,10 +3,13 @@
 namespace Tests;
 
 use LemonSqueezy\Laravel\LemonSqueezyServiceProvider;
+use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase
 {
+    use WithLaravelMigrations;
+
     protected function getPackageProviders($app)
     {
         return [
@@ -17,10 +20,5 @@ class TestCase extends OrchestraTestCase
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
-    }
-
-    protected function defineDatabaseMigrations()
-    {
-        $this->loadLaravelMigrations();
     }
 }

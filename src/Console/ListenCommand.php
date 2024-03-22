@@ -67,11 +67,20 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
     public function handle()
     {
         $this->validateArguments();
-        $this->handleEnvironment();
-        $this->handleCleanup();
-        $this->handleService();
 
-        return Command::SUCCESS;
+        $errorCode = $this->handleEnvironment();
+
+        if ($errorCode !== null) {
+            return $errorCode;
+        }
+
+        $errorCode = $this->handleCleanup();
+
+        if ($errorCode !== null) {
+            return $errorCode;
+        }
+
+        return $this->handleService();
     }
 
     protected function validateArguments()
@@ -94,22 +103,24 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         ])->validate();
     }
 
-    protected function handleEnvironment(): void
+    protected function handleEnvironment(): ?int
     {
         if ($this->argument('service') === 'test') {
             info('lmsqueezy:listen is using the test service.');
 
-            exit(Command::SUCCESS);
+            return Command::SUCCESS;
         }
 
         if (! App::environment('local')) {
             error('lmsqueezy:listen can only be used in local environment.');
 
-            exit(Command::FAILURE);
+            return Command::FAILURE;
         }
+
+        return null;
     }
 
-    protected function handleCleanup(): void
+    protected function handleCleanup(): ?int
     {
         if ($this->option('cleanup')) {
             note("Cleaning up webhooks for '{$this->argument('service')}' service...");
@@ -120,17 +131,19 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                 info('No webhooks found to clean.');
             }
 
-            exit(Command::SUCCESS);
+            return Command::SUCCESS;
         }
+
+        return null;
     }
 
-    protected function handleService(): void
+    protected function handleService(): int
     {
         note('Setting up webhooks domain with '.$this->argument('service').'...');
 
         $this->trap([SIGINT], fn (int $signal) => $this->teardownWebhook());
 
-        $this->{$this->argument('service')}();
+        return $this->{$this->argument('service')}();
     }
 
     protected function promptForMissingArgumentsUsing()
@@ -160,7 +173,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             });
     }
 
-    protected function expose(): void
+    protected function expose(): int
     {
         $tunnel = null;
 
@@ -180,15 +193,22 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                     $matches
                 )) {
                     $tunnel = $matches[1];
-                    $this->setupWebhook($tunnel);
+
+                    $errorCode = $this->setupWebhook($tunnel);
+
+                    if ($errorCode !== null) {
+                        return $errorCode;
+                    }
                 }
             }
 
             sleep(1);
         }
+
+        return Command::SUCCESS;
     }
 
-    protected function ngrok(): void
+    protected function ngrok(): int
     {
         $logs = [];
         $tunnel = null;
@@ -210,7 +230,11 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                 $tunnel = $result['tunnels'][0]['public_url'] ?? null;
 
                 if (Str::startsWith($tunnel ?? '', ['https://', 'http://'])) {
-                    $this->setupWebhook($tunnel);
+                    $errorCode = $this->setupWebhook($tunnel);
+
+                    if ($errorCode !== null) {
+                        return $errorCode;
+                    }
                 }
             }
 
@@ -235,9 +259,11 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
 
             sleep(1);
         }
+
+        return Command::SUCCESS;
     }
 
-    protected function setupWebhook(string $tunnel): void
+    protected function setupWebhook(string $tunnel): ?int
     {
         note("Found webhook endpoint: {$tunnel}");
         note('Sending webhook to Lemon Squeezy...');
@@ -285,13 +311,15 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         if ($result->status() !== 201) {
             error('Failed to setup webhook.');
 
-            exit(1);
+            return Command::FAILURE;
         }
 
         $this->webhookId = $result['data']['id'];
 
         info('✅ Webhook setup successfully.');
         note('Listening for webhooks...');
+
+        return null;
     }
 
     protected function teardownWebhook(): void

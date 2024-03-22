@@ -2,6 +2,7 @@
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Validation\ValidationException;
 
 it('can call the listen command', function () {
     config()->set([
@@ -14,5 +15,7 @@ it('can call the listen command', function () {
 });
 
 it('can validate services', function () {
-    expect(Artisan::call('lmsqueezy:listen', ['service' => 'invalid']))->toEqual(Command::FAILURE);
+    $this->expectException(ValidationException::class);
+
+    Artisan::call('lmsqueezy:listen', ['service' => 'invalid']);
 });
