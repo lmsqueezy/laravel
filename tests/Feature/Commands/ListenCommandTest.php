@@ -16,5 +16,6 @@ it('can call the listen command', function () {
 
 it('can validate services', function () {
     $this->expectException(ValidationException::class);
-    expect(Artisan::call('lmsqueezy:listen', ['service' => 'invalid']))->toEqual(Command::FAILURE);
+
+    Artisan::call('lmsqueezy:listen', ['service' => 'invalid']);
 });
