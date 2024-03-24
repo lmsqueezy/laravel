@@ -5,8 +5,10 @@ namespace LemonSqueezy\Laravel\Console;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
 use LemonSqueezy\Laravel\LemonSqueezy;
 
+use function Laravel\Prompts\error;
 use function Laravel\Prompts\spin;
 
 class ListProductsCommand extends Command
@@ -29,6 +31,10 @@ class ListProductsCommand extends Command
 
     public function handle(): int
     {
+        if (!$this->validate()) {
+            return Command::FAILURE;
+        }
+
         $storeResponse = spin(fn () => $this->fetchStore(), '🍋 Fetching store information...');
         $store = $storeResponse->json('data.attributes');
 
@@ -41,12 +47,40 @@ class ListProductsCommand extends Command
         return $this->handleProducts($store);
     }
 
-    private function fetchStore(): Response
+    protected function validate(): bool
+    {
+        $validator = Validator::make(config('lemon-squeezy'), [
+            'api_key' => [
+                'required',
+            ],
+            'store' => [
+                'required',
+            ],
+        ]);
+
+        if ($validator->passes()) {
+            return true;
+        }
+
+        $this->newLine();
+
+        if ($validator->errors()->has('api_key')) {
+            error('Lemon Squeezy API key not set. You can add it to your .env file as LEMON_SQUEEZY_API_KEY.');
+        }
+
+        if ($validator->errors()->has('store')) {
+            error('Lemon Squeezy store ID not set. You can add it to your .env file as LEMON_SQUEEZY_STORE.');
+        }
+
+        return false;
+    }
+
+    protected function fetchStore(): Response
     {
         return LemonSqueezy::api('GET', sprintf('stores/%s', config('lemon-squeezy.store')));
     }
 
-    private function handleProduct(array $store, string $productId): int
+    protected function handleProduct(array $store, string $productId): int
     {
         $response = spin(
             fn () => LemonSqueezy::api(
@@ -79,7 +113,7 @@ class ListProductsCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function handleProducts(array $store): int
+    protected function handleProducts(array $store): int
     {
         $productsResponse = spin(
             fn () => LemonSqueezy::api(
@@ -120,12 +154,12 @@ class ListProductsCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function displayTitle(): void
+    protected function displayTitle(): void
     {
         $this->components->twoColumnDetail('<fg=gray>Product/Variant</>', '<fg=gray>ID</>');
     }
 
-    private function displayProduct(array $product): void
+    protected function displayProduct(array $product): void
     {
         $this->components->twoColumnDetail(
             sprintf('<fg=green;options=bold>%s</>', Arr::get($product, 'attributes.name')),
@@ -133,7 +167,7 @@ class ListProductsCommand extends Command
         );
     }
 
-    private function displayVariant(array $variant, string $currency, bool $hidePending = false): void
+    protected function displayVariant(array $variant, string $currency, bool $hidePending = false): void
     {
         if (Arr::get($variant, 'attributes.status') === 'pending' && $hidePending) {
             return;
