@@ -31,7 +31,7 @@ class ListProductsCommand extends Command
 
     public function handle(): int
     {
-        if (!$this->validate()) {
+        if (! $this->validate()) {
             return Command::FAILURE;
         }
 
