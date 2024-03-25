@@ -100,7 +100,8 @@ class ListProductsCommand extends Command
         $this->displayProduct($product);
 
         $variants = collect($response->json('included'))
-            ->filter(fn ($item) => $item['type'] === 'variants');
+            ->filter(fn ($item) => $item['type'] === 'variants')
+            ->sortBy('sort');
 
         $variants->each(fn (array $variant) => $this->displayVariant(
             $variant,
@@ -140,7 +141,8 @@ class ListProductsCommand extends Command
             $variantIds = collect(Arr::get($product, 'relationships.variants.data'))->pluck('id');
             $variants = collect($productsResponse->json('included'))
                 ->filter(fn ($item) => $item['type'] === 'variants')
-                ->filter(fn ($item) => $variantIds->contains($item['id']));
+                ->filter(fn ($item) => $variantIds->contains($item['id']))
+                ->sortBy('sort');
 
             $variants->each(fn ($variant) => $this->displayVariant(
                 $variant,
