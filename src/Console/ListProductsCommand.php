@@ -56,6 +56,9 @@ class ListProductsCommand extends Command
             'store' => [
                 'required',
             ],
+        ], [
+            'api_key.required' => 'Lemon Squeezy API key not set. You can add it to your .env file as LEMON_SQUEEZY_API_KEY.',
+            'store.required' => 'Lemon Squeezy store ID not set. You can add it to your .env file as LEMON_SQUEEZY_STORE.',
         ]);
 
         if ($validator->passes()) {
@@ -64,12 +67,8 @@ class ListProductsCommand extends Command
 
         $this->newLine();
 
-        if ($validator->errors()->has('api_key')) {
-            error('Lemon Squeezy API key not set. You can add it to your .env file as LEMON_SQUEEZY_API_KEY.');
-        }
-
-        if ($validator->errors()->has('store')) {
-            error('Lemon Squeezy store ID not set. You can add it to your .env file as LEMON_SQUEEZY_STORE.');
+        foreach ($validator->errors()->all() as $error) {
+            error($error);
         }
 
         return false;
