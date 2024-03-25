@@ -120,3 +120,17 @@ it('can query a specific product', function () {
         ->expectsOutputToContain('Fake Variant €9.99')
         ->assertSuccessful();
 });
+
+it('fails when api key is missing', function () {
+    config()->set('lemon-squeezy.api_key', null);
+
+    $this->artisan('lmsqueezy:products')
+        ->expectsOutputToContain('Lemon Squeezy API key not set. You can add it to your .env file as LEMON_SQUEEZY_API_KEY.');
+});
+
+it('fails when store is missing', function () {
+    config()->set('lemon-squeezy.store', null);
+
+    $this->artisan('lmsqueezy:products')
+        ->expectsOutputToContain('Lemon Squeezy store ID not set. You can add it to your .env file as LEMON_SQUEEZY_STORE.');
+});
