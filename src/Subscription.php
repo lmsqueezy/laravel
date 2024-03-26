@@ -413,8 +413,8 @@ class Subscription extends Model
     {
         $this->update([
             'status' => $attributes['status'],
-            'product_id' => $attributes['product_id'],
-            'variant_id' => $attributes['variant_id'],
+            'product_id' => (string) $attributes['product_id'],
+            'variant_id' => (string) $attributes['variant_id'],
             'card_brand' => $attributes['card_brand'] ?? null,
             'card_last_four' => $attributes['card_last_four'] ?? null,
             'pause_mode' => $attributes['pause']['mode'] ?? null,
