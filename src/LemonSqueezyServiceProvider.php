@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use LemonSqueezy\Laravel\Console\ListenCommand;
+use LemonSqueezy\Laravel\Console\ListProductsCommand;
 use LemonSqueezy\Laravel\Http\Controllers\WebhookController;
 
 class LemonSqueezyServiceProvider extends ServiceProvider
@@ -86,6 +87,7 @@ class LemonSqueezyServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 ListenCommand::class,
+                ListProductsCommand::class,
             ]);
         }
     }
