@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.1...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.2...main)
+
+## [1.5.2](https://github.com/lmsqueezy/laravel/compare/1.5.1...1.5.2) - 2024-03-26
+
+* Fix Tests on Laravel 11 and exit codes by [@heyjorgedev](https://github.com/heyjorgedev) in https://github.com/lmsqueezy/laravel/pull/79
+* Cast variant_id before saving by [@matthiasweiss](https://github.com/matthiasweiss) in https://github.com/lmsqueezy/laravel/pull/81
 
 ## [1.5.1](https://github.com/lmsqueezy/laravel/compare/1.5.0...1.5.1) - 2024-03-21
 
