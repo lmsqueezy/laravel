@@ -154,6 +154,16 @@ protected $except = [
 ];
 ```
 
+Or if you're using Laravel v11 and up, you should exclude `lemon-squeezy/*` in your application's `bootstrap/app.php` file:
+
+```php
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->validateCsrfTokens(except: [
+        'lemon-squeezy/*',
+    ]);
+})
+```
+
 ## Upgrading
 
 Please review [our upgrade guide](./UPGRADE.md) when upgrading to a new version.
@@ -952,7 +962,7 @@ class LemonSqueezyEventListener
 
 For an example payload, [take a look at the Lemon Squeezy API docs](https://docs.lemonsqueezy.com/api/webhooks#webhook-requests). 
 
-Once you have a listener, wire it up in your app's `EventServiceProvider`:
+Laravel v11 and up will detect the listener automatically. If you're on Laravel v10 or lower, you should wire it up in your app's `EventServiceProvider`:
 
 ```php
 <?php
