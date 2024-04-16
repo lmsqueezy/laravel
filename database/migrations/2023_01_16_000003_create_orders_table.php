@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('receipt_url')->nullable();
             $table->boolean('refunded');
             $table->timestamp('refunded_at')->nullable();
-            $table->timestamp('ordered_at');
+            $table->timestamp('ordered_at')->nullable();
             $table->timestamps();
 
             $table->index(['billable_id', 'billable_type']);
