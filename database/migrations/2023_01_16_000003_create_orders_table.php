@@ -10,8 +10,7 @@ return new class extends Migration
     {
         Schema::create('lemon_squeezy_orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('billable_id');
-            $table->string('billable_type');
+            $table->morphs('billable');
             $table->string('lemon_squeezy_id')->unique();
             $table->string('customer_id');
             $table->uuid('identifier')->unique();
@@ -30,8 +29,6 @@ return new class extends Migration
             $table->timestamp('refunded_at')->nullable();
             $table->timestamp('ordered_at');
             $table->timestamps();
-
-            $table->index(['billable_id', 'billable_type']);
         });
     }
 

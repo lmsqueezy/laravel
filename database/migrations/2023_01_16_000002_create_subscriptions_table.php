@@ -10,8 +10,7 @@ return new class extends Migration
     {
         Schema::create('lemon_squeezy_subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('billable_id');
-            $table->string('billable_type');
+            $table->morphs('billable');
             $table->string('type');
             $table->string('lemon_squeezy_id')->unique();
             $table->string('status');
@@ -25,8 +24,6 @@ return new class extends Migration
             $table->timestamp('renews_at')->nullable();
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();
-
-            $table->index(['billable_id', 'billable_type']);
         });
     }
 
