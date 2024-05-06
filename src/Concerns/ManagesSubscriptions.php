@@ -2,7 +2,7 @@
 
 namespace LemonSqueezy\Laravel\Concerns;
 
-use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use LemonSqueezy\Laravel\LemonSqueezy;
 use LemonSqueezy\Laravel\Subscription;
@@ -88,7 +88,7 @@ trait ManagesSubscriptions
     /**
      * Get the ending date of the trial.
      */
-    public function trialEndsAt(string $type = Subscription::DEFAULT_TYPE): ?Carbon
+    public function trialEndsAt(string $type = Subscription::DEFAULT_TYPE): ?CarbonInterface
     {
         if ($subscription = $this->subscription($type)) {
             return $subscription->trial_ends_at;
