@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.2...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.3...main)
+
+## [1.5.3](https://github.com/lmsqueezy/laravel/compare/1.5.2...1.5.3) - 2024-05-06
+
+* Replace carbon return type with carboninterface for trialEndsAt by [@dimitri-koenig](https://github.com/dimitri-koenig) in https://github.com/lmsqueezy/laravel/pull/87
 
 ## [1.5.2](https://github.com/lmsqueezy/laravel/compare/1.5.1...1.5.2) - 2024-03-26
 
