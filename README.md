@@ -45,12 +45,13 @@ The below features are not yet in this package but are planned to be added in th
 There are a few steps you'll need to take to install the package:
 
 1. Requiring the package through Composer
-2. Creating an API Key
-3. Connecting your store
-4. Configuring the Billable Model
-5. Running Migrations
-6. Connecting to Lemon JS
-7. Setting up webhooks
+2. Register ServiceProvider
+3. Creating an API Key
+4. Connecting your store
+5. Configuring the Billable Model
+6. Running Migrations
+7. Connecting to Lemon JS
+8. Setting up webhooks
 
 We'll go over each of these below.
 
@@ -60,6 +61,24 @@ Install the package with composer:
 
 ```bash
 composer require lemonsqueezy/laravel
+```
+
+### ServiceProvider
+
+Register ServiceProvider in `config/app.php`:
+
+```php
+<?php
+
+    'providers' => ServiceProvider::defaultProviders()->merge([
+        //...
+
+        /*
+         * Application Service Providers...
+         */
+        //...
+        LemonSqueezy\Laravel\LemonSqueezyServiceProvider::class,
+    ])->toArray(),
 ```
 
 ### API Key
