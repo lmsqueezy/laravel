@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.3...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.4...main)
+
+## [1.5.4](https://github.com/lmsqueezy/laravel/compare/1.5.3...1.5.4) - 2024-05-27
+
+* Prevent firing of events when billable is deleted by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/91
 
 ## [1.5.3](https://github.com/lmsqueezy/laravel/compare/1.5.2...1.5.3) - 2024-05-06
 
