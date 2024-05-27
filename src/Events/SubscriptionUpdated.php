@@ -14,7 +14,7 @@ class SubscriptionUpdated
     /**
      * The billable entity.
      */
-    public ?Model $billable;
+    public Model $billable;
 
     /**
      * The subscription instance.
@@ -26,7 +26,7 @@ class SubscriptionUpdated
      */
     public array $payload;
 
-    public function __construct(?Model $billable, Subscription $subscription, array $payload)
+    public function __construct(Model $billable, Subscription $subscription, array $payload)
     {
         $this->billable = $billable;
         $this->subscription = $subscription;
