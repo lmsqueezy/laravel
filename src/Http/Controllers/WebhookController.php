@@ -165,7 +165,9 @@ final class WebhookController extends Controller
 
         $subscription = $subscription->sync($payload['data']['attributes']);
 
-        SubscriptionUpdated::dispatch($subscription->billable, $subscription, $payload);
+        if ($subscription->billable) {
+            SubscriptionUpdated::dispatch($subscription->billable, $subscription, $payload);
+        }
     }
 
     private function handleSubscriptionCancelled(array $payload): void
@@ -176,7 +178,9 @@ final class WebhookController extends Controller
 
         $subscription = $subscription->sync($payload['data']['attributes']);
 
-        SubscriptionCancelled::dispatch($subscription->billable, $subscription, $payload);
+        if ($subscription->billable) {
+            SubscriptionCancelled::dispatch($subscription->billable, $subscription, $payload);
+        }
     }
 
     private function handleSubscriptionResumed(array $payload): void
@@ -198,7 +202,9 @@ final class WebhookController extends Controller
 
         $subscription = $subscription->sync($payload['data']['attributes']);
 
-        SubscriptionExpired::dispatch($subscription->billable, $subscription, $payload);
+        if ($subscription->billable) {
+            SubscriptionExpired::dispatch($subscription->billable, $subscription, $payload);
+        }
     }
 
     private function handleSubscriptionPaused(array $payload): void
@@ -225,21 +231,30 @@ final class WebhookController extends Controller
 
     private function handleSubscriptionPaymentSuccess(array $payload): void
     {
-        if ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) {
+        if (
+            ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) &&
+            $subscription->billable
+        ) {
             SubscriptionPaymentSuccess::dispatch($subscription->billable, $subscription, $payload);
         }
     }
 
     private function handleSubscriptionPaymentFailed(array $payload): void
     {
-        if ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) {
+        if (
+            ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) &&
+            $subscription->billable
+        ) {
             SubscriptionPaymentFailed::dispatch($subscription->billable, $subscription, $payload);
         }
     }
 
     private function handleSubscriptionPaymentRecovered(array $payload): void
     {
-        if ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) {
+        if (
+            ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) &&
+            $subscription->billable
+        ) {
             SubscriptionPaymentRecovered::dispatch($subscription->billable, $subscription, $payload);
         }
     }
