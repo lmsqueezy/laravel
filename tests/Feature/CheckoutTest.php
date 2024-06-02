@@ -98,3 +98,18 @@ it('can include prefilled fields and custom data', function () {
     expect($checkout->url())
         ->toBe('https://lemon.lemonsqueezy.com/checkout/buy/variant_123');
 });
+
+it('can include quantities', function () {
+    $checkout = Checkout::make('store_24398', 'variant_123')
+        ->withName('John Doe')
+        ->withQuantity(2);
+
+    Http::fake([
+        'api.lemonsqueezy.com/v1/checkouts' => Http::response([
+            'data' => ['attributes' => ['url' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']],
+        ]),
+    ]);
+
+    expect($checkout->url())
+        ->toBe('https://lemon.lemonsqueezy.com/checkout/buy/variant_123');
+});
