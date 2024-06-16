@@ -19,6 +19,7 @@ use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
 use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
 
 class ListenCommand extends Command implements Isolatable, PromptsForMissingInput
 {
@@ -28,7 +29,8 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
      * @var string
      */
     protected $signature = 'lmsqueezy:listen
-                            {service : The service to use for listening to webhooks, either ngrok or expose.}
+                            {service : The service to use for listening to webhooks, either ngrok, expose, or custom.}
+                            {--url= : The custom URL to use for webhooks if service is custom.}
                             {--cleanup : Remove all webhooks for the given service.}';
 
     /**
@@ -36,7 +38,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
      *
      * @var string
      */
-    protected $description = 'Listens to Lemon Squeezy webhooks via expose or ngrok.';
+    protected $description = 'Listens to Lemon Squeezy webhooks via expose, ngrok, or custom URL.';
 
     /**
      * The available services.
@@ -60,6 +62,11 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
      * The currently in-use Lemon Squeezy webhook ID.
      */
     protected int $webhookId;
+
+    /**
+     * Whether the command is running.
+     */
+    protected bool $running = true;
 
     /**
      * Execute the console command.
@@ -92,7 +99,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             'service' => [
                 'required',
                 'string',
-                'in:expose,ngrok,test',
+                'in:expose,ngrok,custom,test',
             ],
             'store' => [
                 'required',
@@ -123,9 +130,24 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
     protected function handleCleanup(): ?int
     {
         if ($this->option('cleanup')) {
-            note("Cleaning up webhooks for '{$this->argument('service')}' service...");
+            $service = $this->argument('service');
+            $serviceDomain = null;
 
-            $cleaned = $this->cleanupWebhooks();
+            if ($service === 'custom') {
+                $serviceDomain = $this->option('url') ?? text('Please enter the custom domain to clean up webhooks for');
+                $serviceDomain = rtrim(trim($serviceDomain), '/');
+
+                if (!filter_var($serviceDomain, FILTER_VALIDATE_URL) || !preg_match('/^https?:\/\//', $serviceDomain)) {
+                    error('The provided domain is not valid.');
+                    return Command::FAILURE;
+                }
+            } else {
+                $serviceDomain = $this->services[$service]['domain'];
+            }
+
+            note("Cleaning up webhooks for '{$service}' service with domain '{$serviceDomain}' ...");
+
+            $cleaned = $this->cleanupWebhooks($serviceDomain);
 
             if ($cleaned === 0) {
                 info('No webhooks found to clean.');
@@ -155,8 +177,9 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                 options: [
                     'expose',
                     'ngrok',
+                    'custom',
                 ],
-                validate: fn ($val) => in_array($val, ['expose', 'ngrok'])
+                validate: fn ($val) => in_array($val, ['expose', 'ngrok', 'custom'])
                     ? null
                     : 'Please choose a valid service.',
             ),
@@ -263,6 +286,29 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         return Command::SUCCESS;
     }
 
+    protected function custom(): int
+    {
+        $url = $this->option('url') ?? text('Please enter the custom tunnel URL to use for webhooks');
+
+        $url = rtrim(trim($url), '/');
+        if (!filter_var($url, FILTER_VALIDATE_URL) || !preg_match('/^https?:\/\//', $url)) {
+            error('The provided URL is not valid.');
+            return Command::FAILURE;
+        }
+        
+        $errorCode = $this->setupWebhook($url);
+
+        if ($errorCode !== null) {
+            return $errorCode;
+        }
+
+        while ($this->running) {
+            sleep(1);
+        }
+
+        return Command::SUCCESS;
+    }
+
     protected function setupWebhook(string $tunnel): ?int
     {
         note("Found webhook endpoint: {$tunnel}");
@@ -324,6 +370,8 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
 
     protected function teardownWebhook(): void
     {
+        $this->running = false;
+
         if (! isset($this->webhookId)) {
             return;
         }
@@ -341,12 +389,11 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         info('✅ Webhook removed successfully.');
     }
 
-    protected function cleanupWebhooks(): int
+    protected function cleanupWebhooks(string $serviceDomain): int
     {
         return collect($this->fetchWebhooks())
-            ->filter(function ($url, $id) {
-                collect($this->services[$this->argument('service')]['domain'])
-                    ->reduce(fn ($carry, $domain) => $carry || Str::endsWith($url, $domain), false);
+            ->filter(function ($url, $id) use ($serviceDomain) { 
+                return Str::contains($url, $serviceDomain);
             })
             ->each(function ($url, $id) {
                 $this->deleteWebhook($id)->status() === 204
