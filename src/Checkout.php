@@ -42,9 +42,7 @@ class Checkout implements Responsable
 
     private ?int $customPrice = null;
 
-    public function __construct(private string $store, private string $variant)
-    {
-    }
+    public function __construct(private string $store, private string $variant) {}
 
     public static function make(string $store, string $variant): static
     {

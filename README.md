@@ -137,6 +137,9 @@ php artisan lmsqueezy:listen --cleanup
 
 Currently, this command supports [Ngrok](https://ngrok.com/) and [Expose](https://github.com/beyondcode/expose).
 
+> [!WARNING]  
+> The `lmsqueezy:listen` command is currently not supported in Windows due to the lack of signal handling.
+
 #### Webhooks In Production
 
 For production, we'll need to setup things manually. The package already ships with a route so all that's left is to go to [your Lemon Squeezy's webhook settings](https://app.lemonsqueezy.com/settings/webhooks) and point the url to your app's domain. The path you should point to is `/lemon-squeezy/webhook` by default. Make sure to select all event types.
