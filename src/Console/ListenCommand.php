@@ -66,6 +66,12 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
      */
     public function handle()
     {
+        if (windows_os()) {
+            error('lmsqueezy:listen is not supported on Windows because it lacks support for signal handling.');
+
+            return static::FAILURE;
+        }
+
         $this->validateArguments();
 
         $errorCode = $this->handleEnvironment();
