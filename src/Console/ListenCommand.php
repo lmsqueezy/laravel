@@ -30,7 +30,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
      */
     protected $signature = 'lmsqueezy:listen
                             {service : The service to use for listening to webhooks, either ngrok, expose, or custom.}
-                            {--url= : The custom URL to use for webhooks if service is custom.}
+                            {--url= : The URL to use for webhooks when using a custom service.}
                             {--cleanup : Remove all webhooks for the given service.}';
 
     /**
