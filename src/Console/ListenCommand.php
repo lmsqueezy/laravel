@@ -81,6 +81,12 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             return $errorCode;
         }
 
+        if ($this->argument('service') === 'custom') {
+            $url = $this->option('url');
+
+            $this->services['custom']['domain'] = rtrim(trim($url), '/');
+        }
+
         $errorCode = $this->handleCleanup();
 
         if ($errorCode !== null) {
@@ -92,7 +98,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
 
     protected function validateArguments()
     {
-        Validator::make($this->arguments() + config('lemon-squeezy'), [
+        Validator::make($this->arguments() + $this->options() + config('lemon-squeezy'), [
             'api_key' => [
                 'required',
             ],
@@ -100,6 +106,11 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                 'required',
                 'string',
                 'in:expose,ngrok,custom,test',
+            ],
+            'url' => [
+                'nullable',
+                'required_if:service,custom',
+                'url',
             ],
             'store' => [
                 'required',
@@ -115,13 +126,13 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         if ($this->argument('service') === 'test') {
             info('lmsqueezy:listen is using the test service.');
 
-            return Command::SUCCESS;
+            return static::SUCCESS;
         }
 
         if (! App::environment('local')) {
             error('lmsqueezy:listen can only be used in local environment.');
 
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
         return null;
@@ -130,30 +141,15 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
     protected function handleCleanup(): ?int
     {
         if ($this->option('cleanup')) {
-            $service = $this->argument('service');
-            $serviceDomain = null;
+            note("Cleaning up webhooks for '{$this->argument('service')}' service...");
 
-            if ($service === 'custom') {
-                $serviceDomain = $this->option('url') ?? text('Please enter the custom domain to clean up webhooks for');
-                $serviceDomain = rtrim(trim($serviceDomain), '/');
-
-                if (!filter_var($serviceDomain, FILTER_VALIDATE_URL) || !preg_match('/^https?:\/\//', $serviceDomain)) {
-                    error('The provided domain is not valid.');
-                    return Command::FAILURE;
-                }
-            } else {
-                $serviceDomain = $this->services[$service]['domain'];
-            }
-
-            note("Cleaning up webhooks for '{$service}' service with domain '{$serviceDomain}' ...");
-
-            $cleaned = $this->cleanupWebhooks($serviceDomain);
+            $cleaned = $this->cleanupWebhooks();
 
             if ($cleaned === 0) {
                 info('No webhooks found to clean.');
             }
 
-            return Command::SUCCESS;
+            return static::SUCCESS;
         }
 
         return null;
@@ -228,7 +224,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             sleep(1);
         }
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     protected function ngrok(): int
@@ -283,20 +279,12 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             sleep(1);
         }
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     protected function custom(): int
     {
-        $url = $this->option('url') ?? text('Please enter the custom tunnel URL to use for webhooks');
-
-        $url = rtrim(trim($url), '/');
-        if (!filter_var($url, FILTER_VALIDATE_URL) || !preg_match('/^https?:\/\//', $url)) {
-            error('The provided URL is not valid.');
-            return Command::FAILURE;
-        }
-        
-        $errorCode = $this->setupWebhook($url);
+        $errorCode = $this->setupWebhook($this->services['custom']['domain']);
 
         if ($errorCode !== null) {
             return $errorCode;
@@ -306,7 +294,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             sleep(1);
         }
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     protected function setupWebhook(string $tunnel): ?int
@@ -357,7 +345,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         if ($result->status() !== 201) {
             error('Failed to setup webhook.');
 
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
         $this->webhookId = $result['data']['id'];
@@ -389,11 +377,12 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         info('✅ Webhook removed successfully.');
     }
 
-    protected function cleanupWebhooks(string $serviceDomain): int
+    protected function cleanupWebhooks(): int
     {
         return collect($this->fetchWebhooks())
-            ->filter(function ($url, $id) use ($serviceDomain) { 
-                return Str::contains($url, $serviceDomain);
+            ->filter(function ($url, $id) {
+                collect($this->services[$this->argument('service')]['domain'])
+                    ->reduce(fn ($carry, $domain) => $carry || Str::endsWith($url, $domain), false);
             })
             ->each(function ($url, $id) {
                 $this->deleteWebhook($id)->status() === 204
