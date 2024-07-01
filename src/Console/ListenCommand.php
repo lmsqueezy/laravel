@@ -19,6 +19,7 @@ use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
 use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
 
 class ListenCommand extends Command implements Isolatable, PromptsForMissingInput
 {
@@ -28,7 +29,8 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
      * @var string
      */
     protected $signature = 'lmsqueezy:listen
-                            {service : The service to use for listening to webhooks, either ngrok or expose.}
+                            {service : The service to use for listening to webhooks, either ngrok, expose, or custom.}
+                            {--url= : The URL to use for webhooks when using a custom service.}
                             {--cleanup : Remove all webhooks for the given service.}';
 
     /**
@@ -36,7 +38,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
      *
      * @var string
      */
-    protected $description = 'Listens to Lemon Squeezy webhooks via expose or ngrok.';
+    protected $description = 'Listens to Lemon Squeezy webhooks via expose, ngrok, or custom URL.';
 
     /**
      * The available services.
@@ -62,6 +64,11 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
     protected int $webhookId;
 
     /**
+     * Whether the command is running.
+     */
+    protected bool $running = true;
+
+    /**
      * Execute the console command.
      */
     public function handle()
@@ -80,6 +87,12 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             return $errorCode;
         }
 
+        if ($this->argument('service') === 'custom') {
+            $url = $this->option('url');
+
+            $this->services['custom']['domain'] = rtrim(trim($url), '/');
+        }
+
         $errorCode = $this->handleCleanup();
 
         if ($errorCode !== null) {
@@ -91,14 +104,19 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
 
     protected function validateArguments()
     {
-        Validator::make($this->arguments() + config('lemon-squeezy'), [
+        Validator::make($this->arguments() + $this->options() + config('lemon-squeezy'), [
             'api_key' => [
                 'required',
             ],
             'service' => [
                 'required',
                 'string',
-                'in:expose,ngrok,test',
+                'in:expose,ngrok,custom,test',
+            ],
+            'url' => [
+                'nullable',
+                'required_if:service,custom',
+                'url',
             ],
             'store' => [
                 'required',
@@ -114,13 +132,13 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         if ($this->argument('service') === 'test') {
             info('lmsqueezy:listen is using the test service.');
 
-            return Command::SUCCESS;
+            return static::SUCCESS;
         }
 
         if (! App::environment('local')) {
             error('lmsqueezy:listen can only be used in local environment.');
 
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
         return null;
@@ -137,7 +155,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                 info('No webhooks found to clean.');
             }
 
-            return Command::SUCCESS;
+            return static::SUCCESS;
         }
 
         return null;
@@ -161,8 +179,9 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                 options: [
                     'expose',
                     'ngrok',
+                    'custom',
                 ],
-                validate: fn ($val) => in_array($val, ['expose', 'ngrok'])
+                validate: fn ($val) => in_array($val, ['expose', 'ngrok', 'custom'])
                     ? null
                     : 'Please choose a valid service.',
             ),
@@ -211,7 +230,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             sleep(1);
         }
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     protected function ngrok(): int
@@ -266,7 +285,22 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             sleep(1);
         }
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
+    }
+
+    protected function custom(): int
+    {
+        $errorCode = $this->setupWebhook($this->services['custom']['domain']);
+
+        if ($errorCode !== null) {
+            return $errorCode;
+        }
+
+        while ($this->running) {
+            sleep(1);
+        }
+
+        return static::SUCCESS;
     }
 
     protected function setupWebhook(string $tunnel): ?int
@@ -317,7 +351,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         if ($result->status() !== 201) {
             error('Failed to setup webhook.');
 
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
         $this->webhookId = $result['data']['id'];
@@ -330,6 +364,8 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
 
     protected function teardownWebhook(): void
     {
+        $this->running = false;
+
         if (! isset($this->webhookId)) {
             return;
         }
