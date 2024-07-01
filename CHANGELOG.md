@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.4...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.5...main)
+
+## [1.5.5](https://github.com/lmsqueezy/laravel/compare/1.5.4...1.5.5) - 2024-07-01
+
+* Limit Listen command on Windows by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/97
 
 ## [1.5.4](https://github.com/lmsqueezy/laravel/compare/1.5.3...1.5.4) - 2024-05-27
 
