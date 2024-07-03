@@ -212,6 +212,16 @@ public function register(): void
 
 Now you'll rely on your own migrations rather than the package one. Please note though that you're now responsible as well for keeping these in sync withe package one manually whenever you upgrade the package.
 
+## Commands
+
+Below you'll find a list of commands you can run to retrieve info from Lemon Squeezy:
+
+Command | Description
+--- | ---
+`php artisan lmsqueezy:products` | List all available products with their variants and prices
+`php artisan lmsqueezy:products 12345` | List a specific product by its ID with its variants and prices
+
+
 ## Checkouts
 
 With this package, you can easily create checkouts for your customers.
