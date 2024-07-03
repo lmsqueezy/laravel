@@ -28,12 +28,11 @@ We also recommend to read the Lemon Squeezy [docs](https://docs.lemonsqueezy.com
 The below features are not yet in this package but are planned to be added in the future:
 
 - Subscription invoices
-- Metered Billing
+- [Usage Based Billing](https://github.com/lmsqueezy/laravel/issues/55)
 - License keys
 - Marketing emails check
-- Product & variant listing
 - Create discount codes
-- Nova integration
+- [Nova integration](https://github.com/lmsqueezy/laravel/issues/51)
 
 ## Requirements
 
