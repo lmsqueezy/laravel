@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.5.5...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.6.0...main)
+
+## [1.6.0](https://github.com/lmsqueezy/laravel/compare/1.5.5...1.6.0) - 2024-07-03
+
+* Add command to list products and variants by [@heyjorgedev](https://github.com/heyjorgedev) in https://github.com/lmsqueezy/laravel/pull/80
 
 ## [1.5.5](https://github.com/lmsqueezy/laravel/compare/1.5.4...1.5.5) - 2024-07-01
 
