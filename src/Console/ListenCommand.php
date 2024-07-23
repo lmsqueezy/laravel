@@ -169,12 +169,46 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         ];
     }
 
+    protected function cleanOutput($output)
+    {
+        if (preg_match(
+            '/Remaining time:\s+\d{2}:\d{2}:\d{2}\\n/',
+            $output,
+            $matches
+        )) {
+            $output = preg_replace('/Remaining time:\s+\d{2}:\d{2}:\d{2}\\n/', '', $output);
+        }
+
+        if ($output) {
+            $lines = explode("\n", $output);
+            $cleaned_lines = [];
+
+            foreach ($lines as $line) {
+                // Trim leading and trailing whitespace
+                $line = trim($line);
+                // Replace multiple spaces with a single space
+                $line = preg_replace('/\s+/', ' ', $line);
+
+                if (!empty($line)) {
+                    $cleaned_lines[] = $line;
+                }
+            }
+            // Join cleaned lines back into a single string
+            $output = implode("\n", $cleaned_lines);
+        }
+
+        return $output;
+    }
+
     protected function process(array $commands): InvokedProcess
     {
         return $this->process = Process::timeout(120)
             ->start($commands, function (string $type, string $output) {
                 if ($this->option('verbose') || isset($this->webhookId)) {
-                    note($output);
+                    $output = $this->cleanOutput($output);
+                    if ($output) {
+                        note($output);
+                    }
                 }
             });
     }
