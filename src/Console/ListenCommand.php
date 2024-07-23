@@ -189,7 +189,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                 // Replace multiple spaces with a single space
                 $line = preg_replace('/\s+/', ' ', $line);
 
-                if (!empty($line)) {
+                if (! empty($line)) {
                     $cleaned_lines[] = $line;
                 }
             }
