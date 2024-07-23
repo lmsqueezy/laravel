@@ -174,5 +174,4 @@ it('returns correct products based on the store id', function () {
     $this->artisan('lmsqueezy:products')
         ->doesntExpectOutput('Pro')
         ->expectsOutputToContain('Pro From Other');
-//        ->expectsOutputToContain('Lemon Squeezy store ID not set. You can add it to your .env file as LEMON_SQUEEZY_STORE.');
 });
