@@ -19,7 +19,7 @@ A package to easily integrate your [Laravel](https://laravel.com) application wi
 
 This package drew inspiration from [Cashier](https://github.com/laravel/cashier-stripe) which was created by [Taylor Otwell](https://twitter.com/taylorotwell).
 
-Lemon Squeezy for Laravel is maintained by [Dries Vints](https://twitter.com/driesvints). Any sponsorship to [help fund development](https://github.com/sponsors/driesvints) is greatly appreciated ❤️
+Lemon Squeezy for Laravel is maintained by [Dries Vints](https://twitter.com/driesvints). I maintain this in my free time so any sponsorship to [help fund development](https://github.com/sponsors/driesvints) is greatly appreciated ❤️
 
 We also recommend to read the Lemon Squeezy [docs](https://docs.lemonsqueezy.com/help) and [developer guide](https://docs.lemonsqueezy.com/guides/developer-guide).
 
