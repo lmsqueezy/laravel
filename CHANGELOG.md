@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.6.0...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.6.1...main)
+
+## [1.6.1](https://github.com/lmsqueezy/laravel/compare/1.6.0...1.6.1) - 2024-07-23
+
+* fix: Filter correct products for store in ListProductsCommand by [@boudydegeer](https://github.com/boudydegeer) in https://github.com/lmsqueezy/laravel/pull/99
 
 ## [1.6.0](https://github.com/lmsqueezy/laravel/compare/1.5.5...1.6.0) - 2024-07-03
 
