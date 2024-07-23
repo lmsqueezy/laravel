@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.6.1...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.6.2...main)
+
+## [1.6.2](https://github.com/lmsqueezy/laravel/compare/1.6.1...1.6.2) - 2024-07-23
+
+* fix: clean up annoying empty lines and timer for expose listen in terminal by [@boudydegeer](https://github.com/boudydegeer) in https://github.com/lmsqueezy/laravel/pull/100
 
 ## [1.6.1](https://github.com/lmsqueezy/laravel/compare/1.6.0...1.6.1) - 2024-07-23
 
