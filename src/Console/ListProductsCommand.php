@@ -121,7 +121,7 @@ class ListProductsCommand extends Command
                 'products',
                 [
                     'include' => 'variants',
-                    'filter[store_id]' => config('lemon-squeezy.store_id'),
+                    'filter[store_id]' => config('lemon-squeezy.store'),
                     'page[size]' => 100,
                 ]
             ),

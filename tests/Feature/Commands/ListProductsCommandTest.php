@@ -14,6 +14,15 @@ beforeEach(function () {
                 ],
             ],
         ]),
+        LemonSqueezy::API.'/stores/other' => Http::response([
+            'data' => [
+                'id' => 'other',
+                'attributes' => [
+                    'name' => 'Other Fake Store',
+                    'currency' => 'EUR',
+                ],
+            ],
+        ]),
         LemonSqueezy::API.'/products/fake?*' => Http::response([
             'data' => [
                 'id' => 'fake',
@@ -44,6 +53,7 @@ beforeEach(function () {
                 [
                     'id' => '1',
                     'attributes' => [
+                        'store_id' => 'fake',
                         'name' => 'Pro',
                     ],
                     'relationships' => [
@@ -57,6 +67,7 @@ beforeEach(function () {
                 [
                     'id' => '2',
                     'attributes' => [
+                        'store_id' => 'fake',
                         'name' => 'Test',
                     ],
                     'relationships' => [
@@ -64,6 +75,20 @@ beforeEach(function () {
                             'data' => [
                                 ['id' => '321'],
                                 ['id' => '456'],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'id' => '3',
+                    'attributes' => [
+                        'store_id' => 'other',
+                        'name' => 'Pro From Other',
+                    ],
+                    'relationships' => [
+                        'variants' => [
+                            'data' => [
+                                ['id' => '789'],
                             ],
                         ],
                     ],
@@ -92,6 +117,14 @@ beforeEach(function () {
                     'attributes' => [
                         'name' => 'Yearly',
                         'price' => 939,
+                    ],
+                ],
+                [
+                    'id' => '789',
+                    'type' => 'variants',
+                    'attributes' => [
+                        'name' => 'Default',
+                        'price' => 999,
                     ],
                 ],
             ],
@@ -133,4 +166,12 @@ it('fails when store is missing', function () {
 
     $this->artisan('lmsqueezy:products')
         ->expectsOutputToContain('Lemon Squeezy store ID not set. You can add it to your .env file as LEMON_SQUEEZY_STORE.');
+});
+
+it('returns correct products based on the store id', function () {
+    config()->set('lemon-squeezy.store', 'other');
+
+    $this->artisan('lmsqueezy:products')
+        ->doesntExpectOutput('Pro')
+        ->expectsOutputToContain('Pro From Other');
 });
