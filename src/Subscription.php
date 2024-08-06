@@ -235,6 +235,68 @@ class Subscription extends Model
     }
 
     /**
+     * Get subscription item
+     */
+    protected function subscriptionItem(): object
+    {
+        $subscription = LemonSqueezy::api('GET', "subscriptions/{$this->lemon_squeezy_id}");
+
+        return (object) $subscription['data']['attributes']['first_subscription_item'];
+    }
+
+    /**
+     * Increment the quantity of a subscription item.
+     */
+    public function incrementQuantity(int $count = 1): self
+    {
+        $item = $this->subscriptionItem();
+
+        return $this->updateQuantity($item->quantity + $count);
+    }
+
+    /**
+     * Decrement the quantity of a subscription item.
+     */
+    public function decrementQuantity(int $count = 1): self
+    {
+        $item = $this->subscriptionItem();
+
+        return $this->updateQuantity(max(1, $item->quantity - $count));
+    }
+
+    /**
+     * Update the quantity of the subscription.
+     */
+    public function updateQuantity(int $quantity): self
+    {
+        $subscriptionItem = $this->subscriptionItem();
+
+        $this->updateSubscriptionItemQuantity($subscriptionItem->id, $quantity);
+
+        return $this;
+    }
+
+    /**
+     * Update the quantity of the subscription item.
+     */
+    protected function updateSubscriptionItemQuantity(int $subscriptionItemId, int $quantity): self
+    {
+        if ($quantity < 1) {
+            throw new LogicException('Quantities of zero are not allowed.');
+        }
+
+        LemonSqueezy::api('PATCH', 'subscription-items/'.$subscriptionItemId, ['data' => [
+            'type' => 'subscription-items',
+            'id' => (string) $subscriptionItemId,
+            'attributes' => [
+                'quantity' => $quantity,
+            ],
+        ]]);
+
+        return $this;
+    }
+
+    /**
      * Change the billing cycle anchor on the subscription.
      */
     public function anchorBillingCycleOn(?int $date): self
