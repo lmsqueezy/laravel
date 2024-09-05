@@ -137,7 +137,7 @@ php artisan lmsqueezy:listen --cleanup
 Currently, this command supports [Ngrok](https://ngrok.com/) and [Expose](https://github.com/beyondcode/expose).
 
 > [!WARNING]  
-> The `lmsqueezy:listen` command is currently not supported in Windows due to the lack of signal handling. Instead you can take the manual approach from the [webhooks in production](#webhooks-in-production) docs below.
+> The `lmsqueezy:listen` command is currently not supported in Windows due to the lack of signal handling. Instead you can take the manual approach from the [webhooks in production](#webhooks-in-production) docs below. You'll still need to use a service like Ngrok or Expose to expose a publically accessible url.
 
 #### Webhooks In Production
 
