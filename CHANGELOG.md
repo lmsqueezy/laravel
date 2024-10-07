@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.6.2...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.6.3...main)
+
+## [1.6.3](https://github.com/lmsqueezy/laravel/compare/1.6.2...1.6.3) - 2024-10-07
+
+* Add support for prompts 0.2 and 0.3 by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/107
 
 ## [1.6.2](https://github.com/lmsqueezy/laravel/compare/1.6.1...1.6.2) - 2024-07-23
 
