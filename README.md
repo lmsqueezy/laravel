@@ -94,6 +94,9 @@ class User extends Authenticatable
 
 Now your user model will have access to methods from our package to create checkouts in Lemon Squeezy for your products. Note that you can make any model type a billable as you wish. It's not required to use one specific model class.
 
+> [!NOTE]
+> Every action on the library like charging, creating checkouts or subscribing will automatically create a customer in Lemon Squeezy for you and connect it to your billable. It should never be necessary to manually create a customer with the Lemon Squeezy API.  
+
 ### Running Migrations
 
 The package comes with some migrations to store data received from Lemon Squeezy by webhooks. It'll add a `lemon_squeezy_customers` table which holds all info about a customer. This table is connected to a billable model of any model type you wish. It'll also add a `lemon_squeezy_subscriptions` table which holds info about subscriptions. Install these migrations by simply running `artisan migrate`:
