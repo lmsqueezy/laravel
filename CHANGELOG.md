@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.6.3...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.7.0...main)
+
+## [1.7.0](https://github.com/lmsqueezy/laravel/compare/1.6.3...1.7.0) - 2024-10-16
+
+* PHP 8.4 support by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/109
 
 ## [1.6.3](https://github.com/lmsqueezy/laravel/compare/1.6.2...1.6.3) - 2024-10-07
 
