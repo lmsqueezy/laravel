@@ -975,7 +975,7 @@ class LemonSqueezyEventListener
 }
 ```
 
-For an example payload, [take a look at the Lemon Squeezy API docs](https://docs.lemonsqueezy.com/api/webhooks#webhook-requests). 
+For an example payload, [take a look at the Lemon Squeezy docs](https://docs.lemonsqueezy.com/help/webhooks/webhook-requests). 
 
 Laravel v11 and up will detect the listener automatically. If you're on Laravel v10 or lower, you should wire it up in your app's `EventServiceProvider`:
 
