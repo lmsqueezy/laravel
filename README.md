@@ -417,7 +417,7 @@ Route::get('/customer-portal', function (Request $request) {
 });
 ```
 
-In order to call this method your billable already needs to have a subscription or made a purchase through Lemon Squeezy. Also, this method will perform an underlying API call so make sure to place this redirect behind a route which you can link to in your app.
+In order to call this method your billable already needs to have a subscription through Lemon Squeezy. Also, this method will perform an underlying API call so make sure to place this redirect behind a route which you can link to in your app.
 
 Optionally, you also get the signed customer portal url directly:
 
