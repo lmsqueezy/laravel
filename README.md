@@ -222,6 +222,9 @@ Command | Description
 --- | ---
 `php artisan lmsqueezy:products` | List all available products with their variants and prices
 `php artisan lmsqueezy:products 12345` | List a specific product by its ID with its variants and prices
+`php artisan lmsqueezy:licenses 12345` | List licenses generated for a given product ID
+`php artisan lmsqueezy:licenses -p 3 -s 20` | List the paginated result of all generated licenses
+`php artisan lmsqueezy:licenses --order=1234 --status=active` | List active licenses for a given order ID
 
 
 ## Checkouts
