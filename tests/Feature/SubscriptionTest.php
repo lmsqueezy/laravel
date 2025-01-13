@@ -23,3 +23,17 @@ it('can generate a checkout for a billable', function () {
 
     expect($subscription)->toMatchArray(['product_id' => '12345', 'variant_id' => '67890']);
 });
+
+it('can determine if the subscription is valid while on its grace period', function () {
+    $subscription = Subscription::factory()->cancelled()->create([
+        'ends_at' => now()->addDays(5),
+    ]);
+
+    expect($subscription->valid())->toBeTrue();
+
+    $subscription = Subscription::factory()->cancelled()->create([
+        'ends_at' => now()->subDays(5),
+    ]);
+
+    expect($subscription->valid())->toBeFalse();
+});
