@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.7.0...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.8.0...main)
+
+## [1.8.0](https://github.com/lmsqueezy/laravel/compare/1.7.0...1.8.0) - 2025-01-13
+
+* Create list licenses console command by [@paulinevos](https://github.com/paulinevos) in https://github.com/lmsqueezy/laravel/pull/115
 
 ## [1.7.0](https://github.com/lmsqueezy/laravel/compare/1.6.3...1.7.0) - 2024-10-16
 
