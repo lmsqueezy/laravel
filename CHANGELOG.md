@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.8.0...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.8.1...main)
+
+## [1.8.1](https://github.com/lmsqueezy/laravel/compare/1.8.0...1.8.1) - 2025-01-13
+
+* Fixes valid state of subscription by [@driesvints](https://github.com/driesvints) in https://github.com/lmsqueezy/laravel/pull/116
 
 ## [1.8.0](https://github.com/lmsqueezy/laravel/compare/1.7.0...1.8.0) - 2025-01-13
 
