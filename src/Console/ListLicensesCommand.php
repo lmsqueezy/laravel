@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use LemonSqueezy\Laravel\LemonSqueezy;
 
 use function Laravel\Prompts\error;
-use function Laravel\Prompts\spin;
 use function Laravel\Prompts\info;
+use function Laravel\Prompts\spin;
 
 class ListLicensesCommand extends Command
 {
@@ -65,8 +65,8 @@ class ListLicensesCommand extends Command
                 'nullable', 'numeric', 'min:1',
             ],
             'size' => [
-                'nullable', 'numeric', 'min:1', 'max:100'
-            ]
+                'nullable', 'numeric', 'min:1', 'max:100',
+            ],
         ], [
             'api_key.required' => 'Lemon Squeezy API key not set. You can add it to your .env file as LEMON_SQUEEZY_API_KEY.',
             'store.required' => 'Lemon Squeezy store ID not set. You can add it to your .env file as LEMON_SQUEEZY_STORE.',
@@ -98,8 +98,8 @@ class ListLicensesCommand extends Command
                 sprintf('license-keys'),
                 [
                     'filter[store_id]' => config('lemon-squeezy.store'),
-                    'page[size]' => (int)$this->option('size'),
-                    'page[number]' => (int)$this->option('page'),
+                    'page[size]' => (int) $this->option('size'),
+                    'page[number]' => (int) $this->option('page'),
                     'filter[product_id]' => $this->argument('product'),
                     'filter[order_id]' => $this->option('order'),
                     'filter[status]' => $this->option('status'),
@@ -116,7 +116,7 @@ class ListLicensesCommand extends Command
         }
 
         $licenses = collect($licensesResponse->json('data'));
-        $licenses->each(function ($license) use ($licensesResponse, $store) {
+        $licenses->each(function ($license) {
             $this->displayLicense($license, $this->option('long'));
 
             $this->newLine();

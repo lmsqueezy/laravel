@@ -67,7 +67,7 @@ beforeEach(function () {
                         'user_name' => 'John Doe',
                         'user_email' => 'john.doe@example.com',
                     ],
-                ]
+                ],
             ],
         ]),
     ]);
