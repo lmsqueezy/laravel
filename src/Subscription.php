@@ -71,14 +71,14 @@ class Subscription extends Model
     }
 
     /**
-     * Determine if the subscription is active, on trial, paused for free, or within its grace period.
+     * Determine if the subscription is active, on trial, past due, paused for free, or within its grace period.
      */
     public function valid(): bool
     {
         return $this->active() ||
             $this->onTrial() ||
             $this->pastDue() ||
-            $this->cancelled() ||
+            $this->onGracePeriod() ||
             ($this->paused() && $this->pause_mode === 'free');
     }
 
