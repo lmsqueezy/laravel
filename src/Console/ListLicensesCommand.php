@@ -134,7 +134,8 @@ class ListLicensesCommand extends Command
         return "${status} (${usage}/${limit})";
     }
 
-    private function displayProductInfo(array $license): void {
+    private function displayProductInfo(array $license): void
+    {
         $productId = Arr::get($license, 'attributes.product_id');
         $variantId = Arr::get($license, 'attributes.variant_id') ?? 'None';
 
@@ -144,7 +145,8 @@ class ListLicensesCommand extends Command
         );
     }
 
-    private function displayCustomer(array $license): void {
+    private function displayCustomer(array $license): void
+    {
         $customerName = Arr::get($license, 'attributes.user_name');
         $customerEmail = Arr::get($license, 'attributes.user_email');
 
