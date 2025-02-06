@@ -64,7 +64,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         if (windows_os()) {
             error('lmsqueezy:listen is not supported on Windows because it lacks support for signal handling.');
@@ -89,7 +89,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         return $this->handleService();
     }
 
-    protected function validateArguments()
+    protected function validateArguments(): void
     {
         Validator::make($this->arguments() + config('lemon-squeezy'), [
             'api_key' => [
@@ -114,13 +114,13 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         if ($this->argument('service') === 'test') {
             info('lmsqueezy:listen is using the test service.');
 
-            return Command::SUCCESS;
+            return static::SUCCESS;
         }
 
         if (! App::environment('local')) {
             error('lmsqueezy:listen can only be used in local environment.');
 
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
         return null;
@@ -137,7 +137,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                 info('No webhooks found to clean.');
             }
 
-            return Command::SUCCESS;
+            return static::SUCCESS;
         }
 
         return null;
@@ -152,16 +152,16 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         return $this->{$this->argument('service')}();
     }
 
-    protected function promptForMissingArgumentsUsing()
+    protected function promptForMissingArgumentsUsing(): array
     {
         return [
             'service' => fn () => select(
                 label: 'Please choose a service',
-                default: 'expose',
                 options: [
                     'expose',
                     'ngrok',
                 ],
+                default: 'expose',
                 validate: fn ($val) => in_array($val, ['expose', 'ngrok'])
                     ? null
                     : 'Please choose a valid service.',
@@ -169,7 +169,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         ];
     }
 
-    protected function cleanOutput($output)
+    protected function cleanOutput($output): string
     {
         if (preg_match(
             '/Remaining time:\s+\d{2}:\d{2}:\d{2}\\n/',
@@ -204,7 +204,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
     {
         return $this->process = Process::timeout(120)
             ->start($commands, function (string $type, string $output) {
-                if ($this->option('verbose') || isset($this->webhookId)) {
+                if (isset($this->webhookId) || $this->option('verbose')) {
                     $output = $this->cleanOutput($output);
                     if ($output) {
                         note($output);
@@ -226,8 +226,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         ]);
 
         while ($this->process->running()) {
-            if (is_null($tunnel)) {
-                if (preg_match(
+            if (is_null($tunnel) && preg_match(
                     '/Public HTTPS:\s+(http[s]?:\/\/[^\s]+)/',
                     $this->process->latestOutput(),
                     $matches
@@ -240,12 +239,11 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                         return $errorCode;
                     }
                 }
-            }
 
             sleep(1);
         }
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     protected function ngrok(): int
@@ -283,7 +281,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                     ->json('requests');
 
                 foreach ($result as $request) {
-                    if (! in_array($request['id'], $logs)) {
+                    if (!in_array($request['id'], $logs, true)) {
                         $logs[] = $request['id'];
 
                         note(sprintf(
@@ -300,7 +298,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             sleep(1);
         }
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     protected function setupWebhook(string $tunnel): ?int
@@ -351,7 +349,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         if ($result->status() !== 201) {
             error('Failed to setup webhook.');
 
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
         $this->webhookId = $result['data']['id'];

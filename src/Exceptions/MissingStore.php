@@ -6,8 +6,8 @@ use Exception;
 
 class MissingStore extends Exception
 {
-    public static function notConfigured(): static
+    public static function notConfigured(): MissingStore
     {
-        return new static('The Lemon Squeezy store was not configured.');
+        return new MissingStore('The Lemon Squeezy store was not configured.');
     }
 }
