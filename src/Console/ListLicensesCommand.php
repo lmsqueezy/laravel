@@ -152,7 +152,7 @@ class ListLicensesCommand extends Command
 
         $this->components->twoColumnDetail(
             '<fg=gray>Customer</>',
-            "<fg=gray>{$customerName} [{$arrcustomerEmail}]</>"
+            "<fg=gray>{$customerName} [{$customerEmail}]</>"
         );
     }
 
