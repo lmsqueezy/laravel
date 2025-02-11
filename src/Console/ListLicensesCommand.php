@@ -131,7 +131,7 @@ class ListLicensesCommand extends Command
         $limit = Arr::get($license, 'attributes.activation_limit') ?? '0';
         $usage = Arr::get($license, 'attributes.activation_usage') ?? '0';
 
-        return "${status} (${usage}/${limit})";
+        return "{$status} ({$usage}/{$limit})";
     }
 
     private function displayProductInfo(array $license): void
@@ -141,7 +141,7 @@ class ListLicensesCommand extends Command
 
         $this->components->twoColumnDetail(
             '<fg=gray>Product:Variant</>',
-            "<fg=gray>${productId}:${variantId}</>"
+            "<fg=gray>{$productId}:{$variantId}</>"
         );
     }
 
@@ -152,7 +152,7 @@ class ListLicensesCommand extends Command
 
         $this->components->twoColumnDetail(
             '<fg=gray>Customer</>',
-            "<fg=gray>${customerName} [${customerEmail}]</>"
+            "<fg=gray>{$customerName} [{$arrcustomerEmail}]</>"
         );
     }
 
@@ -169,7 +169,7 @@ class ListLicensesCommand extends Command
         $this->displayCustomer($license);
         $this->components->twoColumnDetail(
             '<fg=gray>Order ID</>',
-            "<fg=gray>${orderId}</>"
+            "<fg=gray>{$orderId}</>"
         );
     }
 }
