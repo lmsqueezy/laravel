@@ -38,7 +38,7 @@ class ListLicensesCommand extends Command
     public function handle(): int
     {
         if (! $this->validate()) {
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
         $storeResponse = spin(fn () => $this->fetchStore(), '🍋 Fetching store information...');
@@ -122,7 +122,7 @@ class ListLicensesCommand extends Command
             $this->newLine();
         });
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     private function displayStatus(array $license): string

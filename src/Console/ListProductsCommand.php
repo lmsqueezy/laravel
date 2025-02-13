@@ -32,7 +32,7 @@ class ListProductsCommand extends Command
     public function handle(): int
     {
         if (! $this->validate()) {
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
         $storeResponse = spin(fn () => $this->fetchStore(), '🍋 Fetching store information...');
@@ -110,7 +110,7 @@ class ListProductsCommand extends Command
 
         $this->newLine();
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     protected function handleProducts(array $store): int
@@ -152,7 +152,7 @@ class ListProductsCommand extends Command
             $this->newLine();
         });
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     protected function displayTitle(): void

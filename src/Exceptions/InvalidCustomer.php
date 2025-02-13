@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class InvalidCustomer extends Exception
 {
-    public static function notYetCreated(Model $owner): static
+    public static function notYetCreated(Model $owner): InvalidCustomer
     {
-        return new static(class_basename($owner).' is not a Lemon Squeezy customer yet.');
+        return new InvalidCustomer(class_basename($owner).' is not a Lemon Squeezy customer yet.');
     }
 }
