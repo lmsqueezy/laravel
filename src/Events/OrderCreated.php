@@ -9,7 +9,8 @@ use LemonSqueezy\Laravel\Order;
 
 class OrderCreated
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /**
      * The billable entity.

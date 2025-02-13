@@ -145,9 +145,9 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
 
     protected function handleService(): int
     {
-        note('Setting up webhooks domain with '.$this->argument('service').'...');
+        note('Setting up webhooks domain with ' . $this->argument('service') . '...');
 
-        $this->trap([SIGINT], fn (int $signal) => $this->teardownWebhook());
+        $this->trap([SIGINT], fn(int $signal) => $this->teardownWebhook());
 
         return $this->{$this->argument('service')}();
     }
@@ -155,14 +155,14 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'service' => fn () => select(
+            'service' => fn() => select(
                 label: 'Please choose a service',
                 options: [
                     'expose',
                     'ngrok',
                 ],
                 default: 'expose',
-                validate: fn ($val) => in_array($val, ['expose', 'ngrok'])
+                validate: fn($val) => in_array($val, ['expose', 'ngrok'])
                     ? null
                     : 'Please choose a valid service.',
             ),
@@ -174,7 +174,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         if (preg_match(
             '/Remaining time:\s+\d{2}:\d{2}:\d{2}\\n/',
             $output,
-            $matches
+            $matches,
         )) {
             $output = preg_replace('/Remaining time:\s+\d{2}:\d{2}:\d{2}\\n/', '', $output);
         }
@@ -229,7 +229,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             if (is_null($tunnel) && preg_match(
                 '/Public HTTPS:\s+(http[s]?:\/\/[^\s]+)/',
                 $this->process->latestOutput(),
-                $matches
+                $matches,
             )) {
                 $tunnel = $matches[1];
 
@@ -310,7 +310,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             'data' => [
                 'type' => 'webhooks',
                 'attributes' => [
-                    'url' => $tunnel.'/'.config('lemon-squeezy.path').'/webhook',
+                    'url' => $tunnel . '/' . config('lemon-squeezy.path') . '/webhook',
                     'events' => [
                         'order_created',
                         'order_refunded',
@@ -344,7 +344,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
 
         $result = Http::withToken(config('lemon-squeezy.api_key'))
             ->retry(3, 250)
-            ->post(LemonSqueezy::API.'/webhooks', $data);
+            ->post(LemonSqueezy::API . '/webhooks', $data);
 
         if ($result->status() !== 201) {
             error('Failed to setup webhook.');
@@ -384,7 +384,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         return collect($this->fetchWebhooks())
             ->filter(function ($url, $id) {
                 collect($this->services[$this->argument('service')]['domain'])
-                    ->reduce(fn ($carry, $domain) => $carry || Str::endsWith($url, $domain), false);
+                    ->reduce(fn($carry, $domain) => $carry || Str::endsWith($url, $domain), false);
             })
             ->each(function ($url, $id) {
                 $this->deleteWebhook($id)->status() === 204
@@ -431,6 +431,6 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
     {
         return Http::withToken(config('lemon-squeezy.api_key'))
             ->retry(3, 250)
-            ->delete(LemonSqueezy::API."/webhooks/{$webhookId}");
+            ->delete(LemonSqueezy::API . "/webhooks/{$webhookId}");
     }
 }

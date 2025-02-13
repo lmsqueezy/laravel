@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 
 class LicenseKeyCreated
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /**
      * The billable entity.

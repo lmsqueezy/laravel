@@ -5,7 +5,7 @@ use LemonSqueezy\Laravel\LemonSqueezy;
 
 beforeEach(function () {
     Http::fake([
-        LemonSqueezy::API.'/stores/fake' => Http::response([
+        LemonSqueezy::API . '/stores/fake' => Http::response([
             'data' => [
                 'id' => 'fake',
                 'attributes' => [
@@ -14,7 +14,7 @@ beforeEach(function () {
                 ],
             ],
         ]),
-        LemonSqueezy::API.'/stores/other' => Http::response([
+        LemonSqueezy::API . '/stores/other' => Http::response([
             'data' => [
                 'id' => 'other',
                 'attributes' => [
@@ -23,7 +23,7 @@ beforeEach(function () {
                 ],
             ],
         ]),
-        LemonSqueezy::API.'/products/fake?*' => Http::response([
+        LemonSqueezy::API . '/products/fake?*' => Http::response([
             'data' => [
                 'id' => 'fake',
                 'attributes' => [
@@ -48,7 +48,7 @@ beforeEach(function () {
                 ],
             ],
         ]),
-        LemonSqueezy::API.'/products?*' => Http::response([
+        LemonSqueezy::API . '/products?*' => Http::response([
             'data' => [
                 [
                     'id' => '1',

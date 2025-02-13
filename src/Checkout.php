@@ -154,8 +154,8 @@ class Checkout implements Responsable
         }
 
         $this->custom = collect(array_replace_recursive($this->custom, $custom))
-            ->map(fn ($value) => is_string($value) ? trim($value) : $value)
-            ->filter(fn ($value) => ! is_null($value))
+            ->map(fn($value) => is_string($value) ? trim($value) : $value)
+            ->filter(fn($value) => ! is_null($value))
             ->toArray();
 
         return $this;
@@ -211,8 +211,8 @@ class Checkout implements Responsable
                 'attributes' => [
                     'custom_price' => $this->customPrice,
                     'checkout_data' => array_merge(
-                        array_filter($this->checkoutData, fn ($value) => $value !== ''),
-                        ['custom' => $this->custom]
+                        array_filter($this->checkoutData, fn($value) => $value !== ''),
+                        ['custom' => $this->custom],
                     ),
                     'checkout_options' => array_filter([
                         'embed' => $this->embed,

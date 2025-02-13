@@ -1,10 +1,39 @@
-name: coding standards
+name: fix code styling
 
-on: [push]
-
-permissions:
-  contents: write
+on:
+  workflow_call:
+    inputs:
+      php:
+        default: "8.2"
+        type: string
+      message:
+        default: Fix code styling
+        type: string
+      fix:
+        default: true
+        type: boolean
 
 jobs:
   lint:
-    uses: laravel/.github/.github/workflows/coding-standards.yml@main
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php }}
+          tools: composer:v2, laravel/pint
+          extensions: json, dom, curl, libxml, mbstring
+          coverage: none
+
+      - name: Run Pint
+        run: pint
+
+      - name: Commit linted files
+        if: ${{ inputs.fix }}
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: ${{ inputs.message }}

@@ -15,7 +15,8 @@ class LemonSqueezyServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/lemon-squeezy.php', 'lemon-squeezy'
+            __DIR__ . '/../config/lemon-squeezy.php',
+            'lemon-squeezy',
         );
     }
 
@@ -44,13 +45,13 @@ class LemonSqueezyServiceProvider extends ServiceProvider
 
     protected function bootResources(): void
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'lemon-squeezy');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'lemon-squeezy');
     }
 
     protected function bootMigrations(): void
     {
         if (LemonSqueezy::$runsMigrations && $this->app->runningInConsole()) {
-            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         }
     }
 
@@ -58,15 +59,15 @@ class LemonSqueezyServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/lemon-squeezy.php' => $this->app->configPath('lemon-squeezy.php'),
+                __DIR__ . '/../config/lemon-squeezy.php' => $this->app->configPath('lemon-squeezy.php'),
             ], 'lemon-squeezy-config');
 
             $this->publishes([
-                __DIR__.'/../database/migrations' => $this->app->databasePath('migrations'),
+                __DIR__ . '/../database/migrations' => $this->app->databasePath('migrations'),
             ], 'lemon-squeezy-migrations');
 
             $this->publishes([
-                __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/lemon-squeezy'),
+                __DIR__ . '/../resources/views' => $this->app->resourcePath('views/vendor/lemon-squeezy'),
             ], 'lemon-squeezy-views');
         }
     }
