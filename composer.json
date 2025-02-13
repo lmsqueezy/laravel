@@ -6,6 +6,7 @@
     "lemon squeezy",
     "billing"
   ],
+  "version": "1.8.2",
   "license": "MIT",
   "support": {
     "issues": "https://github.com/lmsqueezy/laravel/issues",

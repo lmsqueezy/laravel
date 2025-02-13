@@ -14,7 +14,7 @@ use NumberFormatter;
 
 class LemonSqueezy
 {
-    public const VERSION = '1.6.2';
+    public const VERSION = '1.8.2';
 
     public const API = 'https://api.lemonsqueezy.com/v1';
 
