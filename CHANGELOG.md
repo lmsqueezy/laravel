@@ -1,6 +1,22 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.8.1...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.8.2...main)
+
+## [1.8.2](https://github.com/lmsqueezy/laravel/compare/1.8.1...1.8.2) - 2025-02-13
+
+### What's Changed
+
+* Fix deprecated variable syntax by [@virgildotcodes](https://github.com/virgildotcodes) in https://github.com/lmsqueezy/laravel/pull/119
+* Creating pre-release branch by [@JustSteveKing](https://github.com/JustSteveKing) in https://github.com/lmsqueezy/laravel/pull/120
+* Pre release by [@JustSteveKing](https://github.com/JustSteveKing) in https://github.com/lmsqueezy/laravel/pull/121
+* Preparing release by [@JustSteveKing](https://github.com/JustSteveKing) in https://github.com/lmsqueezy/laravel/pull/122
+
+### New Contributors
+
+* [@virgildotcodes](https://github.com/virgildotcodes) made their first contribution in https://github.com/lmsqueezy/laravel/pull/119
+* [@JustSteveKing](https://github.com/JustSteveKing) made their first contribution in https://github.com/lmsqueezy/laravel/pull/120
+
+**Full Changelog**: https://github.com/lmsqueezy/laravel/compare/1.8.1...1.8.2
 
 ## [1.8.1](https://github.com/lmsqueezy/laravel/compare/1.8.0...1.8.1) - 2025-01-13
 
