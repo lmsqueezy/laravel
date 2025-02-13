@@ -9,6 +9,6 @@ class InvalidCustomer extends Exception
 {
     public static function notYetCreated(Model $owner): InvalidCustomer
     {
-        return new InvalidCustomer(class_basename($owner).' is not a Lemon Squeezy customer yet.');
+        return new InvalidCustomer(class_basename($owner) . ' is not a Lemon Squeezy customer yet.');
     }
 }

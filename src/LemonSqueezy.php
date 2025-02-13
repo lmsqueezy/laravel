@@ -14,9 +14,9 @@ use NumberFormatter;
 
 class LemonSqueezy
 {
-    const VERSION = '1.6.2';
+    public const VERSION = '1.6.2';
 
-    const API = 'https://api.lemonsqueezy.com/v1';
+    public const API = 'https://api.lemonsqueezy.com/v1';
 
     /**
      * Indicates if migrations will be run.
@@ -57,10 +57,10 @@ class LemonSqueezy
 
         /** @var \Illuminate\Http\Client\Response $response */
         $response = Http::withToken($apiKey)
-            ->withUserAgent('LemonSqueezy\Laravel/'.static::VERSION)
+            ->withUserAgent('LemonSqueezy\Laravel/' . static::VERSION)
             ->accept('application/vnd.api+json')
             ->contentType('application/vnd.api+json')
-            ->$method(static::API."/{$uri}", $payload);
+            ->$method(static::API . "/{$uri}", $payload);
 
         if ($response->failed()) {
             throw new LemonSqueezyApiError($response['errors'][0]['detail'], (int) $response['errors'][0]['status']);
@@ -84,7 +84,7 @@ class LemonSqueezy
             $numberFormatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, $options['min_fraction_digits']);
         }
 
-        $moneyFormatter = new IntlMoneyFormatter($numberFormatter, new ISOCurrencies);
+        $moneyFormatter = new IntlMoneyFormatter($numberFormatter, new ISOCurrencies());
 
         return $moneyFormatter->format($money);
     }

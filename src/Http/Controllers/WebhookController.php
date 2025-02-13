@@ -53,7 +53,7 @@ final class WebhookController extends Controller
             return new Response('Webhook received but no event name was found.');
         }
 
-        $method = 'handle'.Str::studly($payload['meta']['event_name']);
+        $method = 'handle' . Str::studly($payload['meta']['event_name']);
 
         WebhookReceived::dispatch($payload);
 
@@ -77,7 +77,7 @@ final class WebhookController extends Controller
         $billable = $this->resolveBillable($payload);
 
         // Todo v2: Remove this check
-        if (Schema::hasTable((new LemonSqueezy::$orderModel)->getTable())) {
+        if (Schema::hasTable((new LemonSqueezy::$orderModel())->getTable())) {
             $attributes = $payload['data']['attributes'];
 
             $order = $billable->orders()->create([
@@ -111,7 +111,7 @@ final class WebhookController extends Controller
         $billable = $this->resolveBillable($payload);
 
         // Todo v2: Remove this check
-        if (Schema::hasTable((new LemonSqueezy::$orderModel)->getTable())) {
+        if (Schema::hasTable((new LemonSqueezy::$orderModel())->getTable())) {
             if (! $order = $this->findOrder($payload['data']['id'])) {
                 return;
             }
@@ -283,13 +283,13 @@ final class WebhookController extends Controller
         $custom = $payload['meta']['custom_data'] ?? null;
 
         if (! isset($custom) || ! is_array($custom) || ! isset($custom['billable_id'], $custom['billable_type'])) {
-            throw new InvalidCustomPayload;
+            throw new InvalidCustomPayload();
         }
 
         return $this->findOrCreateCustomer(
             $custom['billable_id'],
             (string) $custom['billable_type'],
-            (string) $payload['data']['attributes']['customer_id']
+            (string) $payload['data']['attributes']['customer_id'],
         );
     }
 

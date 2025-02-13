@@ -38,13 +38,13 @@ class Order extends Model
 {
     use HasFactory;
 
-    const STATUS_PENDING = 'pending';
+    public const STATUS_PENDING = 'pending';
 
-    const STATUS_FAILED = 'failed';
+    public const STATUS_FAILED = 'failed';
 
-    const STATUS_PAID = 'paid';
+    public const STATUS_PAID = 'paid';
 
-    const STATUS_REFUNDED = 'refunded';
+    public const STATUS_REFUNDED = 'refunded';
 
     /**
      * The table associated with the model.

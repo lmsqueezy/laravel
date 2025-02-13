@@ -9,7 +9,8 @@ use Tests\Fixtures\Factories\UserFactory;
 
 class User extends Authenticatable
 {
-    use Billable, HasFactory;
+    use Billable;
+    use HasFactory;
 
     public function getKey()
     {
@@ -23,6 +24,6 @@ class User extends Authenticatable
 
     protected static function newFactory()
     {
-        return new UserFactory;
+        return new UserFactory();
     }
 }
