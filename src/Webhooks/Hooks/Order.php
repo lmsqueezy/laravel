@@ -35,7 +35,7 @@ final class Order implements Hook
         public readonly OrderStatus $status,
         public readonly string $status_formatted,
         public readonly bool $refunded,
-        public readonly CarbonInterface|null $refunded_at,
+        public readonly ?CarbonInterface $refunded_at,
         public readonly string $subtotal_formatted,
         public readonly string $setup_fee_formatted,
         public readonly string $discount_total_formatted,
@@ -43,8 +43,8 @@ final class Order implements Hook
         public readonly string $total_formatted,
         public readonly OrderItem $first_order_item,
         public readonly array $urls,
-        public readonly CarbonInterface|null $created_at,
-        public readonly CarbonInterface|null $updated_at,
+        public readonly ?CarbonInterface $created_at,
+        public readonly ?CarbonInterface $updated_at,
         public readonly bool $test_mode,
     ) {}
 

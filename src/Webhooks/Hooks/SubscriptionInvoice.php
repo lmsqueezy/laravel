@@ -25,7 +25,7 @@ final class SubscriptionInvoice implements Hook
         public readonly SubscriptionInvoiceStatus $status,
         public readonly string $status_formatted,
         public readonly bool $refunded,
-        public readonly CarbonInterface|null $refunded_at,
+        public readonly ?CarbonInterface $refunded_at,
         public readonly int $subtotal,
         public readonly int $discount_total,
         public readonly int $tax,
@@ -42,8 +42,8 @@ final class SubscriptionInvoice implements Hook
         public readonly string $tax_formatted,
         public readonly string $total_formatted,
         public readonly array $urls,
-        public readonly CarbonInterface|null $created_at,
-        public readonly CarbonInterface|null $updated_at,
+        public readonly ?CarbonInterface $created_at,
+        public readonly ?CarbonInterface $updated_at,
         public readonly bool $test_mode,
     ) {}
 

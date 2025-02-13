@@ -17,8 +17,8 @@ final class OrderItem implements Hook
         public readonly string $product_name,
         public readonly string $variant_name,
         public readonly int $price,
-        public readonly CarbonInterface|null $created_at,
-        public readonly CarbonInterface|null $updated_at,
+        public readonly ?CarbonInterface $created_at,
+        public readonly ?CarbonInterface $updated_at,
         public readonly bool $test_mode,
     ) {}
 

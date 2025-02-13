@@ -13,8 +13,8 @@ final class SubscriptionItem implements Hook
         public readonly int $id,
         public readonly int $subscription_id,
         public readonly int $quantity,
-        public CarbonInterface|null $created_at,
-        public CarbonInterface|null $updated_at,
+        public ?CarbonInterface $created_at,
+        public ?CarbonInterface $updated_at,
     ) {}
 
     public static function fromArray(array $data): SubscriptionItem
