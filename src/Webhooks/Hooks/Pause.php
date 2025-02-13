@@ -12,7 +12,7 @@ final class Pause
 {
     public function __construct(
         public readonly PauseMode $mode,
-        public readonly CarbonInterface|null $resumes_at,
+        public readonly ?CarbonInterface $resumes_at,
     ) {}
 
     public static function fromArray(array $data): Pause

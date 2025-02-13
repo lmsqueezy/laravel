@@ -227,18 +227,18 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
 
         while ($this->process->running()) {
             if (is_null($tunnel) && preg_match(
-                    '/Public HTTPS:\s+(http[s]?:\/\/[^\s]+)/',
-                    $this->process->latestOutput(),
-                    $matches
-                )) {
-                    $tunnel = $matches[1];
+                '/Public HTTPS:\s+(http[s]?:\/\/[^\s]+)/',
+                $this->process->latestOutput(),
+                $matches
+            )) {
+                $tunnel = $matches[1];
 
-                    $errorCode = $this->setupWebhook($tunnel);
+                $errorCode = $this->setupWebhook($tunnel);
 
-                    if ($errorCode !== null) {
-                        return $errorCode;
-                    }
+                if ($errorCode !== null) {
+                    return $errorCode;
                 }
+            }
 
             sleep(1);
         }
@@ -281,7 +281,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                     ->json('requests');
 
                 foreach ($result as $request) {
-                    if (!in_array($request['id'], $logs, true)) {
+                    if (! in_array($request['id'], $logs, true)) {
                         $logs[] = $request['id'];
 
                         note(sprintf(

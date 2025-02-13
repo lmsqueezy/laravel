@@ -7,7 +7,6 @@ namespace LemonSqueezy\Laravel\Webhooks\Hooks;
 use Carbon\CarbonInterface;
 use Illuminate\Support\Carbon;
 use LemonSqueezy\Laravel\Webhooks\Enums\LicenseKeyStatus;
-use LemonSqueezy\Laravel\Webhooks\Enums\SubscriptionInvoiceStatus;
 
 final class LicenseKey implements Hook
 {
@@ -26,9 +25,9 @@ final class LicenseKey implements Hook
         public readonly int $disabled,
         public readonly LicenseKeyStatus $status,
         public readonly string $status_formatted,
-        public readonly CarbonInterface|null $expires_at,
-        public readonly CarbonInterface|null $created_at,
-        public readonly CarbonInterface|null $updated_at,
+        public readonly ?CarbonInterface $expires_at,
+        public readonly ?CarbonInterface $created_at,
+        public readonly ?CarbonInterface $updated_at,
     ) {}
 
     public static function fromArray(array $data): LicenseKey

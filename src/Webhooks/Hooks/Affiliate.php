@@ -17,12 +17,12 @@ final class Affiliate implements Hook
         public readonly string $user_email,
         public readonly string $share_domain,
         public readonly AffiliateStatus $status,
-        public readonly array|null $products,
+        public readonly ?array $products,
         public readonly string $application_note,
         public readonly int $total_earnings,
         public readonly int $unpaid_earnings,
-        public readonly CarbonInterface|null $created_at,
-        public readonly CarbonInterface|null $updated_at,
+        public readonly ?CarbonInterface $created_at,
+        public readonly ?CarbonInterface $updated_at,
     ) {}
 
     public static function fromArray(array $data): Affiliate
