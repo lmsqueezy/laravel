@@ -5,25 +5,14 @@ namespace LemonSqueezy\Laravel\Events;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use LemonSqueezy\Laravel\LicenseKey;
 
 class LicenseKeyUpdated
 {
     use Dispatchable;
     use SerializesModels;
 
-    /**
-     * The billable entity.
-     */
-    public Model $billable;
-
-    /**
-     * The payload array.
-     */
-    public array $payload;
-
-    public function __construct(Model $billable, array $payload)
+    public function __construct(public readonly Model $billable, public readonly LicenseKey $licenseKey)
     {
-        $this->billable = $billable;
-        $this->payload = $payload;
     }
 }
