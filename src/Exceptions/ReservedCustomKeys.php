@@ -3,8 +3,9 @@
 namespace LemonSqueezy\Laravel\Exceptions;
 
 use Exception;
+use LemonSqueezy\Laravel\Http\Throwable\BadRequest;
 
-class ReservedCustomKeys extends Exception
+class ReservedCustomKeys extends Exception implements BadRequest
 {
     public static function overwriteAttempt(): ReservedCustomKeys
     {

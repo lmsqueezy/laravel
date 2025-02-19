@@ -25,6 +25,8 @@ use LemonSqueezy\Laravel\Events\WebhookHandled;
 use LemonSqueezy\Laravel\Events\WebhookReceived;
 use LemonSqueezy\Laravel\Exceptions\InvalidCustomPayload;
 use LemonSqueezy\Laravel\Http\Middleware\VerifyWebhookSignature;
+use LemonSqueezy\Laravel\Http\Throwable\BadRequest;
+use LemonSqueezy\Laravel\Http\Throwable\NotFound;
 use LemonSqueezy\Laravel\LemonSqueezy;
 use LemonSqueezy\Laravel\Order;
 use LemonSqueezy\Laravel\Subscription;
@@ -60,8 +62,12 @@ final class WebhookController extends Controller
         if (method_exists($this, $method)) {
             try {
                 $this->{$method}($payload);
-            } catch (InvalidCustomPayload $e) {
-                return new Response('Webhook skipped due to invalid custom data.');
+            } catch (BadRequest $e) {
+                return new Response($e->getMessage(), 400);
+            } catch (NotFound $e) {
+                return new Response($e->getMessage(), 404);
+            } catch (\Exception $e) {
+                return new Response(sprintf('Internal server error: %s', $e->getMessage()), 500);
             }
 
             WebhookHandled::dispatch($payload);
