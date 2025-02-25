@@ -37,7 +37,7 @@ class LemonSqueezyServiceProvider extends ServiceProvider
             Route::group([
                 'prefix' => config('lemon-squeezy.path'),
                 'as' => 'lemon-squeezy.',
-            ], function () {
+            ], static function (): void {
                 Route::post('webhook', WebhookController::class)->name('webhook');
             });
         }
@@ -74,7 +74,7 @@ class LemonSqueezyServiceProvider extends ServiceProvider
 
     protected function bootDirectives(): void
     {
-        Blade::directive('lemonJS', function () {
+        Blade::directive('lemonJS', static function (): string {
             return "<?php echo view('lemon-squeezy::js'); ?>";
         });
     }
