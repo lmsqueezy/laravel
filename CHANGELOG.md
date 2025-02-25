@@ -1,6 +1,19 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.8.2...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.8.3...main)
+
+## [1.8.3](https://github.com/lmsqueezy/laravel/compare/1.8.2...1.8.3) - 2025-02-25
+
+### What's Changed
+
+* Laravel 12 Support by [@DaltonMcCleery](https://github.com/DaltonMcCleery) in https://github.com/lmsqueezy/laravel/pull/126
+* chore: prepping release by [@JustSteveKing](https://github.com/JustSteveKing) in https://github.com/lmsqueezy/laravel/pull/127
+
+### New Contributors
+
+* [@DaltonMcCleery](https://github.com/DaltonMcCleery) made their first contribution in https://github.com/lmsqueezy/laravel/pull/126
+
+**Full Changelog**: https://github.com/lmsqueezy/laravel/compare/1.8.2...1.8.3
 
 ## [1.8.2](https://github.com/lmsqueezy/laravel/compare/1.8.1...1.8.2) - 2025-02-13
 
