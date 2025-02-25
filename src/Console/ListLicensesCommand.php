@@ -141,7 +141,7 @@ class ListLicensesCommand extends Command
 
         $this->components->twoColumnDetail(
             '<fg=gray>Product:Variant</>',
-            "<fg=gray>{$productId}:{$variantId}</>"
+            "<fg=gray>{$productId}:{$variantId}</>",
         );
     }
 
@@ -152,7 +152,7 @@ class ListLicensesCommand extends Command
 
         $this->components->twoColumnDetail(
             '<fg=gray>Customer</>',
-            "<fg=gray>{$customerName} [{$customerEmail}]</>"
+            "<fg=gray>{$customerName} [{$customerEmail}]</>",
         );
     }
 
@@ -169,7 +169,7 @@ class ListLicensesCommand extends Command
         $this->displayCustomer($license);
         $this->components->twoColumnDetail(
             '<fg=gray>Order ID</>',
-            "<fg=gray>{$orderId}</>"
+            "<fg=gray>{$orderId}</>",
         );
     }
 }

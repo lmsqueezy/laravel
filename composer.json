@@ -31,7 +31,7 @@
     }
   ],
   "require": {
-    "php": "~8.1.0|~8.2.0|~8.3.0|~8.4.0",
+    "php": "^8.1|^8.2|^8.3|^8.4",
     "guzzlehttp/guzzle": "^7.0",
     "laravel/framework": "^10.0|^11.0|^12.0",
     "laravel/prompts": "^0.1|^0.2|^0.3",
@@ -78,6 +78,12 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "scripts": {
+    "lint": [
+      "./vendor/bin/pint --test"
+    ],
+    "pint": [
+      "./vendor/bin/pint"
+    ],
     "stan": [
       "./vendor/bin/phpstan analyse --memory-limit=-1"
     ],
