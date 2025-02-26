@@ -2,32 +2,15 @@
 
 namespace LemonSqueezy\Laravel\Http\Controllers;
 
-use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
-use LemonSqueezy\Laravel\Events\LicenseKeyCreated;
-use LemonSqueezy\Laravel\Events\LicenseKeyUpdated;
-use LemonSqueezy\Laravel\Events\OrderCreated;
-use LemonSqueezy\Laravel\Events\OrderRefunded;
-use LemonSqueezy\Laravel\Events\SubscriptionCancelled;
-use LemonSqueezy\Laravel\Events\SubscriptionCreated;
-use LemonSqueezy\Laravel\Events\SubscriptionExpired;
-use LemonSqueezy\Laravel\Events\SubscriptionPaused;
-use LemonSqueezy\Laravel\Events\SubscriptionPaymentFailed;
-use LemonSqueezy\Laravel\Events\SubscriptionPaymentRecovered;
-use LemonSqueezy\Laravel\Events\SubscriptionPaymentSuccess;
-use LemonSqueezy\Laravel\Events\SubscriptionResumed;
-use LemonSqueezy\Laravel\Events\SubscriptionUnpaused;
-use LemonSqueezy\Laravel\Events\SubscriptionUpdated;
 use LemonSqueezy\Laravel\Events\WebhookHandled;
 use LemonSqueezy\Laravel\Events\WebhookReceived;
 use LemonSqueezy\Laravel\Exceptions\InvalidCustomPayload;
 use LemonSqueezy\Laravel\Http\Middleware\VerifyWebhookSignature;
-use LemonSqueezy\Laravel\LemonSqueezy;
-use LemonSqueezy\Laravel\Order;
-use LemonSqueezy\Laravel\Subscription;
+use LemonSqueezy\Laravel\Webhooks\Enums\Topic;
+use LemonSqueezy\Laravel\Webhooks\Handlers;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -44,275 +27,52 @@ final class WebhookController extends Controller
 
     /**
      * Handle a Lemon Squeezy webhook call.
+     *
+     * @param Request $request
+     * @return Response
+     * @throws InvalidCustomPayload
      */
     public function __invoke(Request $request): Response
     {
         $payload = $request->all();
 
-        if (! isset($payload['meta']['event_name'])) {
-            return new Response('Webhook received but no event name was found.');
+        if (!isset($payload['meta']['event_name']) || $request->hasHeader('X-Event-Name')) {
+            return new JsonResponse(
+                data: [
+                    'message' => 'Webhook received but no event name was found.',
+                ],
+                status: Response::HTTP_BAD_REQUEST,
+            );
         }
-
-        $method = 'handle' . Str::studly($payload['meta']['event_name']);
 
         WebhookReceived::dispatch($payload);
 
-        if (method_exists($this, $method)) {
-            try {
-                $this->{$method}($payload);
-            } catch (InvalidCustomPayload $e) {
-                return new Response('Webhook skipped due to invalid custom data.');
-            }
 
-            WebhookHandled::dispatch($payload);
+        $handler = match ($request->header('X-Event-Name')) {
+            Topic::OrderCreated->value => new Handlers\HandleOrderCreated(),
+            Topic::OrderRefunded->value => new Handlers\HandleOrderRefunded(),
+            Topic::SubscriptionCreated->value => new Handlers\HandleSubscriptionCreated(),
+            Topic::SubscriptionUpdated->value => new Handlers\HandleSubscriptionUpdated(),
+            Topic::SubscriptionCancelled->value => new Handlers\HandleSubscriptionCancelled(),
+            Topic::SubscriptionExpired->value => new Handlers\HandleSubscriptionExpired(),
+            Topic::SubscriptionPaused->value => new Handlers\HandleSubscriptionPaused(),
+            Topic::SubscriptionResumed->value => new Handlers\HandleSubscriptionResumed(),
+            Topic::SubscriptionUnpaused->value => new Handlers\HandleSubscriptionUnpaused(),
+            Topic::SubscriptionPaymentSuccess->value => new Handlers\HandleSubscriptionPaymentSuccess(),
+            Topic::SubscriptionPaymentFailed->value => new Handlers\HandleSubscriptionPaymentFailed(),
+            Topic::SubscriptionPaymentRecovered->value => new Handlers\HandleSubscriptionPaymentRecovered(),
+            Topic::LicenseKeyCreated->value => new Handlers\HandleLicenseKeyCreated(),
+            Topic::LicenseKeyUpdated->value => new Handlers\HandleLicenseKeyUpdated(),
+        };
 
-            return new Response('Webhook was handled.');
-        }
+        $handler->handle($payload);
+        WebhookHandled::dispatch($payload);
 
-        return new Response('Webhook received but no handler found.');
-    }
-
-    public function handleOrderCreated(array $payload): void
-    {
-        $billable = $this->resolveBillable($payload);
-
-        // Todo v2: Remove this check
-        if (Schema::hasTable((new LemonSqueezy::$orderModel())->getTable())) {
-            $attributes = $payload['data']['attributes'];
-
-            $order = $billable->orders()->create([
-                'lemon_squeezy_id' => $payload['data']['id'],
-                'customer_id' => $attributes['customer_id'],
-                'product_id' => (string) $attributes['first_order_item']['product_id'],
-                'variant_id' => (string) $attributes['first_order_item']['variant_id'],
-                'identifier' => $attributes['identifier'],
-                'order_number' => $attributes['order_number'],
-                'currency' => $attributes['currency'],
-                'subtotal' => $attributes['subtotal'],
-                'discount_total' => $attributes['discount_total'],
-                'tax' => $attributes['tax'],
-                'total' => $attributes['total'],
-                'tax_name' => $attributes['tax_name'],
-                'status' => $attributes['status'],
-                'receipt_url' => $attributes['urls']['receipt'] ?? null,
-                'refunded' => $attributes['refunded'],
-                'refunded_at' => $attributes['refunded_at'] ? Carbon::make($attributes['refunded_at']) : null,
-                'ordered_at' => Carbon::make($attributes['created_at']),
-            ]);
-        } else {
-            $order = null;
-        }
-
-        OrderCreated::dispatch($billable, $order, $payload);
-    }
-
-    public function handleOrderRefunded(array $payload): void
-    {
-        $billable = $this->resolveBillable($payload);
-
-        // Todo v2: Remove this check
-        if (Schema::hasTable((new LemonSqueezy::$orderModel())->getTable())) {
-            if (! $order = $this->findOrder($payload['data']['id'])) {
-                return;
-            }
-
-            $order = $order->sync($payload['data']['attributes']);
-        } else {
-            $order = null;
-        }
-
-        OrderRefunded::dispatch($billable, $order, $payload);
-    }
-
-    public function handleSubscriptionCreated(array $payload): void
-    {
-        $custom = $payload['meta']['custom_data'] ?? null;
-        $attributes = $payload['data']['attributes'];
-
-        $billable = $this->resolveBillable($payload);
-
-        $subscription = $billable->subscriptions()->create([
-            'type' => $custom['subscription_type'] ?? Subscription::DEFAULT_TYPE,
-            'lemon_squeezy_id' => $payload['data']['id'],
-            'status' => $attributes['status'],
-            'product_id' => (string) $attributes['product_id'],
-            'variant_id' => (string) $attributes['variant_id'],
-            'card_brand' => $attributes['card_brand'] ?? null,
-            'card_last_four' => $attributes['card_last_four'] ?? null,
-            'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
-            'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
-            'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
-        ]);
-
-        // Terminate the billable's generic trial at the model level if it exists...
-        if (! is_null($billable->customer->trial_ends_at)) {
-            $billable->customer->update(['trial_ends_at' => null]);
-        }
-
-        // Set the billable's lemon squeezy id if it was on generic trial at the model level
-        if (is_null($billable->customer->lemon_squeezy_id)) {
-            $billable->customer->update(['lemon_squeezy_id' => $attributes['customer_id']]);
-        }
-
-        SubscriptionCreated::dispatch($billable, $subscription, $payload);
-    }
-
-    private function handleSubscriptionUpdated(array $payload): void
-    {
-        if (! $subscription = $this->findSubscription($payload['data']['id'])) {
-            return;
-        }
-
-        $subscription = $subscription->sync($payload['data']['attributes']);
-
-        if ($subscription->billable) {
-            SubscriptionUpdated::dispatch($subscription->billable, $subscription, $payload);
-        }
-    }
-
-    private function handleSubscriptionCancelled(array $payload): void
-    {
-        if (! $subscription = $this->findSubscription($payload['data']['id'])) {
-            return;
-        }
-
-        $subscription = $subscription->sync($payload['data']['attributes']);
-
-        if ($subscription->billable) {
-            SubscriptionCancelled::dispatch($subscription->billable, $subscription, $payload);
-        }
-    }
-
-    private function handleSubscriptionResumed(array $payload): void
-    {
-        if (! $subscription = $this->findSubscription($payload['data']['id'])) {
-            return;
-        }
-
-        $subscription = $subscription->sync($payload['data']['attributes']);
-
-        SubscriptionResumed::dispatch($subscription->billable, $subscription, $payload);
-    }
-
-    private function handleSubscriptionExpired(array $payload): void
-    {
-        if (! $subscription = $this->findSubscription($payload['data']['id'])) {
-            return;
-        }
-
-        $subscription = $subscription->sync($payload['data']['attributes']);
-
-        if ($subscription->billable) {
-            SubscriptionExpired::dispatch($subscription->billable, $subscription, $payload);
-        }
-    }
-
-    private function handleSubscriptionPaused(array $payload): void
-    {
-        if (! $subscription = $this->findSubscription($payload['data']['id'])) {
-            return;
-        }
-
-        $subscription = $subscription->sync($payload['data']['attributes']);
-
-        SubscriptionPaused::dispatch($subscription->billable, $subscription, $payload);
-    }
-
-    private function handleSubscriptionUnpaused(array $payload): void
-    {
-        if (! $subscription = $this->findSubscription($payload['data']['id'])) {
-            return;
-        }
-
-        $subscription = $subscription->sync($payload['data']['attributes']);
-
-        SubscriptionUnpaused::dispatch($subscription->billable, $subscription, $payload);
-    }
-
-    private function handleSubscriptionPaymentSuccess(array $payload): void
-    {
-        if (
-            ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) &&
-            $subscription->billable
-        ) {
-            SubscriptionPaymentSuccess::dispatch($subscription->billable, $subscription, $payload);
-        }
-    }
-
-    private function handleSubscriptionPaymentFailed(array $payload): void
-    {
-        if (
-            ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) &&
-            $subscription->billable
-        ) {
-            SubscriptionPaymentFailed::dispatch($subscription->billable, $subscription, $payload);
-        }
-    }
-
-    private function handleSubscriptionPaymentRecovered(array $payload): void
-    {
-        if (
-            ($subscription = $this->findSubscription($payload['data']['attributes']['subscription_id'])) &&
-            $subscription->billable
-        ) {
-            SubscriptionPaymentRecovered::dispatch($subscription->billable, $subscription, $payload);
-        }
-    }
-
-    private function handleLicenseKeyCreated(array $payload): void
-    {
-        $billable = $this->resolveBillable($payload);
-
-        LicenseKeyCreated::dispatch($billable, $payload);
-    }
-
-    private function handleLicenseKeyUpdated(array $payload): void
-    {
-        $billable = $this->resolveBillable($payload);
-
-        LicenseKeyUpdated::dispatch($billable, $payload);
-    }
-
-    /**
-     * @return \LemonSqueezy\Laravel\Billable
-     *
-     * @throws InvalidCustomPayload
-     */
-    private function resolveBillable(array $payload)
-    {
-        $custom = $payload['meta']['custom_data'] ?? null;
-
-        if (! isset($custom) || ! is_array($custom) || ! isset($custom['billable_id'], $custom['billable_type'])) {
-            throw new InvalidCustomPayload();
-        }
-
-        return $this->findOrCreateCustomer(
-            $custom['billable_id'],
-            (string) $custom['billable_type'],
-            (string) $payload['data']['attributes']['customer_id'],
+        return new JsonResponse(
+            data: [
+                'message' => 'Webhook was handled.',
+            ],
+            status: Response::HTTP_OK,
         );
-    }
-
-    /**
-     * @return \LemonSqueezy\Laravel\Billable
-     */
-    private function findOrCreateCustomer(int|string $billableId, string $billableType, string $customerId)
-    {
-        return LemonSqueezy::$customerModel::firstOrCreate([
-            'billable_id' => $billableId,
-            'billable_type' => $billableType,
-        ], [
-            'lemon_squeezy_id' => $customerId,
-        ])->billable;
-    }
-
-    private function findSubscription(string $subscriptionId): ?Subscription
-    {
-        return LemonSqueezy::$subscriptionModel::firstWhere('lemon_squeezy_id', $subscriptionId);
-    }
-
-    private function findOrder(string $orderId): ?Order
-    {
-        return LemonSqueezy::$orderModel::firstWhere('lemon_squeezy_id', $orderId);
     }
 }
