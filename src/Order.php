@@ -3,6 +3,7 @@
 namespace LemonSqueezy\Laravel;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,19 +11,40 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use LemonSqueezy\Laravel\Database\Factories\OrderFactory;
 
 /**
- * @property \LemonSqueezy\Laravel\Billable $billable
+ * @property int $id
+ * @property string|int $billable_id
+ * @property string $billable_type
+ * @property string $lemon_squeezy_id
+ * @property string $identifier
+ * @property string $product_id
+ * @property string $variant_id
+ * @property int $order_number
+ * @property string $currency
+ * @property int $subtotal
+ * @property int $discount_total
+ * @property int $tax
+ * @property int $total
+ * @property string|null $tax_name
+ * @property string $status
+ * @property string|null $receipt_url
+ * @property bool $refunded
+ * @property CarbonInterface|null $refunded_at
+ * @property CarbonInterface $ordered_at
+ * @property CarbonInterface|null $created_at
+ * @property CarbonInterface|null $updated_at
+ * @property Billable $billable
  */
 class Order extends Model
 {
     use HasFactory;
 
-    const STATUS_PENDING = 'pending';
+    public const STATUS_PENDING = 'pending';
 
-    const STATUS_FAILED = 'failed';
+    public const STATUS_FAILED = 'failed';
 
-    const STATUS_PAID = 'paid';
+    public const STATUS_PAID = 'paid';
 
-    const STATUS_REFUNDED = 'refunded';
+    public const STATUS_REFUNDED = 'refunded';
 
     /**
      * The table associated with the model.

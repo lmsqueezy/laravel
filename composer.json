@@ -6,6 +6,7 @@
         "lemon squeezy",
         "billing"
     ],
+    "version": "1.8.2",
     "license": "MIT",
     "support": {
         "issues": "https://github.com/lmsqueezy/laravel/issues",
@@ -15,12 +16,18 @@
         {
             "name": "Dries Vints",
             "homepage": "https://driesvints.com"
+        },
+        {
+            "role": "Maintainer",
+            "name": "Steve McDougall",
+            "email": "juststevemcd@gmail.com",
+            "homepage": "https://juststeveking.link"
         }
     ],
     "funding": [
         {
             "type": "github",
-            "url": "https://github.com/sponsors/driesvints"
+            "url": "https://github.com/sponsors/juststeveking"
         },
         {
             "type": "paypal",
@@ -36,8 +43,11 @@
         "nesbot/carbon": "^2.0|^3.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^8.0|^9.0",
-        "pestphp/pest": "^2.0|^3.0"
+        "laravel/pint": "^1.20",
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "pestphp/pest": "^2.0|^3.0",
+        "phpstan/phpstan": "^2.1",
+        "roave/security-advisories": "dev-latest"
     },
     "suggest": {
         "ext-intl": "Allows for more locales besides the default \"en\" when formatting money values."
@@ -70,5 +80,13 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts": {
+        "stan": [
+            "./vendor/bin/phpstan analyse --memory-limit=-1"
+        ],
+        "test": [
+            "./vendor/bin/pest"
+        ]
+    }
 }

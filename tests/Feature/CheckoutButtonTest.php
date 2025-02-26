@@ -8,7 +8,7 @@ uses(InteractsWithViews::class);
 it('can render a button', function () {
     $view = $this->blade(
         '<x-lemon-button :href="$href">Buy Now</x-lemon-button>',
-        ['href' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']
+        ['href' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123'],
     );
 
     $expect = <<<'HTML'
@@ -32,7 +32,7 @@ it('can render a checkout instance', function () {
 
     $view = $this->blade(
         '<x-lemon-button :href="$checkout">Buy Now</x-lemon-button>',
-        ['checkout' => Checkout::make('store_24398', 'variant_123')]
+        ['checkout' => Checkout::make('store_24398', 'variant_123')],
     );
 
     $expect = <<<'HTML'

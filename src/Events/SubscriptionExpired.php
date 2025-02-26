@@ -9,7 +9,8 @@ use LemonSqueezy\Laravel\Subscription;
 
 class SubscriptionExpired
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /**
      * The billable entity.

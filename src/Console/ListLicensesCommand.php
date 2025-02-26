@@ -38,10 +38,10 @@ class ListLicensesCommand extends Command
     public function handle(): int
     {
         if (! $this->validate()) {
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
-        $storeResponse = spin(fn () => $this->fetchStore(), '🍋 Fetching store information...');
+        $storeResponse = spin(fn() => $this->fetchStore(), '🍋 Fetching store information...');
         $store = $storeResponse->json('data.attributes');
 
         return $this->handleLicenses($store);
@@ -52,7 +52,7 @@ class ListLicensesCommand extends Command
         $arr = array_merge(
             config('lemon-squeezy'),
             ['page' => $this->option('page')],
-            ['size' => $this->option('size')]
+            ['size' => $this->option('size')],
         );
         $validator = Validator::make($arr, [
             'api_key' => [
@@ -93,7 +93,7 @@ class ListLicensesCommand extends Command
     protected function handleLicenses(array $store): int
     {
         $licensesResponse = spin(
-            fn () => LemonSqueezy::api(
+            fn() => LemonSqueezy::api(
                 'GET',
                 sprintf('license-keys'),
                 [
@@ -103,7 +103,7 @@ class ListLicensesCommand extends Command
                     'filter[product_id]' => $this->argument('product'),
                     'filter[order_id]' => $this->option('order'),
                     'filter[status]' => $this->option('status'),
-                ]
+                ],
             ),
             '🍋 Fetching licenses...',
         );
@@ -122,7 +122,7 @@ class ListLicensesCommand extends Command
             $this->newLine();
         });
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     private function displayStatus(array $license): string
@@ -163,7 +163,7 @@ class ListLicensesCommand extends Command
 
         $this->components->twoColumnDetail(
             sprintf('<fg=green;options=bold>%s</>', $key),
-            $this->displayStatus($license)
+            $this->displayStatus($license),
         );
         $this->displayProductInfo($license);
         $this->displayCustomer($license);

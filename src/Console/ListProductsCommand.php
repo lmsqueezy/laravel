@@ -32,10 +32,10 @@ class ListProductsCommand extends Command
     public function handle(): int
     {
         if (! $this->validate()) {
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
-        $storeResponse = spin(fn () => $this->fetchStore(), '🍋 Fetching store information...');
+        $storeResponse = spin(fn() => $this->fetchStore(), '🍋 Fetching store information...');
         $store = $storeResponse->json('data.attributes');
 
         $productId = $this->argument('product');
@@ -82,12 +82,12 @@ class ListProductsCommand extends Command
     protected function handleProduct(array $store, string $productId): int
     {
         $response = spin(
-            fn () => LemonSqueezy::api(
+            fn() => LemonSqueezy::api(
                 'GET',
                 sprintf('products/%s', $productId),
-                ['include' => 'variants']
+                ['include' => 'variants'],
             ),
-            '🍋 Fetching product information...'
+            '🍋 Fetching product information...',
         );
 
         $product = $response->json('data');
@@ -99,31 +99,31 @@ class ListProductsCommand extends Command
         $this->displayProduct($product);
 
         $variants = collect($response->json('included'))
-            ->filter(fn ($item) => $item['type'] === 'variants')
+            ->filter(fn($item) => $item['type'] === 'variants')
             ->sortBy('sort');
 
-        $variants->each(fn (array $variant) => $this->displayVariant(
+        $variants->each(fn(array $variant) => $this->displayVariant(
             $variant,
             Arr::get($store, 'currency'),
-            $variants->count() > 1
+            $variants->count() > 1,
         ));
 
         $this->newLine();
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     protected function handleProducts(array $store): int
     {
         $productsResponse = spin(
-            fn () => LemonSqueezy::api(
+            fn() => LemonSqueezy::api(
                 'GET',
                 'products',
                 [
                     'include' => 'variants',
                     'filter[store_id]' => config('lemon-squeezy.store'),
                     'page[size]' => 100,
-                ]
+                ],
             ),
             '🍋 Fetching products information...',
         );
@@ -139,20 +139,20 @@ class ListProductsCommand extends Command
 
             $variantIds = collect(Arr::get($product, 'relationships.variants.data'))->pluck('id');
             $variants = collect($productsResponse->json('included'))
-                ->filter(fn ($item) => $item['type'] === 'variants')
-                ->filter(fn ($item) => $variantIds->contains($item['id']))
+                ->filter(fn($item) => $item['type'] === 'variants')
+                ->filter(fn($item) => $variantIds->contains($item['id']))
                 ->sortBy('sort');
 
-            $variants->each(fn ($variant) => $this->displayVariant(
+            $variants->each(fn($variant) => $this->displayVariant(
                 $variant,
                 Arr::get($store, 'currency'),
-                $variants->count() > 1
+                $variants->count() > 1,
             ));
 
             $this->newLine();
         });
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     protected function displayTitle(): void
@@ -164,7 +164,7 @@ class ListProductsCommand extends Command
     {
         $this->components->twoColumnDetail(
             sprintf('<fg=green;options=bold>%s</>', Arr::get($product, 'attributes.name')),
-            Arr::get($product, 'id')
+            Arr::get($product, 'id'),
         );
     }
 

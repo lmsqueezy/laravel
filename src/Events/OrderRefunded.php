@@ -9,7 +9,8 @@ use LemonSqueezy\Laravel\Order;
 
 class OrderRefunded
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /**
      * The billable entity.

@@ -3,6 +3,7 @@
 namespace LemonSqueezy\Laravel;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,28 +14,45 @@ use LemonSqueezy\Laravel\Database\Factories\SubscriptionFactory;
 use LogicException;
 
 /**
- * @property \LemonSqueezy\Laravel\Billable $billable
+ * @property int $id
+ * @property string|int $billable_id
+ * @property string $billable_type
+ * @property string $type
+ * @property string $lemon_squeezy_id
+ * @property string $status
+ * @property string $product_id
+ * @property string $variant_id
+ * @property string|null $card_brand
+ * @property string|null $card_last_four
+ * @property string|null $pause_mode
+ * @property CarbonInterface|null $pause_resumes_at
+ * @property CarbonInterface|null $trial_ends_at
+ * @property CarbonInterface|null $renews_at
+ * @property CarbonInterface|null $ends_at
+ * @property CarbonInterface|null $created_at
+ * @property CarbonInterface|null $updated_at
+ * @property Billable $billable
  */
 class Subscription extends Model
 {
     use HasFactory;
     use Prorates;
 
-    const STATUS_ON_TRIAL = 'on_trial';
+    public const STATUS_ON_TRIAL = 'on_trial';
 
-    const STATUS_ACTIVE = 'active';
+    public const STATUS_ACTIVE = 'active';
 
-    const STATUS_PAUSED = 'paused';
+    public const STATUS_PAUSED = 'paused';
 
-    const STATUS_PAST_DUE = 'past_due';
+    public const STATUS_PAST_DUE = 'past_due';
 
-    const STATUS_UNPAID = 'unpaid';
+    public const STATUS_UNPAID = 'unpaid';
 
-    const STATUS_CANCELLED = 'cancelled';
+    public const STATUS_CANCELLED = 'cancelled';
 
-    const STATUS_EXPIRED = 'expired';
+    public const STATUS_EXPIRED = 'expired';
 
-    const DEFAULT_TYPE = 'default';
+    public const DEFAULT_TYPE = 'default';
 
     /**
      * The table associated with the model.
