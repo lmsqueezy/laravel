@@ -27,7 +27,6 @@ The below features are not yet in this package but are planned to be added in th
 
 - Subscription invoices
 - [Usage Based Billing](https://github.com/lmsqueezy/laravel/issues/55)
-- License keys
 - Marketing emails check
 - Create discount codes
 - [Nova integration](https://github.com/lmsqueezy/laravel/issues/51)
@@ -941,6 +940,27 @@ $user->subscription()->endTrial();
 ```
 
 This method will move the billing achor to the current day and thus ending any trial period the customer had.
+
+## License Keys
+
+License keys can be activated and validated using the license key string. A license key instance will be stored in 
+the database for each activated license. 
+
+**Please note:** the billable for the license is the billable that purchased the license key, but _not necessarily the 
+user who activated the license key_, so you should establish a relationship between a license key instance and the user
+creating it yourself.
+
+To activate a license key and retrieve a license key instance:
+
+```php
+$user->activateLicenseKey('your-key', 'your-reference')
+```
+
+To validate a license key:
+```php
+$user->activateLicenseKey('your-key', 'your-reference')
+```
+
 
 ## Handling Webhooks
 
