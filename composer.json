@@ -1,88 +1,92 @@
 {
-  "name": "lemonsqueezy/laravel",
-  "description": "A package to easily integrate your Laravel application with Lemon Squeezy.",
-  "keywords": [
-    "laravel",
-    "lemon squeezy",
-    "billing"
-  ],
-  "version": "1.8.2",
-  "license": "MIT",
-  "support": {
-    "issues": "https://github.com/lmsqueezy/laravel/issues",
-    "source": "https://github.com/lmsqueezy/laravel"
-  },
-  "authors": [
-    {
-      "name": "Dries Vints",
-      "homepage": "https://driesvints.com"
-    },
-    {
-      "role": "Maintainer",
-      "name": "Steve McDougall",
-      "email": "juststevemcd@gmail.com",
-      "homepage": "https://juststeveking.link"
-    }
-  ],
-  "funding": [
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/juststeveking"
-    }
-  ],
-  "require": {
-    "php": "~8.1.0|~8.2.0|~8.3.0|~8.4.0",
-    "guzzlehttp/guzzle": "^7.0",
-    "laravel/framework": "^10.0|^11.0|^12.0",
-    "laravel/prompts": "^0.1|^0.2|^0.3",
-    "moneyphp/money": "^4.0",
-    "nesbot/carbon": "^2.0|^3.0"
-  },
-  "require-dev": {
-    "laravel/pint": "^1.20",
-    "orchestra/testbench": "^8.0|^9.0|^10.0",
-    "pestphp/pest": "^2.0|^3.0",
-    "phpstan/phpstan": "^2.1",
-    "roave/security-advisories": "dev-latest"
-  },
-  "suggest": {
-    "ext-intl": "Allows for more locales besides the default \"en\" when formatting money values."
-  },
-  "autoload": {
-    "psr-4": {
-      "LemonSqueezy\\Laravel\\": "src/",
-      "LemonSqueezy\\Laravel\\Database\\Factories\\": "database/factories/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
-    }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-main": "1.x-dev"
-    },
-    "laravel": {
-      "providers": [
-        "LemonSqueezy\\Laravel\\LemonSqueezyServiceProvider"
-      ]
-    }
-  },
-  "config": {
-    "sort-packages": true,
-    "allow-plugins": {
-      "pestphp/pest-plugin": true
-    }
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "scripts": {
-    "stan": [
-      "./vendor/bin/phpstan analyse --memory-limit=-1"
+    "name": "lemonsqueezy/laravel",
+    "description": "A package to easily integrate your Laravel application with Lemon Squeezy.",
+    "keywords": [
+        "laravel",
+        "lemon squeezy",
+        "billing"
     ],
-    "test": [
-      "./vendor/bin/pest"
-    ]
-  }
+    "version": "1.8.2",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/lmsqueezy/laravel/issues",
+        "source": "https://github.com/lmsqueezy/laravel"
+    },
+    "authors": [
+        {
+            "name": "Dries Vints",
+            "homepage": "https://driesvints.com"
+        },
+        {
+            "role": "Maintainer",
+            "name": "Steve McDougall",
+            "email": "juststevemcd@gmail.com",
+            "homepage": "https://juststeveking.link"
+        }
+    ],
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/juststeveking"
+        },
+        {
+            "type": "paypal",
+            "url": "https://www.paypal.com/paypalme/driesvints"
+        }
+    ],
+    "require": {
+        "php": "~8.1.0|~8.2.0|~8.3.0|~8.4.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "laravel/framework": "^10.0|^11.0|^12.0",
+        "laravel/prompts": "^0.1|^0.2|^0.3",
+        "moneyphp/money": "^4.0",
+        "nesbot/carbon": "^2.0|^3.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.20",
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "pestphp/pest": "^2.0|^3.0",
+        "phpstan/phpstan": "^2.1",
+        "roave/security-advisories": "dev-latest"
+    },
+    "suggest": {
+        "ext-intl": "Allows for more locales besides the default \"en\" when formatting money values."
+    },
+    "autoload": {
+        "psr-4": {
+            "LemonSqueezy\\Laravel\\": "src/",
+            "LemonSqueezy\\Laravel\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "LemonSqueezy\\Laravel\\LemonSqueezyServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "stan": [
+            "./vendor/bin/phpstan analyse --memory-limit=-1"
+        ],
+        "test": [
+            "./vendor/bin/pest"
+        ]
+    }
 }
