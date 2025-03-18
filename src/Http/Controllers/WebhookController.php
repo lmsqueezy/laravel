@@ -24,8 +24,13 @@ use LemonSqueezy\Laravel\Events\SubscriptionUpdated;
 use LemonSqueezy\Laravel\Events\WebhookHandled;
 use LemonSqueezy\Laravel\Events\WebhookReceived;
 use LemonSqueezy\Laravel\Exceptions\InvalidCustomPayload;
+use LemonSqueezy\Laravel\Exceptions\LicenseKeyNotFound;
+use LemonSqueezy\Laravel\Exceptions\MalformedDataError;
 use LemonSqueezy\Laravel\Http\Middleware\VerifyWebhookSignature;
+use LemonSqueezy\Laravel\Http\Throwable\BadRequest;
+use LemonSqueezy\Laravel\Http\Throwable\NotFound;
 use LemonSqueezy\Laravel\LemonSqueezy;
+use LemonSqueezy\Laravel\LicenseKey;
 use LemonSqueezy\Laravel\Order;
 use LemonSqueezy\Laravel\Subscription;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,8 +65,12 @@ final class WebhookController extends Controller
         if (method_exists($this, $method)) {
             try {
                 $this->{$method}($payload);
-            } catch (InvalidCustomPayload $e) {
-                return new Response('Webhook skipped due to invalid custom data.');
+            } catch (BadRequest $e) {
+                return new Response($e->getMessage(), 400);
+            } catch (NotFound $e) {
+                return new Response($e->getMessage(), 404);
+            } catch (\Exception $e) {
+                return new Response(sprintf('Internal server error: %s', $e->getMessage()), 500);
             }
 
             WebhookHandled::dispatch($payload);
@@ -259,18 +268,31 @@ final class WebhookController extends Controller
         }
     }
 
+    /**
+     * @throws MalformedDataError
+     */
     private function handleLicenseKeyCreated(array $payload): void
     {
-        $billable = $this->resolveBillable($payload);
+        $licenseKey = LicenseKey::fromPayload($payload);
 
-        LicenseKeyCreated::dispatch($billable, $payload);
+        LicenseKeyCreated::dispatch($licenseKey->billable(), $licenseKey);
     }
 
+    /**
+     * @throws LicenseKeyNotFound
+     */
     private function handleLicenseKeyUpdated(array $payload): void
     {
-        $billable = $this->resolveBillable($payload);
+        $key = $payload['data']['attributes']['key'] ?? '';
+        $licenseKey = LicenseKey::withKey($key)->first();
 
-        LicenseKeyUpdated::dispatch($billable, $payload);
+        if ($licenseKey === null) {
+            throw LicenseKeyNotFound::withKey($key);
+        }
+
+        $licenseKey = $licenseKey->sync($payload['data']['attributes']);
+
+        LicenseKeyUpdated::dispatch($licenseKey->billable(), $licenseKey);
     }
 
     /**
