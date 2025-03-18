@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.8.3...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.8.4...main)
+
+## [1.8.4](https://github.com/lmsqueezy/laravel/compare/1.8.3...1.8.4) - 2025-03-18
+
+### What's Changed
+
+* Bump version support to Laravel 12 by [@virgildotcodes](https://github.com/virgildotcodes) in https://github.com/lmsqueezy/laravel/pull/131
+* Creates the license key feature by [@paulinevos](https://github.com/paulinevos) in https://github.com/lmsqueezy/laravel/pull/129
+
+**Full Changelog**: https://github.com/lmsqueezy/laravel/compare/1.8.3...1.8.4
 
 ## [1.8.3](https://github.com/lmsqueezy/laravel/compare/1.8.2...1.8.3) - 2025-02-25
 
