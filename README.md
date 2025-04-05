@@ -128,6 +128,11 @@ The easiest way to set this up while developing your app is with the `php artisa
 php artisan lmsqueezy:listen
 ```
 
+For ngrok, if your app is not running on port `8000` pass in the port you want to tunnel using:
+```aiignore
+php artisan lmsqueezy:listen ngrok --port=80
+```
+
 Although this command should always cleanup the webhook after itself, you may wish to cleanup any lingering webhooks with the `--cleanup` flag:
 
 ```bash

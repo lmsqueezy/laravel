@@ -29,6 +29,7 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
      */
     protected $signature = 'lmsqueezy:listen
                             {service : The service to use for listening to webhooks, either ngrok or expose.}
+                            {--port=8000 : The port on your machine to tunnel to the internet}
                             {--cleanup : Remove all webhooks for the given service.}';
 
     /**
@@ -254,9 +255,8 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
         $this->process([
             'ngrok',
             'http',
-            route('lemon-squeezy.webhook'),
+            $this->option('port'),
             '--host-header=rewrite',
-            '--no-interaction',
         ]);
 
         while ($this->process->running()) {
