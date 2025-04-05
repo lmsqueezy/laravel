@@ -270,12 +270,14 @@ final class WebhookController extends Controller
 
     /**
      * @throws MalformedDataError
+     * @throws InvalidCustomPayload
      */
     private function handleLicenseKeyCreated(array $payload): void
     {
-        $licenseKey = LicenseKey::fromPayload($payload);
+        $licenseKey = LicenseKey::fromPayload($payload['data']);
+        $billable = $this->resolveBillable($payload);
 
-        LicenseKeyCreated::dispatch($licenseKey->billable(), $licenseKey);
+        LicenseKeyCreated::dispatch($billable, $licenseKey);
     }
 
     /**
