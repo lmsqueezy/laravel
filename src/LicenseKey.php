@@ -65,7 +65,7 @@ class LicenseKey extends Model
             self::KEY_ID                => ['required', 'string'],
             self::KEY_KEY               => ['required', 'string'],
             self::KEY_KEY_SHORT         => ['required', 'string'],
-            self::KEY_ACTIVATION_LIMIT  => ['required', 'numeric'],
+            self::KEY_ACTIVATION_LIMIT  => ['nullable', 'numeric'],
             self::KEY_PRODUCT_ID        => ['required'],
             self::KEY_ORDER_ID          => ['required'],
             self::KEY_STATUS            => ['required'],
