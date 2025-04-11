@@ -289,7 +289,9 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
                             $request['response']['status_code'],
                             $request['request']['method'],
                             Str::padRight(Str::limit($request['request']['uri'], 48, ''), 48, '.'),
-                            Carbon::parse($request['response']['headers']['Date'][0])->format('H:i:s'),
+                            isset($request['response']['headers']['Date'][0])
+                                ? Carbon::parse($request['response']['headers']['Date'][0])->format('H:i:s')
+                                : '[Date-Not-Set]',
                         ));
                     }
                 }
