@@ -1,6 +1,21 @@
 # Release Notes
 
-## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.8.4...main)
+## [Unreleased](https://github.com/lmsqueezy/laravel/compare/1.8.5...main)
+
+## [1.8.5](https://github.com/lmsqueezy/laravel/compare/1.8.4...1.8.5) - 2025-04-11
+
+### What's Changed
+
+* chore: bumping package version to 1.8.4 in composer.json by [@Nelwhix](https://github.com/Nelwhix) in https://github.com/lmsqueezy/laravel/pull/133
+* fix: correctly instantiate license key model from webhook event by [@Nelwhix](https://github.com/Nelwhix) in https://github.com/lmsqueezy/laravel/pull/135
+* fix: updating listen command to use new ngrok cli syntax by [@Nelwhix](https://github.com/Nelwhix) in https://github.com/lmsqueezy/laravel/pull/136
+* fix: fixing #139 by [@JustSteveKing](https://github.com/JustSteveKing) in https://github.com/lmsqueezy/laravel/pull/140
+
+### New Contributors
+
+* [@Nelwhix](https://github.com/Nelwhix) made their first contribution in https://github.com/lmsqueezy/laravel/pull/133
+
+**Full Changelog**: https://github.com/lmsqueezy/laravel/compare/1.8.4...1.8.5
 
 ## [1.8.4](https://github.com/lmsqueezy/laravel/compare/1.8.3...1.8.4) - 2025-03-18
 
