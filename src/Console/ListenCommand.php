@@ -226,12 +226,31 @@ class ListenCommand extends Command implements Isolatable, PromptsForMissingInpu
             '--no-interaction',
         ]);
 
+
+        $oldRegex = '/Public HTTPS:\s+(http[s]?:\/\/[^\s]+)/';
+        $newRegex = '/Public URL\s+([^\s]+)/';
+
         while ($this->process->running()) {
-            if (is_null($tunnel) && preg_match(
-                '/Public HTTPS:\s+(http[s]?:\/\/[^\s]+)/',
-                $this->process->latestOutput(),
-                $matches,
-            )) {
+
+            if ($tunnel !== null) {
+                sleep(1);
+
+                continue;
+            }
+
+            $latestOutput = $this->process->latestOutput();
+
+            if (preg_match($oldRegex, $latestOutput, $matches)) {
+                $tunnel = $matches[1];
+
+                $errorCode = $this->setupWebhook($tunnel);
+
+                if ($errorCode !== null) {
+                    return $errorCode;
+                }
+            }
+
+            if (preg_match($newRegex, $latestOutput, $matches)) {
                 $tunnel = $matches[1];
 
                 $errorCode = $this->setupWebhook($tunnel);
