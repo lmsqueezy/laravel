@@ -294,7 +294,9 @@ final class WebhookController extends Controller
 
         $licenseKey = $licenseKey->sync($payload['data']['attributes']);
 
-        LicenseKeyUpdated::dispatch($licenseKey->billable(), $licenseKey);
+        $billable = $this->resolveBillable($payload);
+
+        LicenseKeyUpdated::dispatch($billable, $licenseKey);
     }
 
     /**
