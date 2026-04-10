@@ -18,7 +18,7 @@ trait ManagesCheckouts
         // checkout so we can match it back to a user when handling Lemon Squeezy webhooks.
         $custom = array_merge($custom, [
             'billable_id' => (string) $this->getKey(),
-            'billable_type' => $this->getMorphClass(),
+            'billable_type' => (string) $this->getMorphClass(),
         ]);
 
         return Checkout::make($this->lemonSqueezyStore(), $variant)
